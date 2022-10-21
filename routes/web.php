@@ -55,6 +55,11 @@ Route::prefix('admin')->group(function () {
             Route::get('/', [CurrenciesController::class, 'index'])->name('admin.currencies');
             Route::post('/edit', [CurrenciesController::class, 'update'])->name('admin.currencies.update');
             // Route::post('/tests', [CurrenciesController::class, 'index'])->name('admin.currencies.tests');
+            Route::prefix('rates')->group(function () {
+                Route::get('/', [CurrenciesController::class, 'rate_index'])->name('admin.currencies.rates');
+                Route::post('/create', [CurrenciesController::class, 'rate_create'])->name('admin.currencies.rates.create');
+                Route::post('/edit', [CurrenciesController::class, 'rate_update'])->name('admin.currencies.rates.update');
+            });
         });
         Route::prefix('upload_data')->group(function () {
             Route::prefix('transactions')->group(function () {

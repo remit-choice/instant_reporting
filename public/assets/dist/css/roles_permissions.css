@@ -74,50 +74,63 @@
     color: rgb(168, 168, 168);
 }
 
-#select-all,#checkboxing1,#checkboxing2,#checkboxing3,#checkboxing4 {
-    width: 14px!important;
-    height: 14px!important;
-    outline: 1px solid #8d8d8d!important;
-    border-radius: 1.5px!important;
-    box-shadow: none!important;
-    font-size: 1em!important;
-    text-align: center!important;
-    background: white!important;
-    -webkit-appearance: none!important;
-    -moz-appearance: none!important;
-    -o-appearance: none!important;
-    appearance: none!important;
-    font-weight: bold!important;
-    line-height: 1.1em!important;
+#select-all,
+#checkboxing1,
+#checkboxing2,
+#checkboxing3,
+#checkboxing4 {
+    width: 14px !important;
+    height: 14px !important;
+    outline: 1px solid #8d8d8d !important;
+    border-radius: 1.5px !important;
+    box-shadow: none !important;
+    font-size: 1em !important;
+    text-align: center !important;
+    background: white !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    -o-appearance: none !important;
+    appearance: none !important;
+    font-weight: bold !important;
+    line-height: 1.1em !important;
 }
 
-#select-all:checked:after,#checkboxing1:checked:after,#checkboxing2:checked:after,#checkboxing3:checked:after,#checkboxing4:checked:after {
-    content: '✔'!important;
-    color: black!important;
-    line-height: 1.1em!important;
-}
-.select-all,.check {
-    width: 14px!important;
-    height: 14px!important;
-    outline: 1px solid #8d8d8d!important;
-    border-radius: 1.5px!important;
-    box-shadow: none!important;
-    font-size: 1em!important;
-    text-align: center!important;
-    background: white!important;
-    -webkit-appearance: none!important;
-    -moz-appearance: none!important;
-    -o-appearance: none!important;
-    appearance: none!important;
-    font-weight: bold!important;
-    line-height: 1.1em!important;
+#select-all:checked:after,
+#checkboxing1:checked:after,
+#checkboxing2:checked:after,
+#checkboxing3:checked:after,
+#checkboxing4:checked:after {
+    content: '✔' !important;
+    color: black !important;
+    line-height: 1.1em !important;
 }
 
-.select-all:checked:after,.check:checked:after {
+.select-all,
+.check,
+.checks {
+    width: 14px !important;
+    height: 14px !important;
+    outline: 1px solid #8d8d8d !important;
+    border-radius: 1.5px !important;
+    box-shadow: none !important;
+    font-size: 1em !important;
+    text-align: center !important;
+    background: white !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    -o-appearance: none !important;
+    appearance: none !important;
+    font-weight: bold !important;
+    line-height: 1.1em !important;
+}
+
+.select-all:checked:after,
+.check:checked:after,
+.checks:checked:after {
     /* content: ''!important; */
-    content: '\2713'!important;
-    color: black!important;
-    line-height: 1.1em!important;
+    content: '\2713' !important;
+    color: black !important;
+    line-height: 1.1em !important;
 }
 
 /* .fruit1:checked {

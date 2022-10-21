@@ -8,7 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>@Include('layouts.links.admin.title') | Transaction</title>
+    <title>@Include('layouts.links.admin.title') | Currencies</title>
     <style>
         .flex-wrap {
             float: right !important;
@@ -169,6 +169,13 @@
                     <form action="{{ route('admin.currencies.update') }}" method="post">
                         @csrf
                         <div class="modal-body">
+                            <div id="failes" class="alert alert-default-danger alert-dismissible fade show"
+                                role="alert" style="display: none">
+                                <span class="text_fails"></span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                             <input type="hidden" name="currency_id" id="currency_id" value="">
                             <div class="form-group row">
                                 <div class="col-6">
@@ -243,6 +250,22 @@
                                             $("#max_rate" + id).load(location.href +
                                                 " #max_rate" + id);
                                             $("#max_rate" + id).addClass('cur-rate td');
+                                        } else {
+                                            if (response == '2') {
+                                                $('#failes').show();
+                                                $('#failes .text_fails').html(
+                                                    "Minimum Rate is greater than Maximum");
+                                                window.setInterval(function() {
+                                                    $('#failes').slideUp('slow');
+                                                }, 5000);
+                                            } else {
+                                                $('#failes').show();
+                                                $('#failes .text_fails').html(
+                                                    "Maximum Rate is lesser than Minimum");
+                                                window.setInterval(function() {
+                                                    $('#failes').slideUp('slow');
+                                                }, 5000);
+                                            }
                                         }
                                     },
                                     error: (error) => {

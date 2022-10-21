@@ -143,7 +143,7 @@
                                                             <td>
                                                                 @if (empty($module->permissions['view']) && $module->permissions['view'] != 0)
                                                                 @else
-                                                                    <input type="checkbox" class="check"
+                                                                    <input type="checkbox" class="checks"
                                                                         value="{{ $module->permissions['view'] }}"
                                                                         @if ($module->permissions['view'] == 1) {{ 'checked' }} @endif
                                                                         @if ($module->permissions['view'] == 1) {{ 'disabled' }} @endif>
@@ -152,7 +152,7 @@
                                                             <td>
                                                                 @if (empty($module->permissions['add']) && $module->permissions['add'] != 0)
                                                                 @else
-                                                                    <input type="checkbox" class="check"
+                                                                    <input type="checkbox" class="checks"
                                                                         value="{{ $module->permissions['add'] }}"
                                                                         @if ($module->permissions['add'] == 1) {{ 'checked' }} @endif
                                                                         @if ($module->permissions['view'] == 1) {{ 'disabled' }} @endif>
@@ -161,7 +161,7 @@
                                                             <td>
                                                                 @if (empty($module->permissions['edit']) && $module->permissions['edit'] != 0)
                                                                 @else
-                                                                    <input type="checkbox" class="check"
+                                                                    <input type="checkbox" class="checks"
                                                                         value="{{ $module->permissions['edit'] }}"
                                                                         @if ($module->permissions['edit'] == 1) {{ 'checked' }} @endif
                                                                         @if ($module->permissions['view'] == 1) {{ 'disabled' }} @endif>
@@ -170,7 +170,7 @@
                                                             <td>
                                                                 @if (empty($module->permissions['delete']) && $module->permissions['delete'] != 0)
                                                                 @else
-                                                                    <input type="checkbox" class="check"
+                                                                    <input type="checkbox" class="checks"
                                                                         value="{{ $module->permissions['delete'] }}"
                                                                         @if ($module->permissions['delete'] == 1) {{ 'checked' }} @endif
                                                                         @if ($module->permissions['view'] == 1) {{ 'disabled' }} @endif>
@@ -246,12 +246,12 @@
             });
             $(document).on('change', '#selectall', function() {
                 if ($(this).prop('checked')) {
-                    $('.check').prop('checked', true)
-                    $('input:checkbox').attr('checked', true);
+                    $('.check').prop('checked', true);
+                    $('.check').attr('checked', true);
                     $('.check').val(this.checked ? 1 : 0);
                 } else {
                     $('.check').prop('checked', false);
-                    $('input:checkbox').attr('checked', false);
+                    $('.check').attr('checked', false);
                     $('.check').val(this.checked ? 1 : 0);
                 }
             });

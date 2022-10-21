@@ -10,4 +10,9 @@ class Currency extends Model
     protected $fillable = ['id', 'name', 'iso', 'iso3', 'dial', 'currency', 'currency_name', 'rate', 'status', 'created_at', 'updated_at'];
     protected $table = 'currencies';
     use HasFactory;
+
+    public function rates()
+    {
+        return $this->belongsTo(CurrenciesRate::class, 'id', 'c_id');
+    }
 }
