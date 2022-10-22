@@ -98,9 +98,10 @@
                                                 <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary mb-3">Upload</button>
-                                        <a href="{{ route('admin.upload_data.online_customers') }}"
-                                            class="btn btn-primary mb-3">Back</a>
+                                        <button type="submit" class="btn mb-3"
+                                            style="background-color: #091E3E;color: white">Upload</button>
+                                        <a href="{{ route('admin.upload_data.online_customers') }}" class="btn mb-3"
+                                            style="background-color: #091E3E;color: white">Back</a>
                                     </div>
                                 </form>
                                 <!-- /.card -->

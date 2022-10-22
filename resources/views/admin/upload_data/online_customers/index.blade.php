@@ -98,8 +98,8 @@
                                                     <input type="date" name="date_to" id="" class="p-1"
                                                         value="">
                                                 @endif
-                                                <button type="submit" name="filter"
-                                                    class="btn btn-primary mb-2">Submit</button>
+                                                <button type="submit" name="filter" class="btn mb-2"
+                                                    style="background-color: #091E3E;color: white">Submit</button>
                                             </form>
                                         </div>
                                     </div>

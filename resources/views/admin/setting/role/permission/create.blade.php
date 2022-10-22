@@ -78,12 +78,13 @@
                                 <ul class="nav nav-pills text-center">
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                         <li class="nav-item">
-                                            <div class="nav-link active" aria-current="page">
+                                            <div class="nav-link" aria-current="page"
+                                                style="background-color: #091E3E;color: white">
                                                 @foreach ($roles as $role)
                                                     {{ $role->name }}
                                                 @endforeach
                                                 Permissions <span class="badge ms-2"
-                                                    style="background-color: #0d6efd;"></span>
+                                                    style="background-color: #091E3E;"></span>
                                             </div>
                                         </li>
                                         <input type="checkbox" id="selectall" class="select-all" />
@@ -211,8 +212,10 @@
                                             @endforeach
                                         @endforeach
                                         <div class="d-flex justify-content-between">
-                                            <a href="/admin/setting/role" class="btn btn-primary float-end my-4">Back</a>
-                                            <button type="submit" id="Save" class="btn btn-primary float-end my-4">
+                                            <a href="/admin/setting/role" class="btn float-end my-4"
+                                                style="background-color: #091E3E;color: white">Back</a>
+                                            <button type="submit" id="Save" class="btn float-end my-4"
+                                                style="background-color: #091E3E;color: white">
                                                 Save changes
                                             </button>
                                         </div>

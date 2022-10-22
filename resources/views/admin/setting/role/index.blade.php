@@ -63,9 +63,10 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
                                     <!-- Button trigger modal -->
-                                    <a class="btn btn-primary" type="button" href="#" data-toggle="modal"
-                                        data-target="#role_create">
-                                        Add Role</a>
+                                    <a type="button" href="#" data-toggle="modal" data-target="#role_create"
+                                        class="border px-2 btn" style="background-color: #091E3E;color: white">
+                                        Add Role
+                                    </a>
                                     <!-- Modal -->
                                     <form action="{{ route('admin.role.create') }}" method="POST">
                                         @csrf
@@ -79,30 +80,26 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="" method="post">
-                                                        @csrf
-                                                        <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="role_name" class="text-capitalize">Name</label>
-                                                                <input type="hidden" name="create_role_id"
-                                                                    id="create_role_id" value="">
-                                                                <input type="text" name="create_role_name"
-                                                                    id="create_role_name" class="form-control">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="create_role_status" class="text-capitalize">
-                                                                    <input type="checkbox" name="create_role_status me-2"
-                                                                        id="create_role_status"
-                                                                        value="0">Status</label>
-                                                            </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="role_name" class="text-capitalize">Name</label>
+                                                            <input type="hidden" name="create_role_id" id="create_role_id"
+                                                                value="">
+                                                            <input type="text" name="create_role_name"
+                                                                id="create_role_name" class="form-control">
                                                         </div>
-                                                        <div class="modal-footer justify-content-between">
-                                                            <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">Close</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary create">Save</button>
+                                                        <div class="form-group">
+                                                            <label for="create_role_status" class="text-capitalize">
+                                                                <input type="checkbox" name="create_role_status me-2"
+                                                                    id="create_role_status" value="0">Status</label>
                                                         </div>
-                                                    </form>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="border px-2 btn create"
+                                                            style="background-color: #091E3E;color: white">Save</button>
+                                                    </div>
                                                 </div>
                                                 <!-- /.modal-content -->
                                             </div>
@@ -256,7 +253,8 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary update">Update</button>
+                            <button type="submit" class="border px-2 btn update"
+                                style="background-color: #091E3E;color: white">Update</button>
                         </div>
                     </form>
                 </div>

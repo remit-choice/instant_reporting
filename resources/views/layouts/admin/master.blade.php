@@ -203,6 +203,7 @@
                                   </p>
                               </a>
                               <ul class="nav nav-treeview">
+
                                   @foreach ($module_group->modules as $module)
                                       @if (!empty($module->permissions) && !empty($module->modules_urls))
                                           @foreach ($module->modules_urls as $modules_url)

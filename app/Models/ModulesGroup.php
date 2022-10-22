@@ -14,6 +14,6 @@ class ModulesGroup extends Model
 
     public function modules()
     {
-        return $this->hasMany(Module::class, 'm_g_id', 'id')->with('permissions')->with('modules_urls');
+        return $this->hasMany(Module::class, 'm_g_id', 'id')->with('permissions')->with('modules_urls')->orderBy('sort');
     }
 }

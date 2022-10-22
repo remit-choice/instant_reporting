@@ -63,9 +63,10 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
                                     <!-- Button trigger modal -->
-                                    <a class="btn btn-primary" type="button" href="#" data-toggle="modal"
-                                        data-target="#module_url_create">
-                                        Add Module URL</a>
+                                    <a type="button" href="#" data-toggle="modal" data-target="#module_url_create"
+                                        class="border px-2 btn" style="background-color: #091E3E;color: white">
+                                        Add Module URL
+                                    </a>
                                     <!-- Modal -->
                                     <form action="" method="POST" id="module_url_create_form">
                                         @csrf
@@ -116,7 +117,8 @@
                                                         <div class="modal-footer justify-content-between">
                                                             <button type="button" class="btn btn-default"
                                                                 data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="btn btn-primary create"
+                                                            <button type="submit" class="border px-2 btn create"
+                                                                style="background-color: #091E3E;color: white"
                                                                 id="add_module_btn">Save</button>
                                                         </div>
                                                     </form>
@@ -309,7 +311,8 @@
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary update" id="">Update</button>
+                            <button type="submit" class="border px-2 btn update"
+                                style="background-color: #091E3E;color: white">Update</button>
                         </div>
                     </form>
                 </div>
