@@ -51,8 +51,7 @@ class Routing
                                 foreach ($module->modules_urls as $modules_url) {
                                     // dd($module->modules_urls);
                                     if (
-                                        $module->id == $module->permissions['m_id'] &&  $module->status == 1
-                                        && ($module->permissions['view'] == 1 && $modules_url->url == $REQUEST_URI)
+                                        ($module->id == $module->permissions['m_id']) &&  ($module->status == 1) && ($module->permissions['view'] == 1) && ($modules_url->url == $REQUEST_URI)
                                     ) {
                                         $response = $next($request);
                                     }

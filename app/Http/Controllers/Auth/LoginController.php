@@ -65,7 +65,7 @@ class LoginController extends Controller
         } else {
         }
     }
-    public function admin_login_sessions(Request $request)
+    public function admin_login_sessions($request)
     {
         $email = $request->email;
         $password = $request->password;

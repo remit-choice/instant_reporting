@@ -14,6 +14,9 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        
+        $data = [
+            ['id' => 1, 'name' => 'Admin', 'status' => 1, 'created_at' => NULL, 'updated_at' => NULL],
+        ];
+        Role::insert($data);
     }
 }
