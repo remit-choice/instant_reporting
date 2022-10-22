@@ -64,7 +64,7 @@
                                             </button>
                                         </div>
                                         <form action="{{ route('admin.currencies.rates.create') }}" method="POST"
-                                            id="currency_rate_create_form">
+                                            id="currency_rate_create_form" autocomplete="off">
                                             @csrf
                                             <div class="modal-body">
                                                 <div id="failes"
@@ -126,9 +126,17 @@
                             <!-- Small boxes (Stat box) -->
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h3 class="card-title">Currencies List</h3>
+                                    <div class="card w-100">
+                                        <div class="card-header w-100 d-flex justify-content-between">
+                                            <div class="col-6">
+                                                <h3 class="card-title">Currencies List</h3>
+                                            </div>
+                                            <div class="col-4">
+                                            </div>
+                                            <div class="col-2 float-right">
+                                                <input type="date" name="" id="filter_date"
+                                                    class="form-control">
+                                            </div>
                                         </div>
                                         <!-- /.card-header -->
                                         <div class="card-body">
@@ -175,15 +183,17 @@
                                                                     class="db_currency_max_rate"
                                                                     value="{{ $currency->max_rate }}"></td>
                                                             @if (!empty($currency->rates))
-                                                                <td id="rate{{ $currency->rates['id'] }}">
-                                                                    {{ $currency->rates['rate'] }}
-                                                                    <input type="hidden" name="db_currency_rate_id"
-                                                                        class="db_currency_rate_id"
-                                                                        value="{{ $currency->rates['id'] }}">
-                                                                    <input type="hidden" name="db_currency_rate"
-                                                                        class="db_currency_rate"
-                                                                        value="{{ $currency->rates['rate'] }}">
-                                                                </td>
+                                                                @if ($currency->rates['status'] == 1)
+                                                                    <td id="rate{{ $currency->rates['id'] }}">
+                                                                        {{ $currency->rates['rate'] }}
+                                                                        <input type="hidden" name="db_currency_rate_id"
+                                                                            class="db_currency_rate_id"
+                                                                            value="{{ $currency->rates['id'] }}">
+                                                                        <input type="hidden" name="db_currency_rate"
+                                                                            class="db_currency_rate"
+                                                                            value="{{ $currency->rates['rate'] }}">
+                                                                    </td>
+                                                                @endif
                                                             @else
                                                                 <td></td>
                                                             @endif
@@ -255,7 +265,7 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <form action="{{ route('admin.currencies.rates.update') }}" method="post">
+                        <form action="{{ route('admin.currencies.rates.update') }}" method="post" autocomplete="off">
                             @csrf
                             <div class="modal-body">
                                 <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
@@ -318,13 +328,16 @@
                         var min_rate = $('#create_currency_min_rate').val();
                         var max_rate = $('#create_currency_max_rate').val();
                         var rate = $('#create_currency_rate').val();
+                        var date = $('#filter_date').val();
+
 
                         console.log(c_id);
                         console.log(min_rate);
                         console.log(max_rate);
                         console.log(rate);
+                        console.log(date);
 
-                        if (min_rate != '' && max_rate != '') {
+                        if (min_rate != '' && max_rate != '' && date != '') {
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -347,6 +360,7 @@
                                                 "min_rate": min_rate,
                                                 "max_rate": max_rate,
                                                 "rate": rate,
+                                                "date": date
                                             },
                                             success: function(response) {
                                                 if (response == '1') {
@@ -378,12 +392,21 @@
                                     }
                                 });
                         } else {
-                            $('#failes').show();
-                            $('#failes .text_fails').html(
-                                "Rate limit Not Declared");
-                            window.setInterval(function() {
-                                $('#failes').slideUp('slow');
-                            }, 5000);
+                            if (min_rate == '' && max_rate == '') {
+                                $('#failes').show();
+                                $('#failes .text_fails').html(
+                                    "Rate limit Not Declared");
+                                window.setInterval(function() {
+                                    $('#failes').slideUp('slow');
+                                }, 5000);
+                            } else {
+                                $('#failes').show();
+                                $('#failes .text_fails').html(
+                                    "Date Not Selected");
+                                window.setInterval(function() {
+                                    $('#failes').slideUp('slow');
+                                }, 5000);
+                            }
                         }
 
                     });
@@ -394,13 +417,15 @@
                         var min_rate = $('#currency_min_rate').val();
                         var max_rate = $('#currency_max_rate').val();
                         var rate = $('#currency_rate').val();
+                        var date = $('#filter_date').val();
 
                         console.log(id);
                         console.log(c_id);
                         console.log(min_rate);
                         console.log(max_rate);
                         console.log(rate);
-                        if (min_rate != '' && max_rate != '') {
+                        console.log(date);
+                        if (min_rate != '' && max_rate != '' && date != '') {
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -425,6 +450,7 @@
                                                 "min_rate": min_rate,
                                                 "max_rate": max_rate,
                                                 "rate": rate,
+                                                "date": date,
                                             },
                                             success: function(response) {
                                                 if (response == '1') {
@@ -437,8 +463,8 @@
                                                     $('#success .text_success').html(
                                                         "Updated Successfully");
                                                     window.setInterval(function() {
-                                                        $('#success').slideUp('slow');
-                                                    }, 4000);
+                                                        location.reload();
+                                                    }, 3000);
                                                 } else {
                                                     if (response == '2') {
                                                         $('#update_failes').show();
@@ -468,12 +494,21 @@
                                     }
                                 });
                         } else {
-                            $('#failes').show();
-                            $('#failes .text_fails').html(
-                                "Rate limit Not Declared");
-                            window.setInterval(function() {
-                                $('#failes').slideUp('slow');
-                            }, 5000);
+                            if (min_rate == '' && max_rate == '') {
+                                $('#update_failes').show();
+                                $('#update_failes .text_fails').html(
+                                    "Rate limit Not Declared");
+                                window.setInterval(function() {
+                                    $('#update_failes').slideUp('slow');
+                                }, 5000);
+                            } else {
+                                $('#update_failes').show();
+                                $('#update_failes .text_fails').html(
+                                    "Date Not Selected");
+                                window.setInterval(function() {
+                                    $('#update_failes').slideUp('slow');
+                                }, 5000);
+                            }
                         }
 
                     });

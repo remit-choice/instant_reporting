@@ -41,7 +41,10 @@ class CurrenciesController extends Controller
     }
     public function rate_index(Request $request)
     {
-        $currencies =  Currency::with('rates')->get();
+        $rates = function ($query) {
+            $query->where('status', 1);
+        };
+        $currencies =  Currency::whereHas('rates', $rates)->with('rates')->where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->get();
         // dd($currencies->toArray());
         return view('admin.currencies.rates.index', ['currencies' => $currencies]);
     }
@@ -51,9 +54,10 @@ class CurrenciesController extends Controller
         $min_rate = $request->min_rate;
         $max_rate = $request->max_rate;
         $rate = $request->rate;
-        $dated = date('Y-m-d');
-        if ($rate >= $min_rate &&  $rate <= $max_rate) {
-            CurrenciesRate::insert([
+        // dd($rate);
+        $dated = date('Y-m-d', strtotime($request->date));
+        if ($rate >= $min_rate && $min_rate != '' &&   $rate <= $max_rate && $max_rate != '') {
+            CurrenciesRate::create([
                 'dated' => $dated,
                 'c_id' => $c_id,
                 'rate' => $rate,
@@ -75,9 +79,18 @@ class CurrenciesController extends Controller
         $min_rate = $request->min_rate;
         $max_rate = $request->max_rate;
         $rate = $request->rate;
+
+        $dated = date('Y-m-d',  strtotime($request->date));
+
         if ($rate >= $min_rate && $rate <= $max_rate) {
             CurrenciesRate::where('id', $id)->update([
+                'status' => 0
+            ]);
+            CurrenciesRate::insert([
+                'dated' => $dated,
+                'c_id' => $c_id,
                 'rate' => $rate,
+                'status' => 1
             ]);
             return true;
         } else {

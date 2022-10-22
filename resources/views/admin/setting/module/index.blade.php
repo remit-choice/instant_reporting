@@ -81,6 +81,15 @@
                                                         </button>
                                                     </div>
                                                     <div class="modal-body">
+                                                        <div id="failes"
+                                                            class="alert alert-default-danger alert-dismissible fade show"
+                                                            role="alert" style="display: none">
+                                                            <span class="text_fails"></span>
+                                                            <button type="button" class="close" data-dismiss="alert"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
                                                         <div class="form-group">
                                                             <label for="module_name" class="text-capitalize">Name</label>
                                                             <input type="hidden" name="create_module_id"
@@ -93,6 +102,12 @@
                                                             <label for="module_icon" class="text-capitalize">Icon</label>
                                                             <input type="text" name="create_module_icon"
                                                                 id="create_module_icon" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="module_group_icon"
+                                                                class="text-capitalize">sort</label>
+                                                            <input type="number" name="" class="form-control"
+                                                                id="create_module_sort">
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="m_g_id" class="text-capitalize">Module
@@ -111,8 +126,8 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <label for="create_type" class="text-capitalize">Type</label>
-                                                            <select id="create_type" data-live-search="true" title="Select"
-                                                                class="selectpicker show-tick form-control"
+                                                            <select id="create_type" data-live-search="true"
+                                                                title="Select" class="selectpicker show-tick form-control"
                                                                 name="create_type" required>
                                                                 <option value="" selected hidden disabled>Select
                                                                 </option>
@@ -168,6 +183,7 @@
                                                     <th>Group Name</th>
                                                     <th>Name</th>
                                                     <th>Icon</th>
+                                                    <th>Sort</th>
                                                     <th>Type</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
@@ -193,6 +209,9 @@
                                                         <td>{{ $module->icon }}<input type="hidden"
                                                                 name="db_module_icon" class="db_module_icon"
                                                                 value="{{ $module->icon }}"></td>
+                                                        <td>{{ $module->sort }} <input type="hidden"
+                                                                name="db_module_sort" class="db_module_sort"
+                                                                value="{{ $module->sort }}"></td>
                                                         <td>
                                                             @if ($module->type == '1')
                                                                 <span class="badge badge-info">Inside Page</span>
@@ -265,6 +284,7 @@
                                                     <th>Group Name</th>
                                                     <th>Name</th>
                                                     <th>Icon</th>
+                                                    <th>Sort</th>
                                                     <th>Type</th>
                                                     <th>Status</th>
                                                     <th>Action</th>
@@ -296,6 +316,13 @@
                             </button>
                         </div>
                         <div class="modal-body">
+                            <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
+                                role="alert" style="display: none">
+                                <span class="text_fails"></span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                             <div class="form-group">
                                 <label for="module_name" class="text-capitalize">Name</label>
                                 <input type="hidden" name="module_id" id="module_id" value="">
@@ -305,6 +332,10 @@
                             <div class="form-group">
                                 <label for="module_icon" class="text-capitalize">Icon</label>
                                 <input type="text" name="module_icon" id="module_icon" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="module_sort" class="text-capitalize">sort</label>
+                                <input type="number" name="" class="form-control" id="module_sort">
                             </div>
                             <div class="form-group">
                                 <label for="m_g_id" class="text-capitalize">Module Group</label>
@@ -378,6 +409,7 @@
                 $('#edit_m_g_id').val(_this.find('.m_g_id').val());
                 $('#edit_module_type').text(_this.find('.db_module_type_name').val());
                 $('#edit_module_type').val(_this.find('.db_module_type').val());
+                $('#module_sort').val(_this.find('.db_module_sort').val());
 
 
                 var status = $('#module_status').val();
@@ -394,6 +426,7 @@
                     var icon = $('#create_module_icon').val();
                     var m_g_id = $('#create_m_g_id').val();
                     var status = $('#create_module_status').val();
+                    var sort = $('#create_module_sort').val();
                     var type = $('#create_type').val();
 
                     console.log(name);
@@ -401,6 +434,7 @@
                     console.log(m_g_id);
                     console.log(type);
                     console.log(status);
+                    console.log(sort);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -416,9 +450,26 @@
                             "m_g_id": m_g_id,
                             "status": status,
                             "type": type,
+                            "sort": sort,
                         },
                         success: function(response) {
-                            location.reload();
+                            if (response == '1') {
+                                $('#module_create').modal('hide');
+                                $('#success').show();
+                                $('#success strong').html("Inserted Successfully");
+                                window.setInterval(function() {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                if (response == 'false') {
+                                    $('#failes').show();
+                                    $('#failes .text_fails').html(
+                                        "Sort is Reserved,Firstly Unreserved Current!");
+                                    window.setInterval(function() {
+                                        $('#failes').slideUp('slow');
+                                    }, 5000);
+                                }
+                            }
                         },
                         error: (error) => {
                             console.log(JSON.stringify(error));
@@ -433,6 +484,7 @@
                     var icon = $('#module_icon').val();
                     var status = $('#module_status').val();
                     var type = $('#module_type').val();
+                    var sort = $('#module_sort').val();
 
                     console.log(id);
                     console.log(name);
@@ -440,6 +492,7 @@
                     console.log(m_g_id);
                     console.log(status);
                     console.log(type);
+                    console.log(sort);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -464,13 +517,26 @@
                                         "icon": icon,
                                         "status": status,
                                         "type": type,
+                                        "sort": sort
                                     },
                                     success: function(response) {
-                                        swal("Data Successfully Updated.!", {
-                                            icon: "success",
-                                        }).then((result) => {
-                                            location.reload();
-                                        });
+                                        if (response == '1') {
+                                            swal("Data Successfully Updated.!", {
+                                                icon: "success",
+                                            }).then((result) => {
+                                                location.reload();
+                                            });
+                                        } else {
+                                            if (response == 'false') {
+                                                $('#update_failes').show();
+                                                $('#update_failes .text_fails').html(
+                                                    "Sort is Reserved,Firstly Unreserved Current!"
+                                                );
+                                                window.setInterval(function() {
+                                                    $('#update_failes').slideUp('slow');
+                                                }, 5000);
+                                            }
+                                        }
                                     },
 
                                     error: (error) => {

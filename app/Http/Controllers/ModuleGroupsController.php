@@ -24,7 +24,7 @@ class ModuleGroupsController extends Controller
     {
         if (FacadesRequest::isMethod('get')) {
             $roles = Role::get();
-            $modules_groups = ModulesGroup::get();
+            $modules_groups = ModulesGroup::orderBy('sort')->get();
             return view('admin.setting.module.group.index', ['roles' => $roles, 'modules_groups' => $modules_groups]);
         } else {
             return back();
@@ -53,24 +53,14 @@ class ModuleGroupsController extends Controller
             }
             // $sort_result =  ModulesGroup::where('sort', $sort)->first();
             $sort_count =  ModulesGroup::where('sort', $sort)->count();
-            $modules_groups_sorts =  ModulesGroup::select('sort')->get();
-            foreach ($modules_groups_sorts as $modules_groups_sort) {
-                $sort_results[] = $modules_groups_sort->sort;
-            }
-            $count = 1;
-
-            foreach ($sort_results as $sort_result) {
-                if (in_array($count, $sort_results)) {
-                    ModulesGroup::insert([
-                        'name' => $name,
-                        'icon' => $icon,
-                        'sort' => $count,
-                        'status' => $status
-                    ]);
-                }
-                $count++;
-            }
-            if ($sort_count > 0) {
+            if ($sort_count <= 0) {
+                ModulesGroup::insert([
+                    'name' => $name,
+                    'icon' => $icon,
+                    'sort' => $sort,
+                    'status' => $status
+                ]);
+            } else {
                 return "false";
             }
         } else {
@@ -100,15 +90,30 @@ class ModuleGroupsController extends Controller
             } else {
                 $status = 0;
             }
-            $sort_result =  ModulesGroup::where('sort', $sort)->first();
+
+            ModulesGroup::where('id', $id)->update([
+                'name' => $name,
+                'icon' => $icon,
+                'status' => $status
+            ]);
+
+            $sort_data =  ModulesGroup::where('sort', $sort)->first();
             $sort_count =  ModulesGroup::where('sort', $sort)->count();
-            if ($sort_count >= 1 && $id == $sort_result->id) {
+            // dd($sort_data->id);
+            if ($sort_count <= 0) {
                 ModulesGroup::where('id', $id)->update([
-                    'name' => $name,
-                    'icon' => $icon,
-                    'sort' => '4',
-                    'status' => $status
+                    'sort' => $sort,
                 ]);
+                return true;
+            } elseif (!empty($sort_data)) {
+                if ($sort_count <= 1 && $id == $sort_data->id) {
+                    ModulesGroup::where('id', $id)->update([
+                        'sort' => $sort,
+                    ]);
+                    return true;
+                } else {
+                    return "false";
+                }
             } else {
                 return "false";
             }

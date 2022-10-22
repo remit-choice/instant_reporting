@@ -27,7 +27,7 @@ class ModulesController extends Controller
     public function admin_module_list()
     {
         $roles = Role::get();
-        $modules = Module::with('modules_group')->get();
+        $modules = Module::with('modules_group')->orderBy('sort')->get();
         $modules_groups = ModulesGroup::get();
         // $modules_groups = ModulesGroup::whereHas('modules')->with('modules')->get();
         // $modules_groups = ModulesGroup::whereHas('modules')->with('modules')->get();
@@ -55,21 +55,27 @@ class ModulesController extends Controller
             $name = $request->name;
             $icon = $request->icon;
             $type = $request->type;
-
+            $sort = $request->sort;
 
             if (isset($request->status)) {
                 $status = $request->status;
             } else {
                 $status = 0;
             }
-            // dd($m_g_id);
-            Module::create([
-                'm_g_id' => $m_g_id,
-                'name' => $name,
-                'icon' => $icon,
-                'status' => $status,
-                'type' => $type,
-            ]);
+            $sort_count =  Module::where('sort', $sort)->count();
+            if ($sort_count <= 0) {
+                Module::insert([
+                    'm_g_id' => $m_g_id,
+                    'name' => $name,
+                    'icon' => $icon,
+                    'status' => $status,
+                    'type' => $type,
+                    'sort' => $sort
+                ]);
+                return true;
+            } else {
+                return "false";
+            }
         } else {
         }
     }
@@ -98,6 +104,8 @@ class ModulesController extends Controller
                 $status = 0;
             }
             $type = $request->type;
+            $sort = $request->sort;
+
 
             Module::where('id', $id)->update([
                 'name' => $name,
@@ -106,10 +114,26 @@ class ModulesController extends Controller
                 'status' => $status,
                 'type' => $type,
             ]);
-            $roles = Role::get();
-            $modules = Module::with('modules_group')->get();
-            $modules_groups = ModulesGroup::get();
-            return redirect('/admin/setting/module')->with(['roles' => $roles, 'modules_groups' => $modules_groups, 'modules' => $modules]);
+
+            $sort_data =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->first();
+            $sort_count =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->get()->count();
+            if ($sort_count <= 0) {
+                Module::where('id', $id)->update([
+                    'sort' => $sort,
+                ]);
+                return true;
+            } elseif (!empty($sort_data)) {
+                if ($sort_count <= 1 && $id == $sort_data->id) {
+                    Module::where('id', $id)->update([
+                        'sort' => $sort,
+                    ]);
+                    return true;
+                } else {
+                    return "false";
+                }
+            } else {
+                return "false";
+            }
         } else {
             return back();
         }
