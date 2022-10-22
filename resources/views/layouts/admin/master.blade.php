@@ -203,7 +203,9 @@
                                   </p>
                               </a>
                               <ul class="nav nav-treeview">
-
+                                @php
+                                        $REQUEST_URI = '/' . Route::current(['id'])->uri();
+                                @endphp
                                   @foreach ($module_group->modules as $module)
                                       @if (!empty($module->permissions) && !empty($module->modules_urls))
                                           @foreach ($module->modules_urls as $modules_url)
@@ -212,11 +214,11 @@
                                                   $module->status == 1 &&
                                                   $module->type == 0 &&
                                                   $modules_url->type == 0)
-                                                  <li class="nav-item">
+                                                  <li class="nav-item menu-open">
                                                       @php
                                                           $route_url = URL($modules_url->url);
                                                       @endphp
-                                                      <a href="{{ $route_url }}" class="nav-link">
+                                                      <a href="{{ $route_url }}" class="nav-link @if ($modules_url->url == $REQUEST_URI) {{"active"}} @endif">
                                                           <i class="{{ $module->icon }} nav-icon"></i>
                                                           <p>{{ $module->name }}</p>
                                                       </a>
