@@ -21,9 +21,9 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->text('image')->nullable();
-            $table->string('token');
+            $table->string('token')->nullable();
             $table->integer('status');
-            $table->string('designation');
+            $table->string('designation')->nullable();
             $table->timestamps();
             $table->foreign('r_id')->references('id')->on('roles')->onDelete('cascade');
         });

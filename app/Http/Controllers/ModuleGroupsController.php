@@ -45,16 +45,34 @@ class ModuleGroupsController extends Controller
         } elseif (FacadesRequest::isMethod('post')) {
             $name = $request->name;
             $icon = $request->icon;
+            $sort = $request->sort;
             if (!empty($request->status)) {
                 $status = '1';
             } else {
                 $status = '0';
             }
-            ModulesGroup::insert([
-                'name' => $name,
-                'icon' => $icon,
-                'status' => $status,
-            ]);
+            // $sort_result =  ModulesGroup::where('sort', $sort)->first();
+            $sort_count =  ModulesGroup::where('sort', $sort)->count();
+            $modules_groups_sorts =  ModulesGroup::select('sort')->get();
+            foreach ($modules_groups_sorts as $modules_groups_sort) {
+                $sort_results[] = $modules_groups_sort->sort;
+            }
+            $count = 1;
+
+            foreach ($sort_results as $sort_result) {
+                if (in_array($count, $sort_results)) {
+                    ModulesGroup::insert([
+                        'name' => $name,
+                        'icon' => $icon,
+                        'sort' => $count,
+                        'status' => $status
+                    ]);
+                }
+                $count++;
+            }
+            if ($sort_count > 0) {
+                return "false";
+            }
         } else {
             return back();
         }
@@ -76,13 +94,24 @@ class ModuleGroupsController extends Controller
             $id = $request->id;
             $name = $request->name;
             $icon = $request->icon;
-            ModulesGroup::where('id', $id)->update([
-                'name' => $name,
-                'icon' => $icon,
-            ]);
-            $roles = Role::get();
-            $modules_groups = ModulesGroup::get();
-            return view('admin.setting.module.group.index', ['roles' => $roles, 'modules_groups' => $modules_groups]);
+            $sort = $request->sort;
+            if (!empty($request->status)) {
+                $status = 1;
+            } else {
+                $status = 0;
+            }
+            $sort_result =  ModulesGroup::where('sort', $sort)->first();
+            $sort_count =  ModulesGroup::where('sort', $sort)->count();
+            if ($sort_count >= 1 && $id == $sort_result->id) {
+                ModulesGroup::where('id', $id)->update([
+                    'name' => $name,
+                    'icon' => $icon,
+                    'sort' => '4',
+                    'status' => $status
+                ]);
+            } else {
+                return "false";
+            }
         } else {
             return back();
         }

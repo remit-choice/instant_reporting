@@ -24,6 +24,7 @@ class UserController extends Controller
         };
         $module_groups = ModulesGroup::whereHas('modules.permissions', $modules)->orwhereDoesntHave('modules.permissions', $modules)
             ->with('modules.permissions', $modules)
+            ->orderBy("sort")
             ->get();
         // dd($module_groups->toArray());
         View::share(['module_groups' => $module_groups]);

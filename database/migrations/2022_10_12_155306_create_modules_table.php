@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('icon')->nullable();
             $table->string('status');
             $table->string('type');
-            $table->bigInteger('sort');
             $table->foreign('m_g_id')->references('id')->on('modules_groups')->onDelete('cascade');
             $table->timestamps();
         });

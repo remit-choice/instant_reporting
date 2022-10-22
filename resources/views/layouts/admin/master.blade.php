@@ -192,11 +192,8 @@
                   role="menu" data-accordion="false">
                   <!-- Add icons to the links using the .nav-icon class
        with font-awesome or any other icon font library -->
-                  @php
-                      $sort = 1;
-                  @endphp
                   @foreach ($module_groups as $module_group)
-                      @if ($module_group->sort == $sort && $module_group->status == 1)
+                      @if ($module_group->status == 1)
                           <li class="nav-item">
                               <a href="#" class="nav-link">
                                   <i class="nav-icon {{ $module_group->icon }}"></i>
@@ -230,9 +227,6 @@
                               </ul>
                           </li>
                       @endif
-                      @php
-                          $sort++;
-                      @endphp
                   @endforeach
               </ul>
           </nav>

@@ -79,38 +79,86 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="" method="post">
-                                                        @csrf
-                                                        <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="module_group_name"
-                                                                    class="text-capitalize">Name</label>
-                                                                <input type="hidden" name="create_module_group_id"
-                                                                    id="create_module_group_id" value="">
-                                                                <input type="text" name="create_module_group_name"
-                                                                    id="create_module_group_name" class="form-control">
+                                                    <div class="modal-body">
+                                                         <div id="failes"
+                                                                class="alert alert-default-danger alert-dismissible fade show"
+                                                                role="alert" style="display: none">
+                                                                <span class="text_fails"></span>
+                                                                <button type="button" class="close" data-dismiss="alert"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label for="module_group_icon"
-                                                                    class="text-capitalize">Icon</label>
-                                                                <input type="text" name="create_module_group_icon"
-                                                                    id="create_module_group_icon" class="form-control">
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="module_group_status" class="text-capitalize">
-                                                                    <input type="checkbox"
-                                                                        name="create_module_group_status me-2"
-                                                                        id="create_module_group_status"
-                                                                        value="0">Status</label>
-                                                            </div>
+                                                        <div class="form-group">
+                                                            <label for="module_group_name"
+                                                                class="text-capitalize">Name</label>
+                                                            <input type="hidden" name="create_module_group_id"
+                                                                id="create_module_group_id" value="">
+                                                            <input type="text" name="create_module_group_name"
+                                                                id="create_module_group_name" class="form-control">
                                                         </div>
-                                                        <div class="modal-footer justify-content-between">
-                                                            <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">Close</button>
-                                                            <button type="submit"
-                                                                class="btn btn-primary create">Save</button>
+                                                        <div class="form-group">
+                                                            <label for="module_group_icon"
+                                                                class="text-capitalize">Icon</label>
+                                                            <input type="text" name="create_module_group_icon"
+                                                                id="create_module_group_icon" class="form-control">
                                                         </div>
-                                                    </form>
+                                                        {{-- <div class="form-group">
+                                                            <label for="module_group_icon"
+                                                                class="text-capitalize">sort</label>
+                                                            <select name="create_module_group_sort" class="form-control"
+                                                                id="create_module_group_sort">
+                                                                <option value="" selected hidden disabled>Select
+                                                                </option>
+                                                              
+                                                                @if (!$modules_groups->isEmpty())
+                                                                    <optgroup label="Before">
+                                                                          @php
+                                                                            $count = 1;
+                                                                        @endphp
+                                                                        @foreach ($modules_groups as $module_group)
+                                                                                <option value="{{ $count }}">
+                                                                                    {{ $module_group->name }}
+                                                                                </option>
+                                                                                 @php
+                                                                                    $count++;
+                                                                                @endphp
+                                                                        @endforeach
+                                                                    </optgroup>
+                                                                    <optgroup label="After">
+                                                                          @php
+                                                                                $count = 1;
+                                                                            @endphp
+                                                                            @foreach ($modules_groups as $module_group)
+                                                                            <option value="{{ $count }}">
+                                                                                {{ $module_group->name }}
+                                                                            </option>
+                                                                             @php
+                                                                                $count++;
+                                                                            @endphp
+                                                                            @endforeach
+                                                                    </optgroup>
+                                                                   
+                                                                @else
+                                                                    <option value="1">
+                                                                        Start
+                                                                    </option>
+                                                                @endif
+                                                            </select>
+                                                        </div> --}}
+                                                        <div class="form-group">
+                                                            <label for="module_group_status" class="text-capitalize">
+                                                                <input type="checkbox"
+                                                                    name="create_module_group_status me-2"
+                                                                    id="create_module_group_status"
+                                                                    value="0">Status</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-primary create">Save</button>
+                                                    </div>
                                                 </div>
                                                 <!-- /.modal-content -->
                                             </div>
@@ -175,6 +223,9 @@
                                                             <input type="hidden" name="db_module_group_status"
                                                                 class="db_module_group_status"
                                                                 value="{{ $module_group->status }}">
+                                                            <input type="hidden" name="db_module_group_sort"
+                                                                class="db_module_group_sort"
+                                                                value="{{ $module_group->sort }}">
                                                         </td>
                                                         <td>
                                                             <div class="dropdown">
@@ -245,6 +296,13 @@
                     <form action="" method="post">
                         @csrf
                         <div class="modal-body">
+                             <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
+                                    role="alert" style="display: none">
+                                    <span class="text_fails"></span>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
                             <div class="form-group">
                                 <label for="module_group_name" class="text-capitalize">Name</label>
                                 <input type="hidden" name="module_group_id" id="module_group_id" value="">
@@ -256,6 +314,43 @@
                                 <input type="text" name="module_group_icon" id="module_group_icon"
                                     class="form-control">
                             </div>
+                            {{-- <div class="form-group">
+                                <label for="module_group_icon" class="text-capitalize">sort</label>
+                                <select name="module_group_sort" class="form-control" id="module_group_sort">
+                                     @if (!$modules_groups->isEmpty())
+                                        <optgroup label="Before">
+                                                @php
+                                                $count = 1;
+                                            @endphp
+                                            @foreach ($modules_groups as $module_group)
+                                                    <option value="{{ $count }}">
+                                                        {{ $module_group->name }}
+                                                    </option>
+                                                        @php
+                                                        $count++;
+                                                    @endphp
+                                            @endforeach
+                                        </optgroup>
+                                        <optgroup label="After">
+                                                @php
+                                                    $count = 1;
+                                                @endphp
+                                                @foreach ($modules_groups as $module_group)
+                                                <option value="{{ $count }}">
+                                                    {{ $module_group->name }}
+                                                </option>
+                                                    @php
+                                                    $count++;
+                                                @endphp
+                                                @endforeach
+                                        </optgroup>
+                                    @else
+                                        <option value="1">
+                                            Start
+                                        </option>
+                                    @endif
+                                </select>
+                            </div> --}}
                             <div class="form-group">
                                 <label for="module_group_status" class="text-capitalize">
                                     <input type="checkbox" name="module_group_status me-2"
@@ -302,6 +397,7 @@
                 $('#module_group_name').val(_this.find('.db_module_group_name').val());
                 $('#module_group_icon').val(_this.find('.db_module_group_icon').val());
                 $('#module_group_status').val(_this.find('.db_module_group_status').val());
+                $('#module_group_sort').val(_this.find('.db_module_group_sort').val());
                 var status = $('#module_group_status').val();
                 if (status == 1) {
                     $('#module_group_status').prop('checked', true);
@@ -315,10 +411,12 @@
                     var name = $('#create_module_group_name').val();
                     var icon = $('#create_module_group_icon').val();
                     var status = $('#create_module_group_status').val();
+                    var sort = $('#create_module_group_sort').val();
 
                     console.log(name);
                     console.log(icon);
                     console.log(status);
+                    console.log(sort);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -332,19 +430,26 @@
                             "name": name,
                             "icon": icon,
                             "status": status,
+                            "sort": sort
                         },
                         success: function(response) {
+                            if(response=='1'){
                             $('#module_group_create').modal('hide');
                             $('#success').show();
                             $('#success strong').html("Inserted Successfully");
-                            $("#example2 tbody").load(
-                                location
-                                .href +
-                                "#example2 tbody tr");
                             window.setInterval(function() {
-                                $('#success').slideUp('slow');
-                                $('#success').empty();
-                            }, 4000);
+                                location.reload();
+                            }, 2000);
+                        }else{
+                            if (response == 'false') {
+                                $('#failes').show();
+                                $('#failes .text_fails').html(
+                                    "Sort is Reserved,Firstly Unreserved Current!");
+                                window.setInterval(function() {
+                                    $('#failes').slideUp('slow');
+                                }, 5000);
+                            }
+                        }
                         },
                         error: (error) => {
                             console.log(JSON.stringify(error));
@@ -356,12 +461,15 @@
                     var id = $('#module_group_id').val();
                     var name = $('#module_group_name').val();
                     var icon = $('#module_group_icon').val();
+                    var sort = $('#module_group_sort').val();
                     var status = $('#module_group_status').val();
 
                     console.log(id);
                     console.log(name);
                     console.log(icon);
                     console.log(status);
+                    console.log(sort);
+
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -384,28 +492,39 @@
                                         "name": name,
                                         "icon": icon,
                                         "status": status,
+                                        "sort": sort
                                     },
                                     success: function(response) {
-                                        swal("Data Successfully Updated.!", {
+                                         if(response=='1'){
+                                            swal("Data Successfully Updated.!", {
                                             icon: "success",
-                                        }).then((result) => {
+                                                }).then((result) => {
 
-                                            $('#module_group_update').hide();
-                                            $('#success').show();
-                                            $('#success strong').html(
-                                                "Updated Successfully");
-                                            $('#module_group_update').modal('hide');
-                                            $("#example2 tbody").load(
-                                                location
-                                                .href +
-                                                "#example2 tbody tr");
-                                            window.setInterval(function() {
-                                                $('#success').slideUp('slow');
-                                                $('#success').empty();
-                                            }, 4000);
-                                        });
+                                                    $('#module_group_update').hide();
+                                                    $('#success').show();
+                                                    $('#success strong').html(
+                                                        "Updated Successfully");
+                                                    $('#module_group_update').modal('hide');
+                                                    $("#example2 tbody").load(
+                                                        location
+                                                        .href +
+                                                        "#example2 tbody tr");
+                                                    window.setInterval(function() {
+                                                        $('#success').slideUp('slow');
+                                                        $('#success').empty();
+                                                    }, 4000);
+                                                });
+                                        }else{
+                                            if (response == 'false') {
+                                                $('#update_failes').show();
+                                                $('#update_failes .text_fails').html(
+                                                    "Sort is Reserved,Firstly Unreserved Current!");
+                                                window.setInterval(function() {
+                                                    $('#update_failes').slideUp('slow');
+                                                }, 5000);
+                                            }
+                                        }
                                     },
-
                                     error: (error) => {
                                         console.log(JSON.stringify(error));
                                     }

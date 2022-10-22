@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('modules_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('icon');
-            $table->integer('status');
+            $table->string('name')->nullable();
+            $table->string('icon')->nullable();
+            $table->bigInteger('sort')->nullable();
+            $table->integer('status')->nullable();
             $table->timestamps();
         });
     }

@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('modules_urls', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('m_id')->index('m_id');
+            $table->string('name');
             $table->string('url');
             $table->string('status')->nullable();
             $table->string('type')->nullable();

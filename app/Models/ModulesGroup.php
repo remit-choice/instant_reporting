@@ -9,7 +9,7 @@ class ModulesGroup extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id', 'name', 'icon'];
+    protected $fillable = ['id', 'name', 'icon', 'sort'];
     protected $table = 'modules_groups';
 
     public function modules()
