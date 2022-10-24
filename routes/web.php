@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\accounts\TransactionController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -59,6 +60,7 @@ Route::prefix('admin')->group(function () {
                 Route::get('/', [CurrenciesController::class, 'rate_index'])->name('admin.currencies.rates');
                 Route::post('/create', [CurrenciesController::class, 'rate_create'])->name('admin.currencies.rates.create');
                 Route::post('/edit', [CurrenciesController::class, 'rate_update'])->name('admin.currencies.rates.update');
+                Route::post('/filter', [CurrenciesController::class, 'rate_filter'])->name('admin.currencies.rates.filter');
             });
         });
         Route::prefix('upload_data')->group(function () {
@@ -102,6 +104,12 @@ Route::prefix('admin')->group(function () {
                     Route::match(['get', 'post'], '/edit', [ModuleGroupsController::class, 'edit_admin_module_group'])->name('admin.modules_groups.edit');
                     Route::post('/delete', [ModuleGroupsController::class, 'delete_admin_module_group'])->name('admin.modules_groups.delete');
                 });
+            });
+        });
+
+        Route::prefix('accounts')->group(function () {
+            Route::prefix('transactions')->group(function () {
+                Route::get('/', [TransactionController::class, 'index'])->name('admin.accounts.transactions');
             });
         });
     });

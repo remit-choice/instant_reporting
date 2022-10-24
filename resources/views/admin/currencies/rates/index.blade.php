@@ -131,12 +131,17 @@
                                             <div class="col-6">
                                                 <h3 class="card-title">Currencies List</h3>
                                             </div>
-                                            <div class="col-4">
+                                            <div class="col-3">
                                             </div>
-                                            <div class="col-2 float-right">
-                                                <input type="date" name="" id="filter_date"
-                                                    class="form-control">
-                                            </div>
+                                            <form action="{{ route('admin.currencies.rates.filter') }}" method="post"
+                                                class="col-3 float-right d-flex flex-row">
+                                                @csrf
+                                                <input type="date" name="date" id="filter_date"
+                                                    class="form-control mr-2"
+                                                    value="@php if (session()->has('dated')){echo session()->get('dated'); }else{echo \Carbon\Carbon::now()->format('Y-m-d');} @endphp">
+                                                <button type="submit" name="filter" class="btn mb-2"
+                                                    style="background-color: #091E3E;color: white">Submit</button>
+                                            </form>
                                         </div>
                                         <!-- /.card-header -->
                                         <div class="card-body">
@@ -226,7 +231,6 @@
                                                             </td>
                                                         </tr>
                                                     @endforeach
-
                                                 </tbody>
                                                 <tfoot>
                                                     <tr>
@@ -454,17 +458,7 @@
                                             },
                                             success: function(response) {
                                                 if (response == '1') {
-                                                    $('#currency_rate_update').modal('hide');
-                                                    $("#rate" + id).load(location.href +
-                                                        " #rate" + id);
-                                                    $("#rate" + id).addClass('cur-rate td');
-                                                    $('#module_group_create').modal('hide');
-                                                    $('#success').show();
-                                                    $('#success .text_success').html(
-                                                        "Updated Successfully");
-                                                    window.setInterval(function() {
-                                                        location.reload();
-                                                    }, 3000);
+                                                    location.reload();
                                                 } else {
                                                     if (response == '2') {
                                                         $('#update_failes').show();

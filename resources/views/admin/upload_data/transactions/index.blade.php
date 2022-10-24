@@ -85,6 +85,7 @@
                                             <form action="{{ route('admin.upload_data.transactions') }}" method="get">
                                                 {{-- {!! csrf_field() !!} --}}
                                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                                </select>
                                                 @if (Request::get('date_from'))
                                                     <input type="date" name="date_from" id="" class="p-1"
                                                         value="{{ Request::get('date_from') }}">
@@ -148,7 +149,7 @@
                                                     <th class="text-capitalize">payment_method</th>
                                                     <th class="text-capitalize">beneficiary_country</th>
                                                     <th class="text-capitalize">customer_rate</th>
-                                                    <th class="text-capitalize">agent_rate_</th>
+                                                    <th class="text-capitalize">agent_rate</th>
                                                     <th class="text-capitalize">payout_ccy</th>
                                                     <th class="text-capitalize">amount</th>
                                                     <th class="text-capitalize">payin_ccy</th>
@@ -239,7 +240,7 @@
                                                             <td>{{ $transaction->payment_metdod }}</td>
                                                             <td>{{ $transaction->beneficiary_country }}</td>
                                                             <td>{{ $transaction->customer_rate }}</td>
-                                                            <td>{{ $transaction->agent_rate_ }}</td>
+                                                            <td>{{ $transaction->agent_rate }}</td>
                                                             <td>{{ $transaction->payout_ccy }}</td>
                                                             <td>{{ $transaction->amount }}</td>
                                                             <td>{{ $transaction->payin_ccy }}</td>
@@ -330,7 +331,7 @@
                                                     <th class="text-capitalize">payment_method</th>
                                                     <th class="text-capitalize">beneficiary_country</th>
                                                     <th class="text-capitalize">customer_rate</th>
-                                                    <th class="text-capitalize">agent_rate_</th>
+                                                    <th class="text-capitalize">agent_rate</th>
                                                     <th class="text-capitalize">payout_ccy</th>
                                                     <th class="text-capitalize">amount</th>
                                                     <th class="text-capitalize">payin_ccy</th>

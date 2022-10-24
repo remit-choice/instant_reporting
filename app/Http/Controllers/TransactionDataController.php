@@ -23,7 +23,6 @@ class TransactionDataController extends Controller
                 $transactions_data =  '1';
                 $date_from = '';
                 $date_to = '';
-                $request->request->remove('api_token');
                 if (!empty($request->date_from) && empty($request->date_to)) {
                     $date_from = strtotime($request->date_from);
                     $date_from = date('d/m/Y', $date_from);
@@ -34,13 +33,13 @@ class TransactionDataController extends Controller
                     $date_to = date('n/j/Y', $date_to);
                     $transactions = TransactionsData::where('last_transaction_date',  $date_to)->get();
                     // dd($transactions->toArray());
-                    // dd($transactions->toArray());
                 } elseif (!empty($request->date_from) && !empty($request->date_to)) {
                     $date_from = strtotime($request->date_from);
                     $date_from = date('d/m/Y', $date_from);
                     $date_to = strtotime($request->date_to);
                     $date_to = date('n/j/Y', $date_to);
-                    $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', $date_to]])->get();
+                    $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->get();
+                    // dd($transactions->toArray());
                 } else {
                 }
                 return

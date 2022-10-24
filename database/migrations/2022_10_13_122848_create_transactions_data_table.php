@@ -51,7 +51,7 @@ return new class extends Migration
             $table->text('payment_method')->nullable();
             $table->text('beneficiary_country')->nullable();
             $table->text('customer_rate')->nullable();
-            $table->text('agent_rate_')->nullable();
+            $table->text('agent_rate')->nullable();
             $table->text('payout_ccy')->nullable();
             $table->text('amount')->nullable();
             $table->text('payin_ccy')->nullable();
