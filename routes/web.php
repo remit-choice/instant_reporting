@@ -110,6 +110,7 @@ Route::prefix('admin')->group(function () {
         Route::prefix('accounts')->group(function () {
             Route::prefix('transactions')->group(function () {
                 Route::get('/', [TransactionController::class, 'index'])->name('admin.accounts.transactions');
+                Route::post('/', [TransactionController::class, 'filter'])->name('admin.accounts.transactions');
             });
         });
     });

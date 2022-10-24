@@ -60,6 +60,7 @@ class ModuleGroupsController extends Controller
                     'sort' => $sort,
                     'status' => $status
                 ]);
+                return true;
             } else {
                 return "false";
             }
