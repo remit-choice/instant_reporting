@@ -194,7 +194,8 @@
        with font-awesome or any other icon font library -->
                   @foreach ($module_groups as $module_group)
                       @if ($module_group->status == 1)
-                          <li class="nav-item">
+                          <li
+                              class="nav-item @php $REQUEST_URI = '/' . Route::current(['id'])->uri(); @endphp @foreach ($module_group->modules as $module) @if (!empty($module->permissions) && !empty($module->modules_urls)) @foreach ($module->modules_urls as $modules_url) @if ($modules_url->url == $REQUEST_URI)  {{ 'menu-open' }} @endif @endforeach @endif @endforeach">
                               <a href="#" class="nav-link">
                                   <i class="nav-icon {{ $module_group->icon }}"></i>
                                   <p>
@@ -203,9 +204,9 @@
                                   </p>
                               </a>
                               <ul class="nav nav-treeview">
-                                @php
-                                        $REQUEST_URI = '/' . Route::current(['id'])->uri();
-                                @endphp
+                                  @php
+                                      $REQUEST_URI = '/' . Route::current(['id'])->uri();
+                                  @endphp
                                   @foreach ($module_group->modules as $module)
                                       @if (!empty($module->permissions) && !empty($module->modules_urls))
                                           @foreach ($module->modules_urls as $modules_url)
@@ -218,7 +219,8 @@
                                                       @php
                                                           $route_url = URL($modules_url->url);
                                                       @endphp
-                                                      <a href="{{ $route_url }}" class="nav-link @if ($modules_url->url == $REQUEST_URI) {{"active"}} @endif">
+                                                      <a href="{{ $route_url }}"
+                                                          class="nav-link @if ($modules_url->url == $REQUEST_URI) {{ 'active' }} @endif">
                                                           <i class="{{ $module->icon }} nav-icon"></i>
                                                           <p>{{ $module->name }}</p>
                                                       </a>

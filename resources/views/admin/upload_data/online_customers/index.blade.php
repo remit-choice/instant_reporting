@@ -79,8 +79,8 @@
                             <div class="col-12">
                                 <div class="card">
                                     <div class="card-header row">
-                                        <h3 class="card-title col-6">Customers List</h3>
-                                        <div class="dates col-6 d-flex justify-content-end">
+                                        <h3 class="card-title col-lg-6 col-md-6 col-sm-6 col-xs-6">Customers List</h3>
+                                        <div class="dates col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-end">
                                             <form action="{{ route('admin.upload_data.online_customers') }}" method="get">
                                                 {{-- {!! csrf_field() !!} --}}
                                                 <input type="hidden" name="_token" value="{{ csrf_token() }}">

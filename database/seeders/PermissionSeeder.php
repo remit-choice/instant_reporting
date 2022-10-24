@@ -15,7 +15,7 @@ class PermissionSeeder extends Seeder
     public function run()
     {
         $data = [
-            ['id' => 1, 'r_id' => 1, 'm_id' => 1, 'view' => 1, 'add' => 1, 'edit' => 1, 'delete' => 1, 'created_at' => NULL, 'updated_at' => NULL],
+            ['id' => 1, 'r_id' => 1, 'm_id' => 1, 'view' => 1, 'add' => NULL, 'edit' => NULL, 'delete' => NULL, 'created_at' => NULL, 'updated_at' => NULL],
             ['id' => 2, 'r_id' => 1, 'm_id' => 2, 'view' => 1, 'add' => 1, 'edit' => 1, 'delete' => 1, 'created_at' => NULL, 'updated_at' => NULL],
             ['id' => 3, 'r_id' => 1, 'm_id' => 3, 'view' => 1, 'add' => 1, 'edit' => 1, 'delete' => 1, 'created_at' => NULL, 'updated_at' => NULL],
             ['id' => 4, 'r_id' => 1, 'm_id' => 4, 'view' => 1, 'add' => 1, 'edit' => 1, 'delete' => 1, 'created_at' => NULL, 'updated_at' => NULL],

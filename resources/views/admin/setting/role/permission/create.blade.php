@@ -190,19 +190,19 @@
                                                         </td>
                                                         <td>
                                                             <input type="checkbox" name="view[{{ $counter }}]"
-                                                                class="check" value="0" onclick="Checked()">
+                                                                class="check" value="0">
                                                         </td>
                                                         <td>
                                                             <input type="checkbox" name="add[{{ $counter }}]"
-                                                                class="check" value="0" onclick="Checked()">
+                                                                class="check" value="0">
                                                         </td>
                                                         <td>
                                                             <input type="checkbox" name="edit[{{ $counter }}]"
-                                                                class="check" value="0" onclick="Checked()">
+                                                                class="check" value="0">
                                                         </td>
                                                         <td>
                                                             <input type="checkbox" name="delete[{{ $counter }}]"
-                                                                class="check" value="0" onclick="Checked()">
+                                                                class="check" value="0">
                                                         </td>
                                                     </tr>
                                                     <?php

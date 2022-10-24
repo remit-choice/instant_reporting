@@ -137,8 +137,7 @@
                                                                         <input type="checkbox"
                                                                             name="view[{{ $counter }}]" class="check"
                                                                             value="{{ $module->permissions['view'] }}"
-                                                                            @if ($module->permissions['view'] == 1) {{ 'checked' }} @endif
-                                                                            onclick="Checked()">
+                                                                            @if ($module->permissions['view'] == 1) {{ 'checked' }} @endif>
                                                                     @endif
                                                                 </td>
                                                                 <td>
@@ -147,8 +146,7 @@
                                                                         <input type="checkbox"
                                                                             name="add[{{ $counter }}]" class="check"
                                                                             value="{{ $module->permissions['add'] }}"
-                                                                            @if ($module->permissions['add'] == 1) {{ 'checked' }} @endif
-                                                                            onclick="Checked()">
+                                                                            @if ($module->permissions['add'] == 1) {{ 'checked' }} @endif>
                                                                     @endif
                                                                 </td>
                                                                 <td>
@@ -157,8 +155,7 @@
                                                                         <input type="checkbox"
                                                                             name="edit[{{ $counter }}]" class="check"
                                                                             value="{{ $module->permissions['edit'] }}"
-                                                                            @if ($module->permissions['edit'] == 1) {{ 'checked' }} @endif
-                                                                            onclick="Checked()">
+                                                                            @if ($module->permissions['edit'] == 1) {{ 'checked' }} @endif>
                                                                     @endif
                                                                 </td>
                                                                 <td>
@@ -168,8 +165,7 @@
                                                                             name="delete[{{ $counter }}]"
                                                                             class="check"
                                                                             value="{{ $module->permissions['delete'] }}"
-                                                                            @if ($module->permissions['delete'] == 1) {{ 'checked' }} @endif
-                                                                            onclick="Checked()">
+                                                                            @if ($module->permissions['delete'] == 1) {{ 'checked' }} @endif>
                                                                     @endif
                                                                 </td>
                                                             </tr>
@@ -214,29 +210,25 @@
                                                                 <input type="checkbox" name="view[{{ $counter }}]"
                                                                     class="check"
                                                                     value="{{ $module->permissions['view'] }}"
-                                                                    @if ($module->permissions['view'] == 1) {{ 'checked' }} @endif
-                                                                    onclick="Checked()">
+                                                                    @if ($module->permissions['view'] == 1) {{ 'checked' }} @endif>
                                                             </td>
                                                             <td>
                                                                 <input type="checkbox" name="add[{{ $counter }}]"
                                                                     class="check"
                                                                     value="{{ $module->permissions['add'] }}"
-                                                                    @if ($module->permissions['add'] == 1) {{ 'checked' }} @endif
-                                                                    onclick="Checked()">
+                                                                    @if ($module->permissions['add'] == 1) {{ 'checked' }} @endif>
                                                             </td>
                                                             <td>
                                                                 <input type="checkbox" name="edit[{{ $counter }}]"
                                                                     class="check"
                                                                     value="{{ $module->permissions['edit'] }}"
-                                                                    @if ($module->permissions['edit'] == 1) {{ 'checked' }} @endif
-                                                                    onclick="Checked()">
+                                                                    @if ($module->permissions['edit'] == 1) {{ 'checked' }} @endif>
                                                             </td>
                                                             <td>
                                                                 <input type="checkbox" name="delete[{{ $counter }}]"
                                                                     class="check"
                                                                     value="{{ $module->permissions['delete'] }}"
-                                                                    @if ($module->permissions['delete'] == 1) {{ 'checked' }} @endif
-                                                                    onclick="Checked()">
+                                                                    @if ($module->permissions['delete'] == 1) {{ 'checked' }} @endif>
                                                             </td>
                                                         </tr>
                                                         <?php
