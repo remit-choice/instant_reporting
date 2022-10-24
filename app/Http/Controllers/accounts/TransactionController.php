@@ -83,45 +83,36 @@ class TransactionController extends Controller
     public function filter(Request $request)
     {
         if (FacadesRequest::isMethod('post')) {
-            if ($request->has('filter')) {
-                $transactions_data =  '1';
-                $date_from = '';
-                $date_to = '';
-                $filter = '';
+            $date_from = '';
+            $date_to = '';
 
-                if (!empty($request->date_from) && empty($request->date_to) && empty($request->search_filter)) {
-                    $date_from = date('d/m/Y', strtotime($request->date_from));
-                    $transactions = TransactionsData::where('transaction_date', $date_from)->get();
-                } elseif (empty($request->date_from) && !empty($request->date_to) && empty($request->search_filter)) {
-                    $date_to = date('n/j/Y', strtotime($request->date_to));
-                    $transactions = TransactionsData::where('last_transaction_date', '<=', "$date_to%")->get();
-                } elseif (!empty($request->date_from) && !empty($request->date_to) && empty($request->search_filter)) {
-                    $date_from = date('d/m/Y', strtotime($request->date_from));
-                    $date_to = date('n/j/Y', strtotime($request->date_to));
-                    $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->get();
-                } elseif (empty($request->date_from) && empty($request->date_to) && !empty($request->search_filter)) {
-                    $transactions = TransactionsData::get();
-                    // $transactions = TransactionsData::select('*', DB::raw('count(tr_no) as count_of_tr_no'))->groupBy('beneficiary_country')->get();
-                } elseif (!empty($request->date_from) && empty($request->date_to) && !empty($request->search_filter)) {
-                    $date_from = date('d/m/Y', strtotime($request->date_from));
-                    $transactions = TransactionsData::where('transaction_date', '>=', $date_from)->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
-                } elseif (empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
-                    $date_to = date('n/j/Y', strtotime($request->date_to));
-                    $transactions = TransactionsData::where('last_transaction_date', '<=', "$date_to%")->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
-                } elseif (!empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
-                    $date_from = date('d/m/Y', strtotime($request->date_from));
-                    $date_to = date('n/j/Y', strtotime($request->date_to));
-                    $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
-                } else {
-                }
-
-                return
-                    view('accounts.transactions.index', ['date_from' => $date_from, 'date_to' => $date_to, 'transactions' => $transactions, 'transactions_data' => $transactions_data]);
+            if (!empty($request->date_from) && empty($request->date_to) && empty($request->search_filter)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $transactions = TransactionsData::where('transaction_date', $date_from)->get();
+            } elseif (empty($request->date_from) && !empty($request->date_to) && empty($request->search_filter)) {
+                $date_to = date('n/j/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::where('last_transaction_date', '<=', "$date_to%")->get();
+            } elseif (!empty($request->date_from) && !empty($request->date_to) && empty($request->search_filter)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $date_to = date('n/j/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->get();
+            } elseif (empty($request->date_from) && empty($request->date_to) && !empty($request->search_filter)) {
+                $transactions = TransactionsData::select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'))->groupBy('beneficiary_country')->get();
+            } elseif (!empty($request->date_from) && empty($request->date_to) && !empty($request->search_filter)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $transactions = TransactionsData::where('transaction_date', '>=', $date_from)->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
+            } elseif (empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
+                $date_to = date('n/j/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::where('last_transaction_date', '<=', "$date_to%")->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
+            } elseif (!empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $date_to = date('n/j/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
             } else {
-                $transactions_data =  '';
-                return view('accounts.transactions.index', ['transactions_data' => $transactions_data]);
             }
-        } else {
+
+            return
+                view('accounts.transactions.index', ['date_from' => $date_from, 'date_to' => $date_to, 'transactions' => $transactions]);
         }
     }
 }

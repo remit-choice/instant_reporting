@@ -82,25 +82,23 @@
                                     <div class="card-header row">
                                         <h3 class="card-title col-lg-6 col-md-6 col-sm-6 col-xs-6">Transactions List</h3>
                                         <div class="dates col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-end">
-                                            <form action="{{ route('admin.upload_data.transactions') }}" method="get">
-                                                {{-- {!! csrf_field() !!} --}}
-                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                                </select>
-                                                @if (Request::get('date_from'))
+                                            <form action="{{ route('admin.upload_data.transactions') }}" method="post">
+                                                @csrf
+                                                @if (request()->input('date_from'))
                                                     <input type="date" name="date_from" id="" class="p-1"
-                                                        value="{{ Request::get('date_from') }}">
+                                                        value="{{ request()->input('date_from', old('date_from')) }}">
                                                 @else
                                                     <input type="date" name="date_from" id="" class="p-1"
                                                         value="">
                                                 @endif
-                                                @if (!empty(Request::get('date_to')))
+                                               @if (request()->input('date_to'))
                                                     <input type="date" name="date_to" id="" class="p-1"
-                                                        value="{{ Request::get('date_to') }}">
+                                                        value="{{ request()->input('date_to', old('date_to')) }}">
                                                 @else
                                                     <input type="date" name="date_to" id="" class="p-1"
                                                         value="">
                                                 @endif
-                                                <button type="submit" name="filter" class="btn mb-2"
+                                                <button type="submit" name="filter" class="btn mb-1"
                                                     style="background-color: #091E3E;color: white">Submit</button>
                                             </form>
                                         </div>
@@ -109,7 +107,7 @@
                                     <div class="card-body">
 
                                         <table id="example1"
-                                            class="table table-bordered @php if(!empty($transactions_data)){echo "table-responsive";}else{} @endphp">
+                                            class="table table-bordered @php if(request()->input('date_from') || request()->input('date_to')){echo "table-responsive";}else{} @endphp">
                                             <thead>
                                                 <tr>
                                                     <th class="text-capitalize">#</th>
@@ -199,7 +197,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (!empty($transactions_data))
+                                                @if (request()->input('date_from') || request()->input('date_to'))
                                                     @php $counter = 1; @endphp
                                                     @foreach ($transactions as $transaction)
                                                         <tr>

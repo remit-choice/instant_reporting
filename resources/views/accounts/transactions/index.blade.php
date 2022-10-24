@@ -77,7 +77,7 @@
                                         <div class="dates col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-end">
                                             <form action="{{ route('admin.accounts.transactions') }}" method="post">
                                                 @csrf
-                                                <select name="search_filter" id="" class="p-2">
+                                                <select name="search_filter" id="" style="padding: 7px">
                                                     <option value="{{ request()->input('search_filter', old('search_filter')) }}" hidden selected> 
                                                     @if (request()->input('search_filter'))
                                                         {{ request()->input('search_filter', old('search_filter')) }}
@@ -110,7 +110,7 @@
                                                     <input type="date" name="date_to" id="" class="p-1"
                                                         value="">
                                                 @endif
-                                                <button type="submit" name="filter" class="btn mb-2"
+                                                <button type="submit" name="filter" class="btn mb-1"
                                                     style="background-color: #091E3E;color: white">Submit</button>
                                             </form>
                                         </div>
@@ -223,14 +223,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (!empty($transactions_data))
+                                                @if (request()->input('search_filter'))
                                                     @php $counter = 1; @endphp
                                                     @foreach ($transactions as $transaction)
                                                         <tr>
                                                             <td>{{ $counter++ }}</td>
                                                              @if (request()->input('search_filter'))
                                                                 <td>{{ $transaction->beneficiary_country }}</td>
-                                                                <td></td>
+                                                                <td>{{$transaction->count_of_tr_no}}</td>
                                                                 <td>
                                                                     
                                                                 </td>

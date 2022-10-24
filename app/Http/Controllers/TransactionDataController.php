@@ -19,36 +19,28 @@ class TransactionDataController extends Controller
     public function index(Request $request)
     {
         if (FacadesRequest::isMethod('get')) {
-            if ($request->has('filter')) {
-                $transactions_data =  '1';
-                $date_from = '';
-                $date_to = '';
-                if (!empty($request->date_from) && empty($request->date_to)) {
-                    $date_from = strtotime($request->date_from);
-                    $date_from = date('d/m/Y', $date_from);
-                    $transactions = TransactionsData::where('transaction_date', $date_from)->get();
-                    // dd($transactions->toArray());
-                } elseif (empty($request->date_from) && !empty($request->date_to)) {
-                    $date_to = strtotime($request->date_to);
-                    $date_to = date('n/j/Y', $date_to);
-                    $transactions = TransactionsData::where('last_transaction_date',  $date_to)->get();
-                    // dd($transactions->toArray());
-                } elseif (!empty($request->date_from) && !empty($request->date_to)) {
-                    $date_from = strtotime($request->date_from);
-                    $date_from = date('d/m/Y', $date_from);
-                    $date_to = strtotime($request->date_to);
-                    $date_to = date('n/j/Y', $date_to);
-                    $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->get();
-                    // dd($transactions->toArray());
-                } else {
-                }
-                return
-                    view('admin.upload_data.transactions.index', ['date_from' => $date_from, 'date_to' => $date_to, 'transactions' => $transactions, 'transactions_data' => $transactions_data]);
+            return view('admin.upload_data.transactions.index');
+        }
+    }
+    public function filter(Request $request)
+    {
+        if (FacadesRequest::isMethod('post')) {
+            $date_from = '';
+            $date_to = '';
+            if (!empty($request->date_from) && empty($request->date_to)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $transactions = TransactionsData::where('transaction_date', $date_from)->get();
+            } elseif (empty($request->date_from) && !empty($request->date_to)) {
+                $date_to = date('n/j/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::where('last_transaction_date', '<=', "$date_to%")->get();
+            } elseif (!empty($request->date_from) && !empty($request->date_to)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $date_to = date('n/j/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::where([['transaction_date', '>=', $date_from], ['last_transaction_date', '<=', "$date_to%"]])->get();
             } else {
-                $transactions_data =  '';
-                return view('admin.upload_data.transactions.index', ['transactions_data' => $transactions_data]);
             }
-        } else {
+            return
+                view('admin.upload_data.transactions.index', ['date_from' => $date_from, 'date_to' => $date_to, 'transactions' => $transactions]);
         }
     }
     public function create(Request $request)

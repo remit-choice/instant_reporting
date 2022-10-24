@@ -66,6 +66,7 @@ Route::prefix('admin')->group(function () {
         Route::prefix('upload_data')->group(function () {
             Route::prefix('transactions')->group(function () {
                 Route::get('/', [TransactionDataController::class, 'index'])->name('admin.upload_data.transactions');
+                Route::post('/', [TransactionDataController::class, 'filter'])->name('admin.upload_data.transactions');
                 Route::match(['get', 'post'], '/create', [TransactionDataController::class, 'create'])->name('admin.upload_data.transactions.create');
             });
             Route::prefix('online_customers')->group(function () {
