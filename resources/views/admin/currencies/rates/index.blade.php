@@ -90,6 +90,12 @@
                                                             rate</label>
                                                         <input type="text" name="create_currency_max_rate"
                                                             id="create_currency_max_rate" class="form-control" readonly>
+                                                        <input type="hidden" name="create_currency_iso"
+                                                            id="create_currency_iso" value="">
+                                                        <input type="hidden" name="create_currency_iso3"
+                                                            id="create_currency_iso3" value="">
+                                                        <input type="hidden" name="create_currency" id="create_currency"
+                                                            value="">
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -172,10 +178,21 @@
                                                                     value="{{ $currency->id }}">
                                                             </td>
                                                             <td>{{ $currency->name }}</td>
-                                                            <td>{{ $currency->iso }}</td>
-                                                            <td>{{ $currency->iso3 }}</td>
+                                                            <td>{{ $currency->iso }}<input type="hidden"
+                                                                    name="db_currency_iso" class="db_currency_iso"
+                                                                    value="{{ $currency->iso }}">
+                                                            </td>
+                                                            <td>{{ $currency->iso3 }}
+                                                                <input type="hidden" name="db_currency_iso3"
+                                                                    class="db_currency_iso3"
+                                                                    value="{{ $currency->iso3 }}">
+                                                            </td>
                                                             <td>{{ $currency->dial }}</td>
-                                                            <td>{{ $currency->currency }}</td>
+                                                            <td>{{ $currency->currency }}
+                                                                <input type="hidden" name="db_currency"
+                                                                    class="db_currency"
+                                                                    value="{{ $currency->currency }}">
+                                                            </td>
                                                             <td>{{ $currency->currency_name }}</td>
                                                             <td id="min_rate{{ $currency->id }}">
                                                                 {{ $currency->min_rate }} <input type="hidden"
@@ -292,6 +309,9 @@
                                         <input type="text" name="currency_rate" id="currency_max_rate"
                                             class="form-control" readonly>
                                     </div>
+                                    <input type="hidden" name="currency_iso" id="currency_iso" value="">
+                                    <input type="hidden" name="currency_iso3" id="currency_iso3" value="">
+                                    <input type="hidden" name="currency" id="currency" value="">
                                 </div>
                                 <div class="form-group">
                                     <label for="currency_rate" class="text-capitalize">rate</label>
@@ -316,6 +336,9 @@
                     $('#create_currency_max_rate').val(_this.find('.db_currency_max_rate').val());
                     $('#create_currency_rate').val(_this.find('.db_currency_rate').val());
                     $('#create_currency_id').val(_this.find('.db_currency_id').val());
+                    $('#create_currency_iso').val(_this.find('.db_currency_iso').val());
+                    $('#create_currency_iso3').val(_this.find('.db_currency_iso3').val());
+                    $('#create_currency').val(_this.find('.db_currency').val());
                 });
                 $('.edit_currency').on('click', function() {
                     var _this = $(this).parents('tr');
@@ -324,6 +347,9 @@
                     $('#currency_rate').val(_this.find('.db_currency_rate').val());
                     $('#currency_id').val(_this.find('.db_currency_id').val());
                     $('#currency_rate_id').val(_this.find('.db_currency_rate_id').val());
+                    $('#currency_iso').val(_this.find('.db_currency_iso').val());
+                    $('#currency_iso3').val(_this.find('.db_currency_iso3').val());
+                    $('#currency').val(_this.find('.db_currency').val());
                 });
                 $(document).ready(function() {
                     $('.create').click(function(e) {
@@ -333,6 +359,9 @@
                         var max_rate = $('#create_currency_max_rate').val();
                         var rate = $('#create_currency_rate').val();
                         var date = $('#filter_date').val();
+                        var iso = $('#create_currency_iso').val();
+                        var iso3 = $('#create_currency_iso3').val();
+                        var currency = $('#create_currency').val();
 
 
                         console.log(c_id);
@@ -340,6 +369,10 @@
                         console.log(max_rate);
                         console.log(rate);
                         console.log(date);
+                        console.log(iso);
+                        console.log(iso3);
+                        console.log(currency);
+
 
                         if (min_rate != '' && max_rate != '' && date != '') {
                             $.ajaxSetup({
@@ -364,7 +397,10 @@
                                                 "min_rate": min_rate,
                                                 "max_rate": max_rate,
                                                 "rate": rate,
-                                                "date": date
+                                                "date": date,
+                                                "iso": iso,
+                                                "iso3": iso3,
+                                                "currency": currency,
                                             },
                                             success: function(response) {
                                                 if (response == '1') {
@@ -422,6 +458,10 @@
                         var max_rate = $('#currency_max_rate').val();
                         var rate = $('#currency_rate').val();
                         var date = $('#filter_date').val();
+                        var iso = $('#currency_iso').val();
+                        var iso3 = $('#currency_iso3').val();
+                        var currency = $('#currency').val();
+
 
                         console.log(id);
                         console.log(c_id);
@@ -455,6 +495,9 @@
                                                 "max_rate": max_rate,
                                                 "rate": rate,
                                                 "date": date,
+                                                "iso": iso,
+                                                "iso3": iso3,
+                                                "currency": currency,
                                             },
                                             success: function(response) {
                                                 if (response == '1') {

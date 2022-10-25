@@ -105,7 +105,7 @@ class TransactionDataController extends Controller
                                 'payment_method' => $emapData[33],
                                 'beneficiary_country' => $emapData[34],
                                 'customer_rate' => $emapData[35],
-                                'agent_rate_' => $emapData[36],
+                                'agent_rate' => $emapData[36],
                                 'payout_ccy' => $emapData[37],
                                 'amount' => $emapData[38],
                                 'payin_ccy' => $emapData[39],

@@ -56,6 +56,10 @@ class CurrenciesController extends Controller
         $min_rate = $request->min_rate;
         $max_rate = $request->max_rate;
         $rate = $request->rate;
+        $iso = $request->iso;
+        $iso3 = $request->iso3;
+        $currency = $request->currency;
+
         // dd($rate);
         $dated = date('Y-m-d', strtotime($request->date));
         $request->session()->pull('dated');
@@ -64,6 +68,9 @@ class CurrenciesController extends Controller
             CurrenciesRate::create([
                 'dated' => $dated,
                 'c_id' => $c_id,
+                'iso' => $iso,
+                'iso3' => $iso3,
+                'currency' => $currency,
                 'rate' => $rate,
                 'status' => 1
             ]);
@@ -83,6 +90,9 @@ class CurrenciesController extends Controller
         $min_rate = $request->min_rate;
         $max_rate = $request->max_rate;
         $rate = $request->rate;
+        $iso = $request->iso;
+        $iso3 = $request->iso3;
+        $currency = $request->currency;
 
         $dated = date('Y-m-d',  strtotime($request->date));
         $request->session()->pull('dated');
@@ -97,6 +107,9 @@ class CurrenciesController extends Controller
                 CurrenciesRate::insert([
                     'dated' => $dated,
                     'c_id' => $c_id,
+                    'iso' => $iso,
+                    'iso3' => $iso3,
+                    'currency' => $currency,
                     'rate' => $rate,
                     'status' => 1
                 ]);

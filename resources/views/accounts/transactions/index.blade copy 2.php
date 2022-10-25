@@ -142,8 +142,8 @@
                                                         $fx_in_fc_round_show = 0;
                                                         $charges_in_GBP_show = 0;
                                                         $fx_in_GBP_show = 0;
-                                                        $ssrl_show = 0;
                                                         $fx_loss_show = 0;
+                                                        
                                                     @endphp
                                                     @foreach ($transactions as $transaction)
                                                         <tr>
@@ -151,10 +151,7 @@
                                                                 $rates = function ($query) {
                                                                     $query->where('status', 1);
                                                                 };
-                                                                $country = $transaction->beneficiary_country;
-                                                                $currency = $transaction->payin_ccy;
-                                                                
-                                                                $currency_rates = App\Models\Currency::where([['currency', $currency], ['name', $country]])
+                                                                $currency_rates = App\Models\Currency::where([['currency', $transaction->payin_ccy], ['name', $transaction->beneficiary_country]])
                                                                     ->whereHas('rates', $rates)
                                                                     ->with('rates', $rates)
                                                                     ->get();
@@ -164,13 +161,11 @@
                                                                     if (!empty($currency_rate->rates)) {
                                                                         $rate = $currency_rate->rates['rate'];
                                                                     } else {
-                                                                        $rate = '';
                                                                     }
                                                                 }
                                                                 
                                                             @endphp
                                                             <td>{{ $counter++ }}</td>
-
                                                             <td>{{ $transaction->beneficiary_country }}</td>
                                                             <td></td>
                                                             <td>
@@ -183,7 +178,7 @@
                                                                 @elseif ($transaction->payin_ccy != 'GBP')
                                                                     @if (!empty($rate))
                                                                         @php
-                                                                            $GBP_convert = number_format($transaction->payin_amt / $rate, 2) - $transaction->admin_charges;
+                                                                            $GBP_convert = round($transaction->payin_amt / $rate, 2) - $transaction->admin_charges;
                                                                             $GBP_convert_show += $GBP_convert;
                                                                         @endphp
                                                                         {{ $GBP_convert }}
@@ -191,6 +186,14 @@
                                                                     @endif
                                                                 @else
                                                                 @endif
+                                                            </td>
+                                                            <td>
+                                                                @php
+                                                                    $fx_in_fc = (($transaction->buyer_dc_rate - $transaction->agent_rate) * ($transaction->payin_amt - $transaction->admin_charges)) / $transaction->buyer_dc_rate;
+                                                                    $fx_in_fc_round = round($fx_in_fc, 2);
+                                                                    $fx_in_fc_round_show += $fx_in_fc_round;
+                                                                @endphp
+                                                                {{ $fx_in_fc_round }}
                                                             </td>
                                                             <td>
                                                                 @php
@@ -208,7 +211,7 @@
                                                                         {
                                                                         @php
                                                                             // $fx_in_GBP = abs(round($fx_in_fc_round / $rate, 2));
-                                                                            $fx_in_GBP = number_format($fx_in_fc_round / $rate, 2);
+                                                                            $fx_in_GBP = round($fx_in_fc_round / $rate, 2);
                                                                             $fx_in_GBP_show += $fx_in_GBP;
                                                                             
                                                                         @endphp
@@ -228,26 +231,7 @@
                                                                 @elseif ($transaction->payin_ccy != 'GBP')
                                                                     @if (!empty($rate))
                                                                         @php
-                                                                            $charges_in_GBP = number_format($transaction->admin_charges / $rate, 2);
-                                                                            $charges_in_GBP_show += $charges_in_GBP;
-                                                                        @endphp
-                                                                        {{ $charges_in_GBP }}
-                                                                    @else
-                                                                    @endif
-                                                                @else
-                                                                @endif
-                                                            </td>
-                                                            <td>
-                                                                @if ($transaction->payin_ccy == 'GBP')
-                                                                    @php
-                                                                        $charges_in_GBP = $transaction->admin_charges;
-                                                                        $charges_in_GBP_show += $charges_in_GBP;
-                                                                    @endphp
-                                                                    {{ $charges_in_GBP }}
-                                                                @elseif ($transaction->payin_ccy != 'GBP')
-                                                                    @if (!empty($rate))
-                                                                        @php
-                                                                            $charges_in_GBP = number_format($transaction->admin_charges / $rate, 2);
+                                                                            $charges_in_GBP = round($transaction->admin_charges / $rate, 2);
                                                                             $charges_in_GBP_show += $charges_in_GBP;
                                                                         @endphp
                                                                         {{ $charges_in_GBP }}
@@ -260,10 +244,10 @@
                                                                 @if (!empty($rate))
                                                                     @php
                                                                         $fx_in_fc = (($transaction->buyer_dc_rate - $transaction->agent_rate) * ($transaction->payin_amt - $transaction->admin_charges)) / $transaction->buyer_dc_rate;
-                                                                        $fx_in_fc_round = number_format($fx_in_fc, 2);
+                                                                        $fx_in_fc_round = round($fx_in_fc, 2);
                                                                         
-                                                                        $fx_in_GBP = number_format($fx_in_fc_round / $rate, 2);
-                                                                        $charges_in_GBP = number_format($transaction->admin_charges / $rate, 2);
+                                                                        $fx_in_GBP = round($fx_in_fc_round / $rate, 2);
+                                                                        $charges_in_GBP = round($transaction->admin_charges / $rate, 2);
                                                                         $fx_loss = $fx_in_GBP + $charges_in_GBP;
                                                                         if ($fx_loss > 0) {
                                                                             $fx_loss = 0;
@@ -289,13 +273,13 @@
                                                             {{ $GBP_convert_show }}
                                                         </td>
                                                         <td>
+                                                            {{ $fx_in_fc_round_show }}
+                                                        </td>
+                                                        <td>
                                                             {{ $fx_in_GBP_show }}
                                                         </td>
                                                         <td>
                                                             {{ $charges_in_GBP_show }}
-                                                        </td>
-                                                        <td>
-                                                            {{ $ssrl_show }}
                                                         </td>
                                                         <td>
                                                             {{ $fx_loss_show }}

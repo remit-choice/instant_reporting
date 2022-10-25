@@ -16,6 +16,9 @@ class CreateCurrenciesRatesTable extends Migration
         Schema::create('currencies_rates', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('c_id')->index('c_id')->nullable();
+            $table->string('iso')->nullable();
+            $table->string('iso3')->nullable();
+            $table->string('currency')->nullable();
             $table->string('dated')->nullable();
             $table->string('rate')->nullable();
             $table->integer('status')->nullable();
