@@ -35,6 +35,9 @@
         .select2-container--default .select2-selection--single {
             height: calc(2.25rem + 2px) !important;
         }
+        #search_filter:focus {
+            outline: none;
+        }
     </style>
     @Include('layouts.favicon')
     @Include('layouts.links.admin.head')
@@ -48,11 +51,6 @@
             $('#failed').slideUp('slow');
         }, 3000);
     </script>
-    <style>
-        #search_filter:focus {
-            outline: none;
-        }
-    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -104,58 +102,43 @@
                                             method="post">
                                             @csrf
                                             <div class="row d-flex justify-content-center">
-
-                                                <select name="search_filter" id="search_filter"
-                                                    class="col-lg-3 col-md-3 col-sm-6 col-xs-6 my-2 mx-3"
-                                                    style="padding: 7px">
-                                                    <option
-                                                        value="{{ request()->input('search_filter', old('search_filter')) }}"
-                                                        hidden selected>
-                                                        @if (request()->input('search_filter'))
-                                                            {{ request()->input('search_filter', old('search_filter')) }}
-                                                        @else
-                                                            SELECT
-                                                        @endif
-                                                    </option>
-                                                    <option value="Customer Country">Customer Country</option>
-                                                </select>
-                                                {{-- <div class="form-group">
-                                                    <label>Minimal</label>
-                                                    <select class="select2 col-lg-3 col-md-3 col-sm-6 col-xs-6 my-2 mx-3"
-                                                        name="search_filter" id="search_filter" title="SELECT">
-                                                        <option value="" hidden selected>SELECT</option>
-                                                        <option
-                                                            value="{{ request()->input('search_filter', old('search_filter')) }}"
-                                                            hidden selected>
+                                                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                    <label>Select Country</label>
+                                                    <select class="form-control"
+                                                        name="search_filter" id="search_filter" style="width: 100%">
+                                                         <option class="py-2" hidden selected value="{{ request()->input('search_filter', old('search_filter')) }}">
                                                             @if (request()->input('search_filter'))
-                                                                {{ request()->input('search_filter', old('search_filter')) }}
-                                                            @else
+                                                            {{ request()->input('search_filter', old('search_filter')) }}
+                                                                @else
+                                                                    SELECT
                                                             @endif
-                                                        </option>
-                                                        <option value="Benificiary Country">Benificiary Country</option>
+                                                          </option>
+                                                          <option value="Customer Country" class="py-2">Customer Country</option>
                                                     </select>
-                                                </div> --}}
-
-                                                {{-- <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div> --}}
-                                                @if (request()->input('date_from'))
-                                                    <input type="date" name="date_from" id=""
-                                                        class="p-1 col-lg-3 col-md-3 col-sm-3 col-xs-3 my-2 mx-3"
-                                                        value="{{ request()->input('date_from', old('date_from')) }}">
-                                                @else
-                                                    <input type="date" name="date_from" id=""
-                                                        class="p-1 col-lg-3 col-md-3 col-sm-3 col-xs-3 my-2 mx-3"
-                                                        value="">
-                                                @endif
-                                                {{-- <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></div> --}}
-                                                @if (request()->input('date_to'))
-                                                    <input type="date" name="date_to" id=""
-                                                        class="p-1 col-lg-3 col-md-3 col-sm-3 col-xs-3 my-2 mx-3"
-                                                        value="{{ request()->input('date_to', old('date_to')) }}">
-                                                @else
-                                                    <input type="date" name="date_to" id=""
-                                                        class="p-1 col-lg-3 col-md-3 col-sm-3 col-xs-3 my-2 mx-3"
-                                                        value="">
-                                                @endif
+                                                </div>
+                                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                    <label>From Date</label>
+                                                    @if (request()->input('date_from'))
+                                                        <input type="date" name="date_from" id="" class="form-control"
+                                                            value="{{ request()->input('date_from', old('date_from')) }}" style="width: 100%">
+                                                    @else
+                                                        <input type="date" name="date_from" id=""
+                                                            class="form-control"
+                                                            value="" style="width: 100%">
+                                                    @endif
+                                                </div>
+                                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                    <label>To Date</label>
+                                                    @if (request()->input('date_to'))
+                                                        <input type="date" name="date_to" id=""
+                                                            class="form-control"
+                                                            value="{{ request()->input('date_to', old('date_to')) }}">
+                                                    @else
+                                                        <input type="date" name="date_to" id=""
+                                                            class="form-control"
+                                                            value="">
+                                                    @endif
+                                                </div>                       
                                             </div>
                                             <div class="row d-flex justify-content-center">
                                                 <button type="submit" name="filter" class="btn mb-1"
@@ -170,7 +153,7 @@
                                             <thead>
                                                 <tr>
                                                     <th class="text-capitalize">#</th>
-                                                    <th class="text-capitalize">beneficiary_country</th>
+                                                    <th class="text-capitalize">Customer Country</th>
                                                     <th class="text-capitalize">Count of Tr_No</th>
                                                     <th class="text-capitalize">Sum of Volume in GBP</th>
                                                     <th class="text-capitalize">Sum Fx in GBP</th>
@@ -186,6 +169,14 @@
                                                 @endphp
                                                 @if (!empty($transactions))
                                                     @if (request()->input('search_filter'))
+                                                        @php
+                                                            $count_of_tr_no = 0;
+                                                            $vol_in_gbp_show = 0;
+                                                            $fx_in_GBP_show = 0;
+                                                            $charges_in_GBP_show = 0;
+                                                            $ssrl_charges_in_GBP_show = 0;
+                                                            $fx_loss_show = 0;
+                                                        @endphp
                                                         @foreach ($transactions as $transaction)
                                                             <tr>
                                                                 <td>{{ $counter++ }}</td>
@@ -203,7 +194,29 @@
                                                                     @endif
                                                                 </td>
                                                             </tr>
+                                                             @php
+                                                                $count_of_tr_no += $transaction->count_of_tr_no;
+                                                                $vol_in_gbp_show += $transaction->vol_in_gbp;
+                                                                $fx_in_GBP_show += $transaction->fx_in_gbp;
+                                                                $charges_in_GBP_show += $transaction->charges_in_gbp;
+                                                                $ssrl_charges_in_GBP_show += $transaction->charges_in_gbp;
+                                                                if($transaction->fx_loss>0){
+                                                                    $fx_loss_show +=0;
+                                                                }else{
+                                                                    $fx_loss_show +=$transaction->fx_loss;
+                                                                }
+                                                            @endphp
                                                         @endforeach
+                                                        <tr>
+                                                            <td><strong>Total</strong></td>
+                                                            <td></td>
+                                                            <td>{{ $count_of_tr_no }}</td>
+                                                            <td>{{ $vol_in_gbp_show }}</td>
+                                                            <td>{{ $fx_in_GBP_show }}</td>
+                                                            <td>{{ $charges_in_GBP_show }}</td>
+                                                            <td>{{ $ssrl_charges_in_GBP_show }}</td>
+                                                            <td>{{ $fx_loss_show }}</td>
+                                                        </tr>
                                                     @else
                                                         @php
                                                             $vol_in_gbp_show = 0;
@@ -221,9 +234,9 @@
                                                                 $currencies_rates = App\Models\Currency::where('currency', $transaction->payin_ccy)
                                                                     ->ordoesntHave('rates')
                                                                     ->whereHas('rates', $rates)
-                                                                    ->has('rates')
+                                                                    ->with('rates', $rates)
                                                                     ->get();
-                                                                
+                                                                // dd($currencies_rates->toArray());
                                                                 foreach ($currencies_rates as $currency_rate) {
                                                                     if (!empty($currency_rate->rates)) {
                                                                         foreach ($currency_rate->rates as $rate) {
@@ -233,26 +246,25 @@
                                                                         $rate = 0;
                                                                     }
                                                                 }
-                                                                // dd($currencies_rates->toArray());
-                                                                // dd($rate);
-                                                                
                                                                 //volume in gbp
                                                                 if ($transaction->payin_ccy == 'GBP') {
-                                                                    $vol_in_gbp = $transaction->payin_amt - $transaction->admin_charges;
+                                                                    $vol_in_gbp = round($transaction->payin_amt - $transaction->admin_charges, 2);
                                                                     $vol_in_gbp_show += $vol_in_gbp;
                                                                 } elseif ($transaction->payin_ccy != 'GBP' && $rate != 0) {
-                                                                    $vol_in_gbp = number_format($transaction->payin_amt / $rate - $transaction->admin_charges, 2);
+                                                                    $vol_in_gbp = round($transaction->payin_amt / $rate - $transaction->admin_charges, 2);
                                                                     $vol_in_gbp_show += $vol_in_gbp;
                                                                 } else {
                                                                 }
                                                                 
                                                                 //fx in gbp
-                                                                $fx_in_fc = number_format((($transaction->buyer_dc_rate - $transaction->agent_rate) * ($transaction->payin_amt - $transaction->admin_charges)) / $transaction->buyer_dc_rate, 2);
+                                                                
+                                                                $fx_in_fc = 0;
+                                                                $fx_in_fc = round((($transaction->buyer_dc_rate - $transaction->agent_rate) * ($transaction->payin_amt - $transaction->admin_charges)) / $transaction->buyer_dc_rate, 2);
                                                                 if ($transaction->payin_ccy == 'GBP' && $fx_in_fc != 0) {
                                                                     $fx_in_GBP = $fx_in_fc;
                                                                     $fx_in_GBP_show += $fx_in_GBP;
                                                                 } elseif ($transaction->payin_ccy != 'GBP' && $rate != 0 && $fx_in_fc != 0) {
-                                                                    $fx_in_GBP = number_format($fx_in_fc / $rate, 2);
+                                                                    $fx_in_GBP = round($fx_in_fc / $rate, 2);
                                                                     $fx_in_GBP_show += $fx_in_GBP;
                                                                 } else {
                                                                 }
@@ -263,7 +275,7 @@
                                                                     $charges_in_GBP = $transaction->admin_charges;
                                                                     $charges_in_GBP_show += $charges_in_GBP;
                                                                 } elseif ($transaction->payin_ccy != 'GBP' && $rate != 0) {
-                                                                    $charges_in_GBP = number_format($transaction->admin_charges / $rate, 2);
+                                                                    $charges_in_GBP = round($transaction->admin_charges / $rate, 2);
                                                                     $charges_in_GBP_show += $charges_in_GBP;
                                                                 } else {
                                                                 }
@@ -272,8 +284,9 @@
                                                                 
                                                                 if ($transaction->payin_ccy == 'GBP') {
                                                                     $ssrl_charges_in_GBP = $transaction->admin_charges;
+                                                                    $ssrl_charges_in_GBP_show += $ssrl_charges_in_GBP;
                                                                 } elseif ($transaction->payin_ccy != 'GBP' && $rate != 0) {
-                                                                    $ssrl_charges_in_GBP = number_format($transaction->admin_charges / $rate, 2);
+                                                                    $ssrl_charges_in_GBP = round($transaction->admin_charges / $rate, 2);
                                                                     $ssrl_charges_in_GBP_show += $ssrl_charges_in_GBP;
                                                                 } else {
                                                                 }
@@ -281,16 +294,14 @@
                                                                 // //fx loss
                                                                 
                                                                 if ($rate != 0) {
-                                                                    $fx_in_fc = number_format((($transaction->buyer_dc_rate - $transaction->agent_rate) * ($transaction->payin_amt - $transaction->admin_charges)) / $transaction->buyer_dc_rate, 2);
+                                                                    $fx_in_fc = round((($transaction->buyer_dc_rate - $transaction->agent_rate) * ($transaction->payin_amt - $transaction->admin_charges)) / $transaction->buyer_dc_rate, 2);
                                                                 
-                                                                    $fx_in_GBP = number_format($fx_in_fc / $rate, 2);
-                                                                    $charges_in_GBP = number_format($transaction->admin_charges / $rate, 2);
+                                                                    $fx_in_GBP = round($fx_in_fc / $rate, 2);
+                                                                    $charges_in_GBP = round($transaction->admin_charges / $rate, 2);
                                                                     $fx_loss = $fx_in_GBP + $charges_in_GBP;
                                                                     if ($fx_loss > 0) {
                                                                         $fx_loss = 0;
-                                                                        $fx_loss_show += $fx_loss;
                                                                     } elseif ($fx_loss < 0) {
-                                                                        $fx_loss = $fx_in_GBP + $charges_in_GBP;
                                                                         $fx_loss_show += $fx_loss;
                                                                     } else {
                                                                     }
@@ -309,7 +320,7 @@
                                                                 </td>
                                                                 <td>
                                                                     @if ($rate != 0)
-                                                                        {{ $fx_in_fc }}
+                                                                        {{ $fx_in_GBP }}
                                                                     @else
                                                                     @endif
                                                                 </td>
@@ -340,9 +351,9 @@
                                                             </tr>
                                                         @endforeach
                                                         <tr>
-                                                            <td>Total</td>
+                                                            <td><strong>Total</strong></td>
                                                             <td></td>
-                                                            <td>{{ $counter }}</td>
+                                                            <td>{{ --$counter }}</td>
                                                             <td>{{ $vol_in_gbp_show }}</td>
                                                             <td>{{ $fx_in_GBP_show }}</td>
                                                             <td>{{ $charges_in_GBP_show }}</td>
@@ -356,7 +367,7 @@
                                             <tfoot>
                                                 <tr>
                                                     <th class="text-capitalize">#</th>
-                                                    <th class="text-capitalize">beneficiary_country</th>
+                                                    <th class="text-capitalize">Customer Country</th>
                                                     <th class="text-capitalize">Count of Tr_No</th>
                                                     <th class="text-capitalize">Sum of Volume in GBP</th>
                                                     <th class="text-capitalize">Sum Fx in GBP</th>
