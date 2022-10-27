@@ -204,18 +204,21 @@
                                                                     name="db_currency_max_rate"
                                                                     class="db_currency_max_rate"
                                                                     value="{{ $currency->max_rate }}"></td>
-                                                            @if (!empty($currency->rates))
-                                                                @if ($currency->rates['status'] == 1)
-                                                                    <td id="rate{{ $currency->rates['id'] }}">
-                                                                        {{ $currency->rates['rate'] }}
-                                                                        <input type="hidden" name="db_currency_rate_id"
-                                                                            class="db_currency_rate_id"
-                                                                            value="{{ $currency->rates['id'] }}">
-                                                                        <input type="hidden" name="db_currency_rate"
-                                                                            class="db_currency_rate"
-                                                                            value="{{ $currency->rates['rate'] }}">
-                                                                    </td>
-                                                                @endif
+                                                            @if (!$currency->rates->isEmpty())
+                                                                @foreach ($currency->rates as $rate)
+                                                                    @if ($rate->status == 1)
+                                                                        <td id="rate{{ $rate->id }}">
+                                                                            {{ $rate->rate }}
+                                                                            <input type="hidden"
+                                                                                name="db_currency_rate_id"
+                                                                                class="db_currency_rate_id"
+                                                                                value="{{ $rate->id }}">
+                                                                            <input type="hidden" name="db_currency_rate"
+                                                                                class="db_currency_rate"
+                                                                                value="{{ $rate->rate }}">
+                                                                        </td>
+                                                                    @endif
+                                                                @endforeach
                                                             @else
                                                                 <td></td>
                                                             @endif

@@ -62,8 +62,8 @@ class ModulesController extends Controller
             } else {
                 $status = 0;
             }
-            $sort_count =  Module::where('sort', $sort)->count();
-            if ($sort_count <= 0) {
+            $sort_count =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->count();
+            if ($sort_count == 0) {
                 Module::insert([
                     'm_g_id' => $m_g_id,
                     'name' => $name,
@@ -116,7 +116,8 @@ class ModulesController extends Controller
             ]);
 
             $sort_data =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->first();
-            $sort_count =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->get()->count();
+
+            $sort_count =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->count();
             if ($sort_count <= 0) {
                 Module::where('id', $id)->update([
                     'sort' => $sort,

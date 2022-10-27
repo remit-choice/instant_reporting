@@ -38,7 +38,11 @@
     {{-- @Include('layouts.links.modals.head') --}}
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
+    <script>
+        setTimeout(function() {
+            $('#failed').slideUp('slow');
+        }, 3000);
+    </script>
 
 </head>
 
@@ -75,6 +79,15 @@
                 <!-- Main content -->
                 <section class="content">
                     <div class="container-fluid">
+                        @if (session('failed'))
+                            <div id="failed" class="alert alert-default-danger alert-dismissible fade show"
+                                role="alert">
+                                <strong>{{ session('failed') }}</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
                         <!-- Small boxes (Stat box) -->
                         <div class="row">
                             <div class="col-12">
@@ -91,7 +104,7 @@
                                                     <input type="date" name="date_from" id="" class="p-1"
                                                         value="">
                                                 @endif
-                                               @if (request()->input('date_to'))
+                                                @if (request()->input('date_to'))
                                                     <input type="date" name="date_to" id="" class="p-1"
                                                         value="{{ request()->input('date_to', old('date_to')) }}">
                                                 @else
@@ -197,7 +210,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @if (request()->input('date_from') || request()->input('date_to'))
+                                                @if ((!empty($transactions) && request()->input('date_from')) || request()->input('date_to'))
                                                     @php $counter = 1; @endphp
                                                     @foreach ($transactions as $transaction)
                                                         <tr>

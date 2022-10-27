@@ -13,6 +13,6 @@ class Currency extends Model
 
     public function rates()
     {
-        return $this->belongsTo(CurrenciesRate::class, 'id', 'c_id');
+        return $this->hasMany(CurrenciesRate::class, 'c_id', 'id');
     }
 }

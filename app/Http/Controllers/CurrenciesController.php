@@ -45,8 +45,9 @@ class CurrenciesController extends Controller
         $rates = function ($query) {
             $query->where('status', 1);
         };
-        $currencies =  Currency::where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->orwhereHas('rates', $rates)->with('rates', $rates)->get();
+        $currencies =  Currency::where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->whereHas('rates', $rates)->with('rates', $rates)->get();
         // dd(Session::get('dated'));
+        dd($currencies->toArray());
         $request->session()->pull('dated');
         return view('admin.currencies.rates.index', ['currencies' => $currencies]);
     }

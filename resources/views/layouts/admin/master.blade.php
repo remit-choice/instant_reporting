@@ -222,7 +222,8 @@
                                                       <a href="{{ $route_url }}"
                                                           class="nav-link @if ($modules_url->url == $REQUEST_URI) {{ 'active' }} @endif">
                                                           <i class="{{ $module->icon }} nav-icon"></i>
-                                                          <p>{{ $module->name }}</p>
+                                                          <p style="word-wrap: break-word;white-space: nowrap;">
+                                                              {{ $module->name }}</p>
                                                       </a>
                                                   </li>
                                               @endif

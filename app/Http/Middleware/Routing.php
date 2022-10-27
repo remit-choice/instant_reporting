@@ -70,7 +70,6 @@ class Routing
                 }
             }
         } else {
-            $request->session()->flush();
             return redirect('/admin');
         }
     }

@@ -110,8 +110,16 @@ Route::prefix('admin')->group(function () {
 
         Route::prefix('accounts')->group(function () {
             Route::prefix('transactions')->group(function () {
-                Route::get('/', [TransactionController::class, 'index'])->name('admin.accounts.transactions');
-                Route::post('/', [TransactionController::class, 'filter'])->name('admin.accounts.transactions');
+                //sending side revenue
+                Route::prefix('sending')->group(function () {
+                    Route::get('/', [TransactionController::class, 'sending_index'])->name('admin.accounts.transactions.sending_side_revenue');
+                    Route::post('/', [TransactionController::class, 'sending_filter'])->name('admin.accounts.transactions.sending_side_revenue');
+                });
+                //receiving side revenue
+                Route::prefix('receiving')->group(function () {
+                    Route::get('/', [TransactionController::class, 'receiving_index'])->name('admin.accounts.transactions.receiving_side_revenue');
+                    Route::post('/', [TransactionController::class, 'receiving_filter'])->name('admin.accounts.transactions.receiving_side_revenue');
+                });
             });
         });
     });
