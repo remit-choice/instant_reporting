@@ -9,6 +9,7 @@ use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\Validator;
 
 class ModuleGroupsController extends Controller
 {
@@ -24,7 +25,7 @@ class ModuleGroupsController extends Controller
     {
         if (FacadesRequest::isMethod('get')) {
             $roles = Role::get();
-            $modules_groups = ModulesGroup::orderBy('sort')->get();
+            $modules_groups = ModulesGroup::get();
             return view('admin.setting.module.group.index', ['roles' => $roles, 'modules_groups' => $modules_groups]);
         } else {
             return back();
@@ -43,27 +44,28 @@ class ModuleGroupsController extends Controller
             } else {
             }
         } elseif (FacadesRequest::isMethod('post')) {
+            $request->validate(
+                [
+                    'name' => 'required|string|max:255',
+                    'icon' => 'required|string|max:255',
+                ],
+                [
+                    'name.required' => "*Name is required",
+                    'icon.required' => "*Icon is required",
+                ]
+            );
             $name = $request->name;
             $icon = $request->icon;
-            $sort = $request->sort;
             if (!empty($request->status)) {
                 $status = '1';
             } else {
                 $status = '0';
             }
-            // $sort_result =  ModulesGroup::where('sort', $sort)->first();
-            $sort_count =  ModulesGroup::where('sort', $sort)->count();
-            if ($sort_count <= 0) {
-                ModulesGroup::insert([
-                    'name' => $name,
-                    'icon' => $icon,
-                    'sort' => $sort,
-                    'status' => $status
-                ]);
-                return true;
-            } else {
-                return "false";
-            }
+            ModulesGroup::insert([
+                'name' => $name,
+                'icon' => $icon,
+                'status' => $status
+            ]);
         } else {
             return back();
         }
@@ -82,42 +84,70 @@ class ModuleGroupsController extends Controller
                 return back();
             }
         } elseif (FacadesRequest::isMethod('post')) {
-            $id = $request->id;
-            $name = $request->name;
-            $icon = $request->icon;
-            $sort = $request->sort;
-            if (!empty($request->status)) {
-                $status = 1;
-            } else {
-                $status = 0;
-            }
-
-            ModulesGroup::where('id', $id)->update([
-                'name' => $name,
-                'icon' => $icon,
-                'status' => $status
-            ]);
-
-            $sort_data =  ModulesGroup::where('sort', $sort)->first();
-            $sort_count =  ModulesGroup::where('sort', $sort)->count();
-            // dd($sort_data->id);
-            if ($sort_count <= 0) {
-                ModulesGroup::where('id', $id)->update([
-                    'sort' => $sort,
-                ]);
-                return true;
-            } elseif (!empty($sort_data)) {
-                if ($sort_count <= 1 && $id == $sort_data->id) {
-                    ModulesGroup::where('id', $id)->update([
-                        'sort' => $sort,
-                    ]);
-                    return true;
-                } else {
-                    return "false";
+            if (!empty($request->sort)) {
+                $modules_groups = ModulesGroup::all();
+                foreach ($modules_groups as $modules_group) {
+                    foreach ($request->sort as $sort) {
+                        if ($sort['id'] == $modules_group->id) {
+                            $modules_group->update(['sort' => $sort['position']]);
+                        }
+                    }
                 }
+                return true;
             } else {
-                return "false";
+                $request->validate(
+                    [
+                        'name' => 'required|string|max:255',
+                        'icon' => 'required|string|max:255',
+                    ],
+                    [
+                        'name.required' => "*Name is required",
+                        'icon.required' => "*Icon is required",
+                    ]
+                );
+                $id = $request->id;
+                $name = $request->name;
+                $icon = $request->icon;
+                if (!empty($request->status)) {
+                    $status = 1;
+                } else {
+                    $status = 0;
+                }
+
+                ModulesGroup::where('id', $id)->update([
+                    'name' => $name,
+                    'icon' => $icon,
+                    'status' => $status
+                ]);
             }
+            // $sort_records =  ModulesGroup::where('sort', '>=', $sort)->get();
+            // $sort_count =  ModulesGroup::where('sort', '>=', $sort)->count();
+            // $sort_count_begin =  ModulesGroup::where('sort', '<', $sort)->count();
+            // dd($sort_count);
+            // if ($sort_count >= 0) {
+            //     ModulesGroup::where('id', $id)->update([
+            //         'sort' => $sort,
+            //     ]);
+            //     foreach ($sort_records as $sort_record) {
+            //         ModulesGroup::where('id', $sort_record->id)->update([
+            //             'sort' => $sort++,
+            //         ]);
+            //     }
+            //     return true;
+            // }
+            //  elseif (!empty($sort_data)) {
+            //     if ($sort_count <= 1 && $id == $sort_data->id) {
+            //         ModulesGroup::where('id', $id)->update([
+            //             'sort' => $sort,
+            //         ]);
+            //         return true;
+            //     } else {
+            //         return "false";
+            //     }
+            // } 
+            // else {
+            //     return "false";
+            // }
         } else {
             return back();
         }

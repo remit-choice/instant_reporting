@@ -28,32 +28,30 @@
     @Include('layouts.favicon')
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
-    @Include('layouts.links.sweetalert.head')
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    @Include('layouts.links.toastr.head')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     @extends('layouts.admin.master')
     @section('content')
-        <div class="wrapper">
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0">Modules URL</h1>
-                            </div><!-- /.col -->
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Modules URL</li>
-                                </ol>
-                            </div><!-- /.col -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                {{-- <ul class="nav nav-pills text-center"> --}}
+    <div class="wrapper">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Modules URL</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Modules URL</li>
+                            </ol>
+                        </div><!-- /.col -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            {{-- <ul class="nav nav-pills text-center"> --}}
                                 <div id="success" class="alert alert-default-success alert-dismissible fade show"
                                     role="alert" style="display: none">
                                     <strong class=""></strong>
@@ -84,27 +82,38 @@
                                                         @csrf
                                                         <div class="modal-body">
                                                             <div class="form-group">
-                                                                <label for="module_name" class="text-capitalize">URL</label>
-                                                                <input type="hidden" name="create_module_id"
-                                                                    id="create_module_id"
-                                                                    value="{{ Session::get('m_id') }}">
-                                                                <input type="hidden" name="create_module_url_id"
-                                                                    id="create_module_url_id" value="">
-                                                                <input type="text" name="create_module_url_name"
-                                                                    id="create_module_url_name" class="form-control">
+                                                                <label for="module_name"
+                                                                    class="text-capitalize">URL</label>
+                                                                <div class="input-group">
+                                                                    <input type="hidden" name="create_module_id"
+                                                                        id="create_module_id"
+                                                                        value="{{ Session::get('m_id') }}">
+                                                                    <input type="hidden" name="create_module_url_id"
+                                                                        id="create_module_url_id" value="">
+                                                                    <input type="text" name="create_module_url_name"
+                                                                        id="create_module_url_name"
+                                                                        class="form-control">
+                                                                </div>
+                                                                <span class="invalid-feedback"
+                                                                    id="create_module_url_name_error">
+                                                                </span>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="create_type"
                                                                     class="text-capitalize">Type</label>
-                                                                <select id="create_type" data-live-search="true"
-                                                                    title="Select"
-                                                                    class="selectpicker show-tick form-control"
-                                                                    name="create_type" required>
-                                                                    <option value="" selected hidden disabled>Select
-                                                                    </option>
-                                                                    <option value="0">SideBar</option>
-                                                                    <option value="1">Inside Page</option>
-                                                                </select>
+                                                                <div class="input-group">
+                                                                    <select id="create_type" data-live-search="true"
+                                                                        title="Select"
+                                                                        class="selectpicker show-tick form-control"
+                                                                        name="create_type">
+                                                                        <option value="" selected hidden disabled>Select
+                                                                        </option>
+                                                                        <option value="0">SideBar</option>
+                                                                        <option value="1">Inside Page</option>
+                                                                    </select>
+                                                                </div>
+                                                                <span class="invalid-feedback" id="create_type_error">
+                                                                </span>
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="module_status" class="text-capitalize">
@@ -131,171 +140,171 @@
                                     </form>
                                 </div>
 
-                                {{-- </ul> --}}
-                            </div>
-                        </div><!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content-header -->
-
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <!-- Small boxes (Stat box) -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Modules List</h3>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body datatable_data">
-                                        <table id="example2" class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Module Name</th>
-                                                    <th>Route Name</th>
-                                                    <th>URL</th>
-                                                    <th>Type</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="role_data">
-                                                @php
-                                                    $counter = 1;
-                                                @endphp
-                                                @foreach ($modules_urls as $modules_url)
-                                                    <tr>
-                                                        <td>{{ $counter++ }}<input type="hidden" name="db_module_id"
-                                                                class="db_module_id"
-                                                                value="{{ $modules_url->modules['id'] }}">
-                                                            <input type="hidden" name="db_module_url_id"
-                                                                class="db_module_url_id" value="{{ $modules_url->id }}">
-                                                        </td>
-                                                        <td>
-                                                            {{ $modules_url->modules['name'] }}
-                                                            <input type="hidden" name="db_module_name"
-                                                                class="db_module_name"
-                                                                value="{{ $modules_url->modules['name'] }}">
-                                                        </td>
-                                                        <td>
-                                                            {{ $modules_url->name }}
-                                                            <input type="hidden" name="db_module_url"
-                                                                class="db_module_url" value="{{ $modules_url->name }}">
-
-                                                        </td>
-                                                        <td>
-                                                            {{ $modules_url->url }}
-                                                        </td>
-                                                        <td>
-                                                            @if ($modules_url->type == '1')
-                                                                <span class="badge badge-info">Inside Page</span>
-                                                                <input type="hidden" name="db_module_type_name"
-                                                                    class="db_module_type_name" value="Inside Page">
-                                                            @else
-                                                                <span class="badge badge-dark">SideBar</span>
-                                                                <input type="hidden" name="db_module_type_name"
-                                                                    class="db_module_type_name" value="SideBar">
-                                                            @endif
-                                                            <input type="hidden" name="db_module_type"
-                                                                class="db_module_type" value="{{ $modules_url->type }}">
-                                                        </td>
-                                                        <td>
-                                                            @if ($modules_url->status == '1')
-                                                                <span class="badge badge-success">Active</span>
-                                                            @else
-                                                                <span class="badge badge-danger">InActive</span>
-                                                            @endif
-                                                            <input type="hidden" name="db_module_url_status"
-                                                                class="db_module_url_status"
-                                                                value="{{ $modules_url->status }}">
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-secondary dropdown-toggle"
-                                                                    type="button" id="dropdownMenuButton"
-                                                                    data-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false">
-                                                                    Action
-                                                                </button>
-                                                                <div class="dropdown-menu edit_module_url"
-                                                                    aria-labelledby="dropdownMenuButton">
-                                                                    <li>
-                                                                        <a class="dropdown-item" type="button"
-                                                                            href="#" data-toggle="modal"
-                                                                            data-target="#module_url_update">
-                                                                            Edit</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <form
-                                                                            action="/admin/setting/module/{{ $modules_url->id }}/url/delete"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            <input type="hidden" name="id"
-                                                                                class="id"
-                                                                                value="{{ $modules_url->id }}">
-                                                                            <button class="dropdown-item delete"
-                                                                                type="submit">
-                                                                                Delete
-                                                                            </button>
-                                                                        </form>
-                                                                    </li>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Module Name</th>
-                                                    <th>Route Name</th>
-                                                    <th>URL</th>
-                                                    <th>Type</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
-                            </div>
+                                {{--
+                            </ul> --}}
                         </div>
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </section>
-                <!-- /.content -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
             </div>
-        </div>
-        <div class="modal fade" id="module_url_update">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Module</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Small boxes (Stat box) -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Modules List</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body datatable_data">
+                                    <table id="example2" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Module Name</th>
+                                                <th>Route Name</th>
+                                                <th>URL</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="role_data">
+                                            @php
+                                            $counter = 1;
+                                            @endphp
+                                            @foreach ($modules_urls as $modules_url)
+                                            <tr>
+                                                <td>{{ $counter++ }}<input type="hidden" name="db_module_id"
+                                                        class="db_module_id" value="{{ $modules_url->modules['id'] }}">
+                                                    <input type="hidden" name="db_module_url_id"
+                                                        class="db_module_url_id" value="{{ $modules_url->id }}">
+                                                </td>
+                                                <td>
+                                                    {{ $modules_url->modules['name'] }}
+                                                    <input type="hidden" name="db_module_name" class="db_module_name"
+                                                        value="{{ $modules_url->modules['name'] }}">
+                                                </td>
+                                                <td>
+                                                    {{ $modules_url->name }}
+                                                    <input type="hidden" name="db_module_url" class="db_module_url"
+                                                        value="{{ $modules_url->name }}">
+
+                                                </td>
+                                                <td>
+                                                    {{ $modules_url->url }}
+                                                </td>
+                                                <td>
+                                                    @if ($modules_url->type == '1')
+                                                    <span class="badge badge-info">Inside Page</span>
+                                                    <input type="hidden" name="db_module_type_name"
+                                                        class="db_module_type_name" value="Inside Page">
+                                                    @else
+                                                    <span class="badge badge-dark">SideBar</span>
+                                                    <input type="hidden" name="db_module_type_name"
+                                                        class="db_module_type_name" value="SideBar">
+                                                    @endif
+                                                    <input type="hidden" name="db_module_type" class="db_module_type"
+                                                        value="{{ $modules_url->type }}">
+                                                </td>
+                                                <td>
+                                                    @if ($modules_url->status == '1')
+                                                    <span class="badge badge-success">Active</span>
+                                                    @else
+                                                    <span class="badge badge-danger">InActive</span>
+                                                    @endif
+                                                    <input type="hidden" name="db_module_url_status"
+                                                        class="db_module_url_status" value="{{ $modules_url->status }}">
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                            id="dropdownMenuButton" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <div class="dropdown-menu edit_module_url"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            <li>
+                                                                <a class="dropdown-item" type="button" href="#"
+                                                                    data-toggle="modal"
+                                                                    data-target="#module_url_update">
+                                                                    Edit</a>
+                                                            </li>
+                                                            <li>
+                                                                <form
+                                                                    action="/admin/setting/module/{{ $modules_url->id }}/url/delete"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" class="id"
+                                                                        value="{{ $modules_url->id }}">
+                                                                    <button class="dropdown-item delete" type="submit">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Module Name</th>
+                                                <th>Route Name</th>
+                                                <th>URL</th>
+                                                <th>Type</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
                     </div>
-                    <form action="" method="post" id="module_url_update_form">
-                        @csrf
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <label for="module_url_id" class="text-capitalize">URL</label>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+    </div>
+    <div class="modal fade" id="module_url_update">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Module</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="" method="post" id="module_url_update_form">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="module_url_id" class="text-capitalize">URL</label>
+                            <div class="input-group">
                                 <input type="hidden" name="module_url_id" id="module_url_id" value="">
                                 <input type="text" name="module_url" id="module_url" class="form-control">
                             </div>
-                            <div class="form-group">
-                                <label for="module_id" class="text-capitalize">Module</label>
-                                <input type="hidden" name="module_id" id="module_id" value="">
-                                <input type="text" name="module_name" id="module_name" class="form-control" readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="module_type" class="text-capitalize">Type</label>
+                            <span class="invalid-feedback" id="module_url_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="module_id" class="text-capitalize">Module</label>
+                            <input type="hidden" name="module_id" id="module_id" value="">
+                            <input type="text" name="module_name" id="module_name" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="module_type" class="text-capitalize">Type</label>
+                            <div class="input-group">
                                 <select id="module_type" data-live-search="true" title="Select"
                                     class="selectpicker show-tick form-control" name="module_type" required>
                                     <option id="edit_module_type" selected hidden value="">
@@ -303,28 +312,39 @@
                                     <option value="1">Inside Page</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label for="module_url_status" class="text-capitalize">
-                                    <input type="checkbox" name="module_url_status me-2" id="module_url_status"
-                                        value="0">Status</label>
-                            </div>
+                            <span class="invalid-feedback" id="module_type_error">
+                            </span>
                         </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="border px-2 btn update"
-                                style="background-color: #091E3E;color: white">Update</button>
+                        <div class="form-group">
+                            <label for="module_url_status" class="text-capitalize">
+                                <input type="checkbox" name="module_url_status me-2" id="module_url_status"
+                                    value="0">Status</label>
                         </div>
-                    </form>
-                </div>
-                <!-- /.modal-content -->
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="border px-2 btn update"
+                            style="background-color: #091E3E;color: white">Update</button>
+                    </div>
+                </form>
             </div>
-            <!-- /.modal-dialog -->
+            <!-- /.modal-content -->
         </div>
-        <!-- /.modal -->
-        @Include('layouts.links.datatable.foot')
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    @Include('layouts.links.admin.foot')
+    @Include('layouts.links.datatable.foot')
+    @Include('layouts.links.sweet_alert.foot')
 
-        <script type="text/javascript">
-            $(function() {
+    <script type="text/javascript">
+        $(function() {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
                 $('#module_url_status').click(function() {
                     if ($(this).is(':checked')) {
                         $(this).attr("checked", true)
@@ -343,7 +363,6 @@
                         $(this).val(this.checked ? 1 : 0);
                     }
                 });
-            });
             $('.edit_module_url').on('click', function() {
                 var _this = $(this).parents('tr');
                 $('#module_id').val(_this.find('.db_module_id').val());
@@ -362,7 +381,6 @@
                     $('#module_url_status').prop('checked', false);
                 }
             });
-            $(document).ready(function() {
                 $('.create').click(function(e) {
                     e.preventDefault();
                     var url = $('#create_module_url_name').val();
@@ -380,6 +398,7 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
+                    if (url != '' && type != '') {
                     $.ajax({
                         type: "post",
                         url: urls,
@@ -390,12 +409,38 @@
                             "status": status,
                         },
                         success: function(response) {
-                            location.reload();
+                            Swal.fire(
+                                'Done!',
+                                'Inserted Successfully!',
+                                'success'
+                            ).then((result) => {
+                                location.reload();
+                            });
                         },
                         error: (error) => {
                             console.log(JSON.stringify(error));
                         }
                     });
+                } else {
+                    if (url == '') {
+                        $('#create_module_url_name_error').show();
+                        $('#create_module_url_name_error').html(
+                            "Required!");
+                        window.setInterval(function() {
+                            $('#create_module_url_name_error').slideUp('slow');
+                            $('#create_module_url_name_error').empty();
+                        }, 4000);
+                    }
+                    if (type == null) {
+                        $('#create_type_error').show();
+                        $('#create_type_error').html(
+                            "Required!");
+                        window.setInterval(function() {
+                            $('#create_type_error').slideUp('slow');
+                            $('#create_type_error').empty();
+                        }, 4000);
+                    }
+                }
                 });
                 $('.update').click(function(e) {
                     e.preventDefault();
@@ -420,16 +465,16 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-
-                    swal({
-                            title: "Are you sure?",
-                            text: "Once Update, you will not be able to recover this imaginary rate!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                            if (willDelete) {
+                    if (url != '' && type != '') {
+                        Swal.fire({
+                        title: 'Are you sure?',
+                        icon: 'warning',
+                        confirmButtonColor: '#e64942',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: `No`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
                                 $.ajax({
                                     type: "post",
                                     url: urls,
@@ -441,11 +486,13 @@
                                         "status": status,
                                     },
                                     success: function(response) {
-                                        swal("Data Successfully Updated.!", {
-                                            icon: "success",
-                                        }).then((result) => {
-                                            location.reload();
-                                        });
+                                        Swal.fire(
+                                        'Updated!',
+                                        'Data Successfully Updated.!',
+                                        'success'
+                                    ).then((result) => {
+                                        location.reload();
+                                    });
                                     },
 
                                     error: (error) => {
@@ -454,6 +501,26 @@
                                 });
                             }
                         });
+                    } else {
+                    if (url == '') {
+                        $('#module_url_error').show();
+                        $('#module_url_error').html(
+                            "Required!");
+                        window.setInterval(function() {
+                            $('#module_url_error').slideUp('slow');
+                            $('#module_url_error').empty();
+                        }, 4000);
+                    }
+                    if (type == null) {
+                        $('#module_type_error').show();
+                        $('#module_type_error').html(
+                            "Required!");
+                        window.setInterval(function() {
+                            $('#module_type_error').slideUp('slow');
+                            $('#module_type_error').empty();
+                        }, 4000);
+                    }
+                }   
 
                 });
                 $('.delete').click(function(e) {
@@ -466,15 +533,16 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    swal({
-                            title: "Are you sure?",
-                            text: "Once deleted, you will not be able to recover this imaginary file!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                            if (willDelete) {
+                    Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Once Deleted, you will not be able to recover this record!!",
+                    icon: 'warning',
+                    confirmButtonColor: '#e64942',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes',
+                    cancelButtonText: `No`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
                                 $.ajax({
                                     type: "post",
                                     url: "/admin/setting/module/" + id +
@@ -483,19 +551,18 @@
                                         "id": id,
                                     },
                                     success: function(response) {
-                                        swal("Data successfully Deleted.!", {
-                                            icon: "success",
-                                        }).then((result) => {
-                                            $(el).closest('tr').css(
-                                                'background',
-                                                'tomato');
-                                            $(el).closest('tr').fadeOut(
-                                                800,
-                                                function() {
-                                                    $(this)
-                                                        .remove();
-                                                });
+                                        Swal.fire(
+                                    'Deleted!',
+                                    'Data Successfully Deleted.!',
+                                    'success'
+                                ).then((result) => {
+                                    $(el).closest('tr').css(
+                                        'background', 'tomato');
+                                    $(el).closest('tr').fadeOut(800,
+                                        function() {
+                                            $(this).remove();
                                         });
+                                });
 
                                     },
                                     error: (error) => {
@@ -506,7 +573,7 @@
                         });
                 });
             });
-        </script>
+    </script>
     @endsection
     {{-- @Include('layouts.links.modals.foot') --}}
 </body>

@@ -41,6 +41,8 @@ class TransactionDataController extends Controller
             } else {
                 if (empty($request->date_from) && !empty($request->date_to)) {
                     return redirect()->back()->with('failed', "From Date Mandatory");
+                } else {
+                    return redirect()->back()->with('failed', "Dates Fields Required");
                 }
             }
         }

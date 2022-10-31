@@ -23,9 +23,6 @@
     @Include('layouts.favicon')
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
-    {{-- @Include('layouts.links.modals.head') --}}
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script>
         setTimeout(function() {
             $('#success').slideUp('slow');
@@ -38,88 +35,86 @@
 <body class="hold-transition sidebar-mini layout-fixed">
     @extends('layouts.admin.master')
     @section('content')
-        <div class="wrapper">
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <div class="content-header">
-                    <div class="container-fluid">
-                        @if (session('success'))
-                            <div id="success" class="alert alert-default-success alert-dismissible fade show"
-                                role="alert">
-                                <strong>{{ session('success') }}</strong>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @elseif (session('failed'))
-                            <div id="failed" class="alert alert-default-danger alert-dismissible fade show"
-                                role="alert">
-                                <strong>{{ session('failed') }}</strong>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                        @else
-                        @endif
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0">Transactions</h1>
-                            </div><!-- /.col -->
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Transactions</li>
-                                </ol>
-                            </div><!-- /.col -->
-                        </div><!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content-header -->
+    <div class="wrapper">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    @if (session('success'))
+                    <div id="success" class="alert alert-default-success alert-dismissible fade show" role="alert">
+                        <strong>{{ session('success') }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @elseif (session('failed'))
+                    <div id="failed" class="alert alert-default-danger alert-dismissible fade show" role="alert">
+                        <strong>{{ session('failed') }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @else
+                    @endif
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Transactions</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Transactions</li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
 
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <!-- Small boxes (Stat box) -->
-                        <div class="row">
-                            <div class="col-1">
-                            </div>
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Small boxes (Stat box) -->
+                    <div class="row">
+                        <div class="col-1">
+                        </div>
 
-                            <div class="col-10">
-                                <form action="{{ route('admin.upload_data.online_customers.create') }}" method="post"
-                                    enctype="multipart/form-data">
-                                    @csrf
-                                    <div class="form-group">
-                                        <label for="exampleInputFile mb-3">Upload File</label>
-                                        <div class="input-group mb-3">
-                                            <div class="custom-file">
-                                                <input type="file" name="online_customer_file" class="custom-file-input"
-                                                    id="exampleInputFile">
-                                                <label class="custom-file-label" for="exampleInputFile">Choose file</label>
-                                            </div>
+                        <div class="col-10">
+                            <form action="{{ route('admin.upload_data.online_customers.create') }}" method="post"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="exampleInputFile mb-3">Upload File</label>
+                                    <div class="input-group mb-3">
+                                        <div class="custom-file">
+                                            <input type="file" name="online_customer_file" class="custom-file-input"
+                                                id="exampleInputFile">
+                                            <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                         </div>
-                                        <button type="submit" class="btn mb-3"
-                                            style="background-color: #091E3E;color: white">Upload</button>
-                                        <a href="{{ route('admin.upload_data.online_customers') }}" class="btn mb-3"
-                                            style="background-color: #091E3E;color: white">Back</a>
                                     </div>
-                                </form>
-                                <!-- /.card -->
-                            </div>
-                            <div class="col-1">
-
-                            </div>
+                                    <button type="submit" class="btn mb-3"
+                                        style="background-color: #091E3E;color: white">Upload</button>
+                                    <a href="{{ route('admin.upload_data.online_customers') }}" class="btn mb-3"
+                                        style="background-color: #091E3E;color: white">Back</a>
+                                </div>
+                            </form>
+                            <!-- /.card -->
+                        </div>
+                        <div class="col-1">
 
                         </div>
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </section>
-                <!-- /.content -->
-            </div>
+
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
         </div>
+    </div>
     @endsection
+    @Include('layouts.links.admin.foot')
     @Include('layouts.links.datatable.foot')
-    {{-- @Include('layouts.links.modals.foot') --}}
 </body>
 
 </html>

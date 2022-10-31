@@ -26,12 +26,13 @@ class ModulesController extends Controller
 
     public function admin_module_list()
     {
+
         $roles = Role::get();
         $modules = Module::with('modules_group')->orderBy('sort')->get();
-        $modules_groups = ModulesGroup::get();
+        $modules_groups = ModulesGroup::with('modules')->orderBy('sort')->get();
         // $modules_groups = ModulesGroup::whereHas('modules')->with('modules')->get();
         // $modules_groups = ModulesGroup::whereHas('modules')->with('modules')->get();
-        // dd($modules->toArray());
+        // dd($modules_groups->toArray());
         return view('admin.setting.module.index', ['roles' => $roles, 'modules_groups' => $modules_groups, 'modules' => $modules]);
     }
     public function add_admin_module(Request $request)
@@ -51,31 +52,36 @@ class ModulesController extends Controller
                 return back();
             }
         } elseif (FacadesRequest::isMethod('post')) {
+            $request->validate(
+                [
+                    'name' => 'required|string|max:255',
+                    'icon' => 'required|string|max:255',
+                    'type' => 'required|string|max:255',
+                ],
+                [
+                    'name.required' => "*Name is required",
+                    'icon.required' => "*Icon is required",
+                    'type.required' => "*Type is required",
+                ]
+            );
             $m_g_id = $request->m_g_id;
             $name = $request->name;
             $icon = $request->icon;
             $type = $request->type;
-            $sort = $request->sort;
 
             if (isset($request->status)) {
                 $status = $request->status;
             } else {
                 $status = 0;
             }
-            $sort_count =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->count();
-            if ($sort_count == 0) {
-                Module::insert([
-                    'm_g_id' => $m_g_id,
-                    'name' => $name,
-                    'icon' => $icon,
-                    'status' => $status,
-                    'type' => $type,
-                    'sort' => $sort
-                ]);
-                return true;
-            } else {
-                return "false";
-            }
+
+            Module::insert([
+                'm_g_id' => $m_g_id,
+                'name' => $name,
+                'icon' => $icon,
+                'status' => $status,
+                'type' => $type,
+            ]);
         } else {
         }
     }
@@ -94,46 +100,46 @@ class ModulesController extends Controller
                 return back();
             }
         } elseif (FacadesRequest::isMethod('post')) {
-            $id = $request->id;
-            $name = $request->name;
-            $icon = $request->icon;
-            $m_g_id = $request->m_g_id;
-            if (isset($request->status)) {
-                $status = $request->status;
-            } else {
-                $status = 0;
-            }
-            $type = $request->type;
-            $sort = $request->sort;
-
-
-            Module::where('id', $id)->update([
-                'name' => $name,
-                'icon' => $icon,
-                'm_g_id' => $m_g_id,
-                'status' => $status,
-                'type' => $type,
-            ]);
-
-            $sort_data =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->first();
-
-            $sort_count =  Module::where([['m_g_id', $m_g_id], ['sort', $sort]])->count();
-            if ($sort_count <= 0) {
-                Module::where('id', $id)->update([
-                    'sort' => $sort,
-                ]);
-                return true;
-            } elseif (!empty($sort_data)) {
-                if ($sort_count <= 1 && $id == $sort_data->id) {
-                    Module::where('id', $id)->update([
-                        'sort' => $sort,
-                    ]);
-                    return true;
-                } else {
-                    return "false";
+            if (!empty($request->sort)) {
+                $modules = Module::all();
+                foreach ($modules as $module) {
+                    foreach ($request->sort as $sort) {
+                        if ($sort['id'] == $module->id) {
+                            $module->update(['sort' => $sort['position']]);
+                        }
+                    }
                 }
+                return true;
             } else {
-                return "false";
+                $request->validate(
+                    [
+                        'name' => 'required|string|max:255',
+                        'icon' => 'required|string|max:255',
+                        'type' => 'required|string|max:255',
+                    ],
+                    [
+                        'name.required' => "*Name is required",
+                        'icon.required' => "*Icon is required",
+                        'type.required' => "*Type is required",
+                    ]
+                );
+                $id = $request->id;
+                $name = $request->name;
+                $icon = $request->icon;
+                $m_g_id = $request->m_g_id;
+                if (isset($request->status)) {
+                    $status = $request->status;
+                } else {
+                    $status = 0;
+                }
+                $type = $request->type;
+                Module::where('id', $id)->update([
+                    'name' => $name,
+                    'icon' => $icon,
+                    'm_g_id' => $m_g_id,
+                    'status' => $status,
+                    'type' => $type,
+                ]);
             }
         } else {
             return back();

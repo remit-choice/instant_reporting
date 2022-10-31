@@ -71,6 +71,7 @@ Route::prefix('admin')->group(function () {
             });
             Route::prefix('online_customers')->group(function () {
                 Route::get('/', [OnlineCustomersController::class, 'index'])->name('admin.upload_data.online_customers');
+                Route::post('/', [OnlineCustomersController::class, 'filter'])->name('admin.upload_data.online_customers');
                 Route::match(['get', 'post'], '/create', [OnlineCustomersController::class, 'create'])->name('admin.upload_data.online_customers.create');
             });
         });
