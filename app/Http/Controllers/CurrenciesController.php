@@ -23,6 +23,16 @@ class CurrenciesController extends Controller
     }
     public function update(Request $request)
     {
+        $request->validate(
+            [
+                'min_rate' => 'required|integer',
+                'max_rate' => 'required|integer',
+            ],
+            [
+                'min_rate.required' => '*required',
+                'max_rate.required' => '*required',
+            ]
+        );
         $id = $request->id;
         $min_rate = $request->min_rate;
         $max_rate = $request->max_rate;
@@ -32,12 +42,6 @@ class CurrenciesController extends Controller
                 'max_rate' => $max_rate
             ]);
             return true;
-        } else {
-            if ($min_rate > $max_rate) {
-                return 2;
-            } else {
-                return 3;
-            }
         }
     }
     public function rate_index(Request $request)
@@ -45,14 +49,21 @@ class CurrenciesController extends Controller
         $rates = function ($query) {
             $query->where('status', 1);
         };
-        $currencies =  Currency::where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->whereHas('rates', $rates)->with('rates', $rates)->get();
-        // dd(Session::get('dated'));
-        dd($currencies->toArray());
+        $currencies =  Currency::where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->ordoesntHave('rates')->whereHas('rates', $rates)->with('rates', $rates)->get();
         $request->session()->pull('dated');
         return view('admin.currencies.rates.index', ['currencies' => $currencies]);
     }
     public function rate_create(Request $request)
     {
+
+        $request->validate(
+            [
+                'rate' => 'required',
+            ],
+            [
+                'rate.required' => '*required',
+            ]
+        );
         $c_id = $request->c_id;
         $min_rate = $request->min_rate;
         $max_rate = $request->max_rate;
@@ -65,7 +76,7 @@ class CurrenciesController extends Controller
         $dated = date('Y-m-d', strtotime($request->date));
         $request->session()->pull('dated');
         $request->session()->put('dated', $request->date);
-        if ($rate >= $min_rate && $min_rate != '' &&   $rate <= $max_rate && $max_rate != '') {
+        if ($rate >= $min_rate && $min_rate != '' && $rate <= $max_rate && $max_rate != '') {
             CurrenciesRate::create([
                 'dated' => $dated,
                 'c_id' => $c_id,
@@ -77,11 +88,7 @@ class CurrenciesController extends Controller
             ]);
             return true;
         } else {
-            if ($rate < $min_rate) {
-                return 2;
-            } else {
-                return 3;
-            }
+            return false;
         }
     }
     public function rate_update(Request $request)
@@ -134,12 +141,10 @@ class CurrenciesController extends Controller
     public function rate_filter(Request $request)
     {
         $dated = date('Y-m-d', strtotime($request->date));
-        // dd($request->date);
         $rates = function ($query) use ($dated) {
             $query->where('dated', $dated);
         };
-        $currencies =  Currency::where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->whereHas('rates', $rates)->with('rates', $rates)->get();
-        // dd($currencies->toArray());
+        $currencies =  Currency::where([['min_rate', '!=', NULL], ['max_rate', '!=', NULL]])->ordoesntHave('rates')->whereHas('rates', $rates)->with('rates', $rates)->get();
         if (Session::get('dated') != $dated) {
             $request->session()->pull('dated');
             $request->session()->put('dated', $dated);

@@ -71,6 +71,7 @@ Route::prefix('admin')->group(function () {
             });
             Route::prefix('online_customers')->group(function () {
                 Route::get('/', [OnlineCustomersController::class, 'index'])->name('admin.upload_data.online_customers');
+                Route::post('/', [OnlineCustomersController::class, 'filter'])->name('admin.upload_data.online_customers');
                 Route::match(['get', 'post'], '/create', [OnlineCustomersController::class, 'create'])->name('admin.upload_data.online_customers.create');
             });
         });
@@ -92,6 +93,12 @@ Route::prefix('admin')->group(function () {
                 Route::match(['get', 'post'], '/create', [ModulesController::class, 'add_admin_module'])->name('admin.module.create');
                 Route::match(['get', 'post'], '/edit', [ModulesController::class, 'edit_admin_module'])->name('admin.module.edit');
                 Route::post('/delete', [ModulesController::class, 'delete_admin_module'])->name('admin.module.delete');
+
+                // Route::prefix('test')->group(function () {
+                //     Route::get('/', [ModulesController::class, 'admin_module_test_list'])->name('admin.module.test.index');
+                //     Route::match(['get', 'post'], '/edit', [ModulesController::class, 'edit_admin_test_module'])->name('admin.module.test.edit');
+                // });
+
 
                 Route::prefix('/{id}/url')->group(function () {
                     Route::get('/', [ModulesController::class, 'admin_module_url_list'])->name('admin.module.url.index');

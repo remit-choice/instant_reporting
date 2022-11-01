@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\ModulesGroup;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
@@ -22,6 +23,9 @@ class RolesController extends Controller
     {
         $roles = Role::get();
         return view('admin.setting.role.index', ['roles' => $roles]);
+        // $roles = Role::get();
+        // $modules_groups = ModulesGroup::get();
+        // return view('admin.setting.role.index', ['roles' => $roles, 'modules_groups' => $modules_groups]);
     }
     public function add_role(Request $request)
     {
@@ -58,7 +62,6 @@ class RolesController extends Controller
                     ]);
                 }
             }
-            return redirect('/admin/setting/role');
         } else {
             return back();
         }
@@ -70,6 +73,14 @@ class RolesController extends Controller
             $roles = Role::where('id', $id)->get();
             return view('admin.setting.role.edit', ['roles' => $roles]);
         } elseif (FacadesRequest::isMethod('post')) {
+            $request->validate(
+                [
+                    'name' => 'required|string|min:3',
+                ],
+                [
+                    'name.required' => '*required',
+                ]
+            );
             $id = $request->id;
             $name = $request->name;
             if (!empty($request->status)) {
@@ -78,8 +89,6 @@ class RolesController extends Controller
                 $status = '0';
             }
             Role::where('id', $id)->update(['name' => $name, 'status' => $status]);
-            $roles = Role::get();
-            return redirect('/admin/setting/role')->with(['roles' => $roles]);
         } else {
             return back();
         }

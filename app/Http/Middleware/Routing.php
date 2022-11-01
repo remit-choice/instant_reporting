@@ -42,17 +42,19 @@ class Routing
                         ->with('modules.permissions', $permissions)
                         ->with('modules.modules_urls', $modules_urls)
                         ->get();
-                    // dd($module_groups->toArray());
-
+                    // dd(
+                    //     $module_groups->toArray()
+                    // );
                     $response = response('', 404);
                     foreach ($module_groups as $module_group) {
                         foreach ($module_group->modules as $module) {
                             if ((!empty($module->permissions)) && (!empty($module->modules_urls))) {
                                 foreach ($module->modules_urls as $modules_url) {
-                                    // dd($module->modules_urls);
                                     if (
                                         ($module->id == $module->permissions['m_id']) &&  ($module->status == 1) && ($module->permissions['view'] == 1) && ($modules_url->url == $REQUEST_URI)
                                     ) {
+
+
                                         $response = $next($request);
                                     }
                                 }
