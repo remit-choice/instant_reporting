@@ -144,7 +144,6 @@ class PermissionController extends Controller
                 $r_id =  $request->r_id;
                 $m_id =  $request->m_id;
                 $m_id_array_key = array_keys($m_id);
-                dd($m_id_array_key);
                 $count_m_id = count($m_id);
                 $view =  [];
                 $add =  [];
@@ -160,7 +159,7 @@ class PermissionController extends Controller
                 //     $count = count($request->delete);
                 // } else {
                 // }
-                dd($request->toArray());
+                // dd($request->toArray());
                 // $permision_count = Permission::where([['r_id', $r_id], ['m_id', $m_id[$i]]])->count();
                 // dd($permision_count);
                 for ($i = 0; $i < $count_m_id; $i++) {
@@ -186,15 +185,15 @@ class PermissionController extends Controller
                     }
                     $permision_count = Permission::where([['r_id', $r_id], ['m_id', $m_id[$i]]])->count();
                     if ($permision_count <= 0) {
-                        if ($m_id_array_key[$i] == $m_id[$i])
-                            Permission::insert([
-                                'r_id' =>  $r_id,
-                                'm_id' => $m_id[$i],
-                                'view' => $view[$i],
-                                'add' => $add[$i],
-                                'edit' => $edit[$i],
-                                'delete' => $delete[$i],
-                            ]);
+                        // if ($m_id_array_key[$i] == $m_id[$i])
+                        Permission::insert([
+                            'r_id' =>  $r_id,
+                            'm_id' => $m_id[$i],
+                            'view' => $view[$i],
+                            'add' => $add[$i],
+                            'edit' => $edit[$i],
+                            'delete' => $delete[$i],
+                        ]);
                     } else {
                         Permission::where([['r_id', $r_id], ['m_id', $m_id[$i]]])->update([
                             'r_id' =>  $r_id,
