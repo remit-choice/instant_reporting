@@ -1,6 +1,6 @@
 <script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
 <!-- jQuery UI 1.11.4 -->
-{{--<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>--}}
+<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
 
 <!-- DataTables  & Plugins -->
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>

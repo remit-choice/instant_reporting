@@ -443,13 +443,9 @@
                 <!-- /.content -->
             </div>
         </div>
-
         @Include('layouts.links.admin.foot')
         @Include('layouts.links.datatable.foot')
-
     @endsection
-
-    {{-- @Include('layouts.links.modals.foot') --}}
 </body>
 
 </html>
