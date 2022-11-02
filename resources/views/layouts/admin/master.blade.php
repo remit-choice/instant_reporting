@@ -1,9 +1,4 @@
-  <!-- Preloader -->
-  <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="{{ asset('assets/dist/img/AdminLTELogo.png') }}
-      " alt="AdminLTELogo"
-          height="60" width="60">
-  </div>
+    @include('layouts.links.logo.logo')
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
       <!-- Left navbar links -->
@@ -153,11 +148,7 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
       <!-- Brand Logo -->
-      <a href="" class="brand-link">
-          <img src="{{ asset('assets/dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-              class="brand-image img-circle elevation-3" style="opacity: .8">
-          <span class="brand-text font-weight-light">@Include('layouts.links.admin.title')</span>
-      </a>
+      @Include('layouts.links.logo.sidebar')
 
       <!-- Sidebar -->
       <div class="sidebar">
@@ -243,12 +234,9 @@
   @yield('content')
 
   <!-- /.content-wrapper -->
-  <footer class="main-footer">
-      <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">Web Training</a>.</strong>
+  <footer class="main-footer text-center">
+      <strong>&copy;Copyright 2022 <a href="{{route('admin.dashboard')}}">@include('layouts.links.admin.title')</a>.</strong>
       All rights reserved.
-      <div class="float-right d-none d-sm-inline-block">
-          <b>Version</b> 3.1.0
-      </div>
   </footer>
 
   <!-- Control Sidebar -->

@@ -1,3 +1,7 @@
+<script src="{{ asset('assets/plugins/jquery/jquery.min.js') }}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+
 <!-- DataTables  & Plugins -->
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -19,6 +23,7 @@
             "autoWidth": true,
             "searching": true,
             "responsive": true,
+            "order": [[0, 'asc']],
             "aLengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
@@ -33,12 +38,14 @@
             "autoWidth": true,
             "searching": true,
             "responsive": true,
+            "order": [[0, 'asc']],
             "aLengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
             ],
+
             // "pageLength": 10,
         });
     });
-    
+
 </script>

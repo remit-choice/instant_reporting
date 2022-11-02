@@ -2,4 +2,4 @@
   <!-- Toastr -->
   <link rel="stylesheet" href="{{ asset('assets/plugins/toastr/toastr.min.css') }}">
   <!-- Theme style -->
-  <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+{{--  <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">--}}

@@ -138,20 +138,28 @@ class PermissionController extends Controller
             $modules_groups = ModulesGroup::whereHas('modules.permissions', $modules)->orwhereDoesntHave('modules.permissions', $modules)
                 ->with('modules.permissions', $modules)
                 ->get();
-            // dd($modules_groups->toArray());
-
-            // dd($modules_groups->toArray());
             return view('admin.setting.role.permission.create', ['roles' => $roles, 'modules_groups' => $modules_groups]);
         } elseif (FacadesRequest::isMethod('post')) {
             if (!empty($request->m_id)) {
                 $r_id =  $request->r_id;
                 $m_id =  $request->m_id;
+                $m_id_array_key = array_keys($m_id);
                 $count_m_id = count($m_id);
                 $view =  [];
                 $add =  [];
                 $edit =  [];
                 $delete =  [];
-                // dd($request->view);
+                // if (!empty(count($request->view))) {
+                //     $count = count($request->view);
+                // } elseif (!empty($request->add)) {
+                //     $count = count($request->add);
+                // } elseif (!empty($request->edit)) {
+                //     $count = count($request->edit);
+                // } elseif (!empty($request->delete)) {
+                //     $count = count($request->delete);
+                // } else {
+                // }
+                // dd($request->toArray());
                 // $permision_count = Permission::where([['r_id', $r_id], ['m_id', $m_id[$i]]])->count();
                 // dd($permision_count);
                 for ($i = 0; $i < $count_m_id; $i++) {
@@ -177,6 +185,7 @@ class PermissionController extends Controller
                     }
                     $permision_count = Permission::where([['r_id', $r_id], ['m_id', $m_id[$i]]])->count();
                     if ($permision_count <= 0) {
+                        // if ($m_id_array_key[$i] == $m_id[$i])
                         Permission::insert([
                             'r_id' =>  $r_id,
                             'm_id' => $m_id[$i],

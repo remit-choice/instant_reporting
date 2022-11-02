@@ -25,7 +25,7 @@ class ModuleGroupsController extends Controller
     {
         if (FacadesRequest::isMethod('get')) {
             $roles = Role::get();
-            $modules_groups = ModulesGroup::get();
+            $modules_groups = ModulesGroup::orderBy('sort', 'ASC')->get();
             return view('admin.setting.module.group.index', ['roles' => $roles, 'modules_groups' => $modules_groups]);
         } else {
             return back();
