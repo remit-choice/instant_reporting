@@ -95,16 +95,13 @@
                                     <h3 class="card-title col-lg-6 col-md-6 col-sm-6 col-xs-6">Transactions List</h3>
                                 </div>
                                 <div class="card-header container-fluid">
-                                    <form action="{{ route('admin.accounts.transactions.sending_side_revenue') }}"
-                                        method="post">
+                                    <form action="{{ route('admin.accounts.transactions.sending_side_revenue') }}" method="post">
                                         @csrf
                                         <div class="row d-flex justify-content-center">
                                             <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                 <label>Select Country</label>
-                                                <select class="form-control" name="search_filter" id="search_filter"
-                                                    style="width: 100%">
-                                                    <option class="py-2" hidden selected
-                                                        value="{{ request()->input('search_filter', old('search_filter')) }}">
+                                                <select class="form-control" name="search_filter" id="search_filter" style="width: 100%">
+                                                    <option class="py-2" hidden selected value="{{ request()->input('search_filter', old('search_filter')) }}">
                                                         @if (request()->input('search_filter'))
                                                         {{ request()->input('search_filter', old('search_filter')) }}
                                                         @else
@@ -118,35 +115,28 @@
                                             <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                 <label>From Date</label>
                                                 @if (request()->input('date_from'))
-                                                <input type="date" name="date_from" id="" class="form-control"
-                                                    value="{{ request()->input('date_from', old('date_from')) }}"
-                                                    style="width: 100%">
+                                                <input type="date" name="date_from" id="" class="form-control" value="{{ request()->input('date_from', old('date_from')) }}" style="width: 100%">
                                                 @else
-                                                <input type="date" name="date_from" id="" class="form-control" value=""
-                                                    style="width: 100%">
+                                                <input type="date" name="date_from" id="" class="form-control" value="" style="width: 100%">
                                                 @endif
                                             </div>
                                             <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                 <label>To Date</label>
                                                 @if (request()->input('date_to'))
-                                                <input type="date" name="date_to" id="" class="form-control"
-                                                    value="{{ request()->input('date_to', old('date_to')) }}">
+                                                <input type="date" name="date_to" id="" class="form-control" value="{{ request()->input('date_to', old('date_to')) }}">
                                                 @else
                                                 <input type="date" name="date_to" id="" class="form-control" value="">
                                                 @endif
                                             </div>
                                         </div>
                                         <div class="row d-flex justify-content-center">
-                                            <button type="submit" name="filter" class="btn mb-1"
-                                                style="background-color: #091E3E;color: white">Submit</button>
+                                            <button type="submit" name="filter" class="btn mb-1" style="background-color: #091E3E;color: white">Submit</button>
                                         </div>
                                     </form>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <table id="example1"
-                                        class="table table-bordered @php if(!empty($transactions)){echo "
-                                        table-responsive";}else{} @endphp">
+                                    <table id="example1" class="table table-bordered @php if(!empty($transactions)){echo " table-responsive";}else{} @endphp">
                                         <thead>
                                             <tr>
                                                 <th class="text-capitalize">#</th>
@@ -306,8 +296,7 @@
                                             $fx_loss = $fx_in_GBP + $charges_in_GBP;
                                             if ($fx_loss > 0) {
                                             $fx_loss = 0;
-                                            } elseif ($fx_loss < 0) { $fx_loss_show +=$fx_loss; } else { } } @endphp
-                                                <tr>
+                                            } elseif ($fx_loss < 0) { $fx_loss_show +=$fx_loss; } else { } } @endphp <tr>
                                                 <td>{{ $counter++ }}</td>
                                                 <td>{{ $transaction->beneficiary_country }}</td>
                                                 <td>{{ $count = 1 }}</td>
@@ -343,8 +332,7 @@
                                                     {{ $fx_loss }}
                                                     @endif
                                                     @else
-                                                    <a href="{{ route('admin.currencies') }}"
-                                                        class="btn btn-danger">Update Rate</a>
+                                                    <a href="{{ route('admin.currencies') }}" class="btn btn-danger">Update Rate</a>
                                                     @endif
                                                 </td>
                                                 </tr>
