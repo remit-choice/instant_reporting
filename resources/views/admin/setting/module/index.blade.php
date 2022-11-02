@@ -29,6 +29,7 @@
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
     @Include('layouts.links.toastr.head')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
