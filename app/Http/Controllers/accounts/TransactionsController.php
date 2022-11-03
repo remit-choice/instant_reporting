@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 
 // use Illuminate\Support\Facades\Request;
 
-class TransactionController extends Controller
+class TransactionsController extends Controller
 {
     public function __construct()
     {

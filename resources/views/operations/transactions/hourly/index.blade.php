@@ -116,7 +116,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
-                                                    <label>Date</label>
+                                                    <label>From Date</label>
                                                     @if (request()->input('date_from'))
                                                         <input type="date" name="date_from" id=""
                                                             class="form-control"
@@ -124,6 +124,18 @@
                                                             style="width: 100%">
                                                     @else
                                                         <input type="date" name="date_from" id=""
+                                                            class="form-control" value="" style="width: 100%">
+                                                    @endif
+                                                </div>
+                                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                    <label>To Date</label>
+                                                    @if (request()->input('to_from'))
+                                                        <input type="date" name="to_from" id=""
+                                                            class="form-control"
+                                                            value="{{ request()->input('to_from', old('to_from')) }}"
+                                                            style="width: 100%">
+                                                    @else
+                                                        <input type="date" name="to_from" id=""
                                                             class="form-control" value="" style="width: 100%">
                                                     @endif
                                                 </div>
