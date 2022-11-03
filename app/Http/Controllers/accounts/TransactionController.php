@@ -4,8 +4,6 @@ namespace App\Http\Controllers\accounts;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserController;
-use App\Models\CurrenciesRate;
-use App\Models\Currency;
 use App\Models\TransactionsData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

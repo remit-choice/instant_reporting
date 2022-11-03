@@ -147,18 +147,29 @@
                                             </thead>
                                             <tbody>
                                                 @if (!empty($transactions))
-                                                    @php
-                                                        $counter = 0;
-                                                        $counters = 0;
-                                                    @endphp
                                                     @if (request()->input('search_filter'))
+                                                        @php
+                                                                    $day_start_hours = 0;
+                                                                    $day_end_hours = 1;
+                                                        @endphp
                                                         @foreach ($transactions as $transaction)
-                                                            <tr data-widget="expandable-table" aria-expanded="false" role='button'>
+                                                            @php
+                                                                $counter = $transaction->hours;
+                                                                $counters = $day_start_hours;
+                                                            @endphp
+                                                            @for ($day_start_hours; $day_start_hours!=$transaction->hours;$day_start_hours++)
+                                                                <tr data-widget="expandable-table" aria-expanded="false" role='button' class="bg-light">
+                                                                    <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i></td>
+                                                                    <td>{{  $day_start_hours }} - {{ ++$counters }}</td>
+                                                                    <td>{{ 0 }}</td>
+                                                                </tr>
+                                                            @endfor
+                                                            <tr data-widget="expandable-table" aria-expanded="false" role='button' class="bg-light">
                                                                 <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i></td>
-                                                                <td>{{  $transaction->hours }} - {{ ++$transaction->hours }}</td>
-                                                                <td>{{ $transaction->count_of_tr_no }}  {{$transaction->transaction_time}}</td>
+                                                                <td>{{  $transaction->hours }} - {{ ++$counter }}</td>
+                                                                <td>{{ $transaction->count_of_tr_no }}</td>
                                                             </tr>
-                                                           <tr class="expandable-body">
+                                                            <tr class="expandable-body">
                                                                 <td colspan="6">
                                                                     <table class="table table-hover" id="example2">
                                                                         <thead>
@@ -171,24 +182,27 @@
                                                                         <tbody>
                                                                             @php
                                                                                 $counts = 1;
-                                                                                $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
-                                                                                $transactions_data = App\Models\TransactionsData::select('customer_country',$tr_no_count)->where('transaction_time','LIKE', $transaction->transaction_time)->groupBy('customer_country')->get();
-                                                                                // dd($transactions_data->toArray());
                                                                             @endphp
                                                                             @foreach ($transactions_data as $transaction_data)
-                                                                                    <tr>
-                                                                                        <td>{{ $counts++ }}</td>
-                                                                                        <td>{{ $transaction_data->customer_country }}</td>
-                                                                                        <td>{{ $transaction_data->count_of_tr_no }}</td>
-                                                                                    </tr>
+                                                                                @foreach ($transaction_data as $array)                                                                                    
+                                                                                    @if ($transaction->hours==$array->hours)
+                                                                                        <tr>
+                                                                                            <td>{{ $counts++ }}</td>
+                                                                                            <td>{{ $array->customer_country }}</td>
+                                                                                            <td>{{ $array->count_of_tr_no }}</td>
+                                                                                        </tr>
+                                                                                    @endif
+                                                                                @endforeach
                                                                             @endforeach
                                                                         </tbody>
                                                                     </table>
                                                                 </td>
                                                             </tr>
+                                                              @php
+                                                                    $day_start_hours++;
+                                                                @endphp
                                                         @endforeach
-                                                         
-                                                     @endif
+                                                    @endif
                                                 @else
                                                 @endif
                                             </tbody>

@@ -35,6 +35,7 @@ class PermissionController extends Controller
             $modules_groups = ModulesGroup::whereHas('modules.permissions', $modules)
                 ->with('modules.permissions', $modules)
                 ->get();
+            // dd($modules_groups->toArray());
             return view('admin.setting.role.permission.edit', ['roles' => $roles, 'modules_groups' => $modules_groups, 'type' => $type]);
         } elseif (FacadesRequest::isMethod('post')) {
             if ($request->type == 0 && !empty($request->m_id)) {
@@ -47,22 +48,22 @@ class PermissionController extends Controller
                 $delete =  [];
                 for ($i = 0; $i < $count_m_id; $i++) {
                     if (empty($request->view[$i])) {
-                        $view[] = "0";
+                        $view[] = Null;
                     } else {
                         $view[] = "1";
                     }
                     if (empty($request->add[$i])) {
-                        $add[] = "0";
+                        $add[] = Null;
                     } else {
                         $add[] = "1";
                     }
                     if (empty($request->edit[$i])) {
-                        $edit[] = "0";
+                        $edit[] = Null;
                     } else {
                         $edit[] = "1";
                     }
                     if (empty($request->delete[$i])) {
-                        $delete[] = "0";
+                        $delete[] = Null;
                     } else {
                         $delete[] = "1";
                     }
@@ -149,20 +150,20 @@ class PermissionController extends Controller
                 $add =  [];
                 $edit =  [];
                 $delete =  [];
-                // if (!empty(count($request->view))) {
-                //     $count = count($request->view);
-                // } elseif (!empty($request->add)) {
-                //     $count = count($request->add);
-                // } elseif (!empty($request->edit)) {
-                //     $count = count($request->edit);
-                // } elseif (!empty($request->delete)) {
-                //     $count = count($request->delete);
-                // } else {
-                // }
+                if (!empty(count($request->view))) {
+                    $count = count($request->view);
+                } elseif (!empty($request->add)) {
+                    $count = count($request->add);
+                } elseif (!empty($request->edit)) {
+                    $count = count($request->edit);
+                } elseif (!empty($request->delete)) {
+                    $count = count($request->delete);
+                } else {
+                }
                 // dd($request->toArray());
                 // $permision_count = Permission::where([['r_id', $r_id], ['m_id', $m_id[$i]]])->count();
                 // dd($permision_count);
-                for ($i = 0; $i < $count_m_id; $i++) {
+                for ($i = 0; $i < $count; $i++) {
                     if (empty($request->view[$i])) {
                         $view[] = "0";
                     } else {
