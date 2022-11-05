@@ -129,13 +129,13 @@
                                                 </div>
                                                  <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                     <label>To Date</label>
-                                                    @if (request()->input('to_from'))
-                                                        <input type="date" name="to_from" id=""
+                                                    @if (request()->input('date_to'))
+                                                        <input type="date" name="date_to" id=""
                                                             class="form-control"
-                                                            value="{{ request()->input('to_from', old('to_from')) }}"
+                                                            value="{{ request()->input('date_to', old('date_to')) }}"
                                                             style="width: 100%">
                                                     @else
-                                                        <input type="date" name="to_from" id=""
+                                                        <input type="date" name="date_to" id=""
                                                             class="form-control" value="" style="width: 100%">
                                                     @endif
                                                 </div>

@@ -31,13 +31,13 @@ class TransactionDataController extends Controller
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $transactions = TransactionsData::where('transaction_date', $date_from)->get();
                 return
-                    view('admin.upload_data.transactions.index', ['date_from' => $date_from, 'date_to' => $date_to, 'transactions' => $transactions]);
+                    view('admin.upload_data.transactions.index', ['transactions' => $transactions]);
             } elseif (!empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('n/j/Y', strtotime($request->date_to));
                 $transactions = TransactionsData::whereBetween('transaction_date', [$date_from, $date_to])->get();
                 return
-                    view('admin.upload_data.transactions.index', ['date_from' => $date_from, 'date_to' => $date_to, 'transactions' => $transactions]);
+                    view('admin.upload_data.transactions.index', ['transactions' => $transactions]);
             } else {
                 if (empty($request->date_from) && !empty($request->date_to)) {
                     return redirect()->back()->with('failed', "From Date Mandatory");

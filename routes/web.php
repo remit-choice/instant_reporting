@@ -14,6 +14,7 @@ use App\Http\Controllers\operations\TransactionsController as OperationsTransact
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TransactionDataController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -113,6 +114,12 @@ Route::prefix('admin')->group(function () {
                     Route::match(['get', 'post'], '/edit', [ModuleGroupsController::class, 'edit_admin_module_group'])->name('admin.modules_groups.edit');
                     Route::post('/delete', [ModuleGroupsController::class, 'delete_admin_module_group'])->name('admin.modules_groups.delete');
                 });
+            });
+            Route::prefix('user')->group(function () {
+                Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
+                Route::match(['get', 'post'], '/create', [UserController::class, 'create'])->name('admin.user.create');
+                Route::match(['get', 'post'], '/edit', [UserController::class, 'edit'])->name('admin.user.edit');
+                Route::post('/delete', [UserController::class, 'delete'])->name('admin.user.delete');
             });
         });
         Route::prefix('accounts')->group(function () {

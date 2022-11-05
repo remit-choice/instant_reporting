@@ -1,1 +1,1 @@
-<link rel="shortcut icon" href="/Img_Assets/Admin_logo.png" type="image/x-icon" />
+<link rel="shortcut icon" href="{{ asset('assets/dist/img/Admin_logo.png') }}" type="image/x-icon" />

@@ -28,11 +28,12 @@ class TransactionsController extends Controller
     public function sending_filter(Request $request)
     {
         if (FacadesRequest::isMethod('post')) {
-            if (!empty($request->search_filter) && !empty($request->date_from) && empty($request->to_from)) {
-                $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
-                $hours = DB::raw('HOUR(transaction_time) as hours');
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $to_from = date('d/m/Y', strtotime($request->to_from));
+            $date_from = '';
+            $date_to = '';
+            $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
+            $hours = DB::raw('HOUR(transaction_time) as hours');
+            $date_from = date('d/m/Y', strtotime($request->date_from));
+            if (!empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
                 $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)
                     ->groupBy(DB::raw('HOUR(transaction_time)'))
                     ->orderBy('transaction_time', 'ASC')
@@ -43,24 +44,19 @@ class TransactionsController extends Controller
                     ->orderBy('transaction_time', 'ASC')
                     ->orderBy('customer_country', 'ASC')
                     ->get()->groupBy('hours');
-                // dd($transactions->toArray());
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data]);
-            } elseif (!empty($request->search_filter) && !empty($request->date_from) && !empty($request->to_from)) {
-                $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
-                $hours = DB::raw('HOUR(transaction_time) as hours');
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $to_from = date('d/m/Y', strtotime($request->to_from));
-                $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', 'LIKE', [$date_from . '%', $to_from . '%'])
+            } elseif (!empty($request->search_filter) && !empty($request->date_from) && !empty($request->date_to)) {
+                $date_to = date('d/m/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)
                     ->groupBy(DB::raw('HOUR(transaction_time)'))
                     ->orderBy('transaction_time', 'ASC')
                     ->orderBy('customer_country', 'ASC')
                     ->get();
-                $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $to_from])
+                $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)
                     ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
                     ->orderBy('transaction_time', 'ASC')
                     ->orderBy('customer_country', 'ASC')
                     ->get()->groupBy('hours');
-                // dd($transactions->toArray());
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data]);
             } else {
                 return redirect()->back()->with('failed', "From Date Mandatory");
