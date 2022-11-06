@@ -147,13 +147,20 @@
         <!-- /.card -->
     </div>
     <!-- /.login-box -->
-
+    <!-- jQuery -->
+    <script src="{{ asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('assets/dist/js/adminlte.min.js')}}"></script>
+    @production
     <!-- jQuery -->
     <script src="{{ secure_asset('assets/plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
     <script src="{{ secure_asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- AdminLTE App -->
     <script src="{{ secure_asset('assets/dist/js/adminlte.min.js')}}"></script>
+    @endproduction
 </body>
 
 </html>
