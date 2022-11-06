@@ -10,7 +10,16 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-    <!-- Font Awesome -->
+    @if(parse_url(url('/'), PHP_URL_SCHEME) == 'HTTPS')
+    <link rel="stylesheet" href="{{ secure_asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{{ secure_asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ secure_asset('assets/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('assets/dist/css/alt/login.css') }}">
+
+    <script src="{{ secure_asset('assets/dist/js/pages/login.js')}}"></script>
+    @else
     <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
@@ -19,6 +28,8 @@
     <link rel="stylesheet" href="{{ asset('assets/dist/css/alt/login.css') }}">
 
     <script src="{{ asset('assets/dist/js/pages/login.js')}}"></script>
+    @endif
+    <!-- Font Awesome -->
     <script>
         setTimeout(function() {
             $('#failed').slideUp('slow');
