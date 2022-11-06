@@ -11,6 +11,15 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
     <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/alt/login.css') }}">
+
+    <script src="{{ secure_asset('assets/dist/js/pages/login.js')}}"></script>
+    @production
     <link rel="stylesheet" href="{{ secure_asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="{{ secure_asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
@@ -19,6 +28,7 @@
     <link rel="stylesheet" href="{{ secure_asset('assets/dist/css/alt/login.css') }}">
 
     <script src="{{ secure_asset('assets/dist/js/pages/login.js')}}"></script>
+    @endproduction
     <script>
         setTimeout(function() {
             $('#failed').slideUp('slow');
