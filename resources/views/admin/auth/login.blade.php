@@ -10,7 +10,7 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
 
-    @if(parse_url(url('/'), PHP_URL_SCHEME) == 'HTTPS')
+    @if(parse_url(url(), PHP_URL_SCHEME) == 'https')
     <link rel="stylesheet" href="{{ secure_asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="{{ secure_asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
