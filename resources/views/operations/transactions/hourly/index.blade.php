@@ -5,53 +5,49 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <<<<<<< HEAD {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-        =======
-        {{--
-        <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
-        >>>>>>> 516d6c5567d80e2b5a0647025168fd1c6425198c
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>@Include('layouts.links.admin.title') | Transactions</title>
-        <style>
-            .dt-buttons {
-                float: right !important;
-            }
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>@Include('layouts.links.admin.title') | Transactions</title>
+    <style>
+        .dt-buttons {
+            float: right !important;
+        }
 
-            .cur-rate>td {
-                padding: 0 !important;
-                margin: 0 !important;
-                border: none !important;
-            }
+        .cur-rate>td {
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+        }
 
-            #example1 {
-                width: 100% !important;
-            }
+        #example1 {
+            width: 100% !important;
+        }
 
-            .table-responsive {
-                display: inline-table !important;
-            }
+        .table-responsive {
+            display: inline-table !important;
+        }
 
-            input[type=date]:focus {
-                outline: none;
-            }
+        input[type=date]:focus {
+            outline: none;
+        }
 
-            .select2-container--default .select2-selection--single {
-                height: calc(2.25rem + 2px) !important;
-            }
+        .select2-container--default .select2-selection--single {
+            height: calc(2.25rem + 2px) !important;
+        }
 
-            #search_filter:focus {
-                outline: none;
-            }
-        </style>
-        @Include('layouts.favicon')
-        @Include('layouts.links.admin.head')
-        @Include('layouts.links.datatable.head')
-        <script>
-            setTimeout(function() {
+        #search_filter:focus {
+            outline: none;
+        }
+    </style>
+    @Include('layouts.favicon')
+    @Include('layouts.links.admin.head')
+    @Include('layouts.links.datatable.head')
+    <script>
+        setTimeout(function() {
             $('#failed').slideUp('slow');
         }, 3000);
-        </script>
+    </script>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">

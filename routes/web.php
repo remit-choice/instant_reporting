@@ -149,8 +149,8 @@ Route::prefix('admin')->group(function () {
             Route::prefix('transactions')->group(function () {
                 //Sending wise hourly transait report
                 Route::prefix('hourly')->group(function () {
-                    Route::get('/', [OperationsTransactionController::class, 'sending_index'])->name('admin.operations.transactions.hourly');
-                    Route::post('/', [OperationsTransactionController::class, 'sending_filter'])->name('admin.operations.transactions.hourly');
+                    Route::get('/', [OperationsTransactionsController::class, 'sending_index'])->name('admin.operations.transactions.hourly');
+                    Route::post('/', [OperationsTransactionsController::class, 'sending_filter'])->name('admin.operations.transactions.hourly');
                 });
             });
         });
