@@ -1,7 +1,0 @@
-#create_Show,#create_retype_Show,#Show,#retype_Show {
-    display: none;
-}
-
-.input-group-append{
-    cursor: pointer!important;
-}
