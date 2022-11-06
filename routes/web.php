@@ -30,8 +30,6 @@ use Illuminate\Support\Facades\Session;
 */
 
 Route::get('/', function () {
-    echo parse_url(url('/'), PHP_URL_SCHEME);  //resolves to:: C:\xampp\htdocs\paprng\public
-    exit;
     if (Session::has('r_id') && Session::get('status') == 1) {
         return redirect('/admin/dashboard');
     } else {
