@@ -9,16 +9,28 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-
+    @if (env('APP_ENV')!='production')
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('public/assets/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ URL::asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ URL::asset('assets/dist/css/alt/login.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/assets/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/assets/dist/css/alt/login.css') }}">
 
-    <script src="{{ URL::asset('assets/dist/js/pages/login.js')}}"></script>
+    <script src="{{ asset('public/assets/dist/js/pages/login.js')}}"></script>
+
+    @else
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+    <!-- icheck bootstrap -->
+    <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/alt/login.css') }}">
+
+    <script src="{{ asset('assets/dist/js/pages/login.js')}}"></script>
+    @endif
     <script>
         setTimeout(function() {
             $('#failed').slideUp('slow');
@@ -137,13 +149,21 @@
         <!-- /.card -->
     </div>
     <!-- /.login-box -->
-
+    @if (env('APP_ENV')!='production')
     <!-- jQuery -->
-    <script src="{{ URL::asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+    <script src="{{ asset('public/assets/plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
-    <script src="{{ URL::asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{ asset('public/assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
     <!-- AdminLTE App -->
-    <script src="{{ URL::asset('assets/dist/js/adminlte.min.js')}}"></script>
+    <script src="{{ asset('public/assets/dist/js/adminlte.min.js')}}"></script>
+    @else
+    <!-- jQuery -->
+    <script src="{{ asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ asset('assets/dist/js/adminlte.min.js')}}"></script>
+    @endif
 </body>
 
 </html>
