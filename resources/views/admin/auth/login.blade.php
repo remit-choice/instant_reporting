@@ -48,22 +48,22 @@
                         </div>
                         <input type="email" name="email" class="form-control" placeholder="Email">
                         @error('email')
-                            <div class="invalid-feedback order-last" id="email_msg">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback order-last" id="email_msg">
+                            {{ $message }}
+                        </div>
                         @enderror
                         @if (session('failed'))
-                            <div class="invalid-feedback order-last" id="email_msg">
-                                {{ session('failed') }}
-                            </div>
+                        <div class="invalid-feedback order-last" id="email_msg">
+                            {{ session('failed') }}
+                        </div>
                         @endif
                         @if (session('UpdatedSuccess'))
-                            <div class="invalid-feedback order-last" id="email_msg">
-                                <span class="text-success error_message text-center to" style="margin-top: -5px"
-                                    id="UpdatedSuccess">
-                                    {{ session('UpdatedSuccess') }}
-                                </span>
-                            </div>
+                        <div class="invalid-feedback order-last" id="email_msg">
+                            <span class="text-success error_message text-center to" style="margin-top: -5px"
+                                id="UpdatedSuccess">
+                                {{ session('UpdatedSuccess') }}
+                            </span>
+                        </div>
                         @endif
                     </div>
                     <div class="input-group mb-3">
@@ -84,9 +84,9 @@
                             </div>
                         </div>
                         @error('password')
-                            <div class="invalid-feedback order-last" id="password_msg">
-                                {{ $message }}
-                            </div>
+                        <div class="invalid-feedback order-last" id="password_msg">
+                            {{ $message }}
+                        </div>
                         @enderror
                     </div>
                     <div class="row my-2">
