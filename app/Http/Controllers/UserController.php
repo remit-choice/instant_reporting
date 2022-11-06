@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ModulesGroup;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\View;
 
@@ -28,5 +32,132 @@ class UserController extends Controller
             ->get();
         // dd($module_groups->toArray());
         View::share(['module_groups' => $module_groups]);
+    }
+    public function index()
+    {
+        $users =  User::with('roles')->get();
+        $roles =  Role::get();
+        // dd($users->toArray());
+        return View::make('admin.setting.user.index', ['users' => $users, 'roles' => $roles]);
+    }
+    public function show()
+    {
+        $U_ID =  Session::get('U_ID');
+        $UpdateData = User::with('roles')->where('ID', $U_ID)->get();
+        return view('admin.profile.index', ['UpdateData' => $UpdateData]);
+    }
+    public function create(Request $request)
+    {
+        if (FacadesRequest::isMethod('post')) {
+            $request->validate(
+                [
+                    'full_name' => 'required|string|min:3|max:255',
+                    'user_name' => 'required|string|min:3|max:255',
+                    'email' => 'required|string|email|max:255',
+                    'password' => 'required|string|min:8|max:255',
+                    'designation' => 'required|string|min:3|max:255',
+                    'r_id' => 'required|integer',
+                ],
+                [
+                    'full_name' => 'required|string|min:3|max:255',
+                    'user_name.required' => '*required',
+                    'email.required' => '*required',
+                    'password.required' => '*required',
+                    'designation.required' => '*required',
+                    'r_id.required' => '*required',
+                ]
+            );
+            $full_name = $request->full_name;
+            $user_name = $request->user_name;
+            $email = $request->email;
+            $password = $request->password;
+            $r_id = $request->r_id;
+            $designation = $request->designation;
+            $hash_password = Hash::make($password);
+
+            $users_count = User::where('email', '=', $email)->count();
+            $Admin = User::where('email', '=', $request->input('email'))->first();
+
+            if ($users_count > 0) {
+                return back()->with('failed', "email already Exist");
+            } else {
+                User::insert([
+                    'r_id' => $r_id,
+                    'full_name' => $full_name,
+                    'user_name' => $user_name,
+                    'email' => $email,
+                    'password' => $hash_password,
+                    'designation' => $designation,
+                    'status' => $designation,
+                ]);
+            }
+        } else {
+        }
+    }
+    public function edit(Request $request)
+    {
+        if (FacadesRequest::isMethod('post')) {
+            $request->validate(
+                [
+                    'full_name' => 'required|string|min:3|max:255',
+                    'user_name' => 'required|string|min:3|max:255',
+                    'email' => 'required|string|email|max:255',
+                    'designation' => 'required|string|min:3|max:255',
+                    'r_id' => 'required|integer',
+                ],
+                [
+                    'full_name' => 'required|string|min:3|max:255',
+                    'user_name.required' => '*required',
+                    'email.required' => '*required',
+                    'designation.required' => '*required',
+                    'r_id.required' => '*required',
+                ]
+            );
+            $full_name = $request->full_name;
+            $user_name = $request->user_name;
+            $email = $request->email;
+            $password = $request->password;
+            $r_id = $request->r_id;
+            $id = $request->id;
+            $designation = $request->designation;
+            $hash_password = Hash::make($password);
+
+            $users_count = User::where('email', $email)->count();
+
+            if ($users_count > 1) {
+                return back()->with('failed', "email already Exist");
+            } else {
+                if ($password != 0) {
+                    User::where('id', $id)->update([
+                        'full_name' => $full_name,
+                        'user_name' => $user_name,
+                        'email' => $email,
+                        'r_id' => $r_id,
+                        'designation' => $designation,
+                        'password' => $hash_password,
+                    ]);
+                } else {
+                    User::where('id', $id)->update([
+                        'full_name' => $full_name,
+                        'user_name' => $user_name,
+                        'email' => $email,
+                        'r_id' => $r_id,
+                        'designation' => $designation,
+                    ]);
+                }
+                $users =  User::where('id', $id)->first();
+                $id =  Session::get('u_id');
+                if ($users->id == $id) {
+                    session()->pull('full_name');
+                    session()->put('full_name', $full_name);
+                }
+            }
+        } else {
+        }
+    }
+    public function delete(Request $request)
+    {
+        $is = $request->id;
+        User::where('id', $is)->delete();
     }
 }

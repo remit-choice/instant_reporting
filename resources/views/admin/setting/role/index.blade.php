@@ -276,14 +276,7 @@
     @Include('layouts.links.datatable.foot')
     @Include('layouts.links.sweet_alert.foot')
     <script type="text/javascript">
-        $(function() {
-            var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
-            });
-                $('#role_status').click(function() {
+        $('#role_status').click(function() {
                     if ($(this).is(':checked')) {
                         $(this).attr("checked", true)
                         $(this).val(this.checked ? 1 : 0);
@@ -313,6 +306,14 @@
                     $('#role_status').prop('checked', false);
                 }
             });
+        $(function() {
+            var Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000
+            });
+                
                 $('.create').click(function(e) {
                     e.preventDefault();
                     var name = $('#create_role_name').val();

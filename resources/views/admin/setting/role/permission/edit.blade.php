@@ -103,7 +103,10 @@
                                 <?php
                                     $counter = 0;
                                     ?>
+<<<<<<< HEAD
                                 @if ($type == 0)
+=======
+>>>>>>> 516d6c5567d80e2b5a0647025168fd1c6425198c
                                 <form action="{{ route('admin.role.permission.edit', [Session::get('roll_id')]) }}"
                                     method="POST">
                                     @csrf
@@ -115,6 +118,7 @@
                                         </td>
                                     </tr>
                                     @foreach ($modules_group->modules as $module)
+<<<<<<< HEAD
                                     @if (!empty($module->permissions['r_id']))
                                     @if (!empty($module->permissions['view']) ||
                                     !empty($module->permissions['add']) ||
@@ -168,6 +172,59 @@
                                                             ?>
                                     @endif
                                     @endif
+=======
+                                  
+                                        @if (!empty($module->permissions['r_id']))
+                                            @if (!empty($module->permissions['view']) || !empty($module->permissions['add']) || !empty($module->permissions['edit']) || !empty($module->permissions['delete']))
+                                                <tr class="checoboxes">
+                                                    <td>
+                                                        <input type="hidden" name="r_id" id="R_id"
+                                                            value="{{ $module->permissions['r_id'] }}">
+                                                        <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
+                                                        {{ $module->name }}
+                                                    </td>
+                                                    <td>
+                                                        @if (empty($module->permissions['view']) && $module->permissions['view'] !=
+                                                        0)
+                                                        @else
+                                                        <input type="checkbox" name="view[{{ $counter }}]" class="check"
+                                                            value="{{ $module->permissions['view'] }}"
+                                                            @if($module->permissions['view'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (empty($module->permissions['add']) && $module->permissions['add'] != 0)
+                                                        @else
+                                                        <input type="checkbox" name="add[{{ $counter }}]" class="check"
+                                                            value="{{ $module->permissions['add'] }}"
+                                                            @if($module->permissions['add'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (empty($module->permissions['edit']) && $module->permissions['edit'] !=
+                                                        0)
+                                                        @else
+                                                        <input type="checkbox" name="edit[{{ $counter }}]" class="check"
+                                                            value="{{ $module->permissions['edit'] }}"
+                                                            @if($module->permissions['edit'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @if (empty($module->permissions['delete']) && $module->permissions['delete']
+                                                        != 0)
+                                                        @else
+                                                        <input type="checkbox" name="delete[{{ $counter }}]" class="check"
+                                                            value="{{ $module->permissions['delete'] }}"
+                                                            @if($module->permissions['delete'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                @php
+                                                $counter = $counter + 1;
+                                                @endphp
+                                            @endif
+                                        @endif
+>>>>>>> 516d6c5567d80e2b5a0647025168fd1c6425198c
                                     @endforeach
                                     @endforeach
                                     <div class="d-flex justify-content-between">
@@ -179,6 +236,7 @@
                                         </button>
                                     </div>
                                 </form>
+<<<<<<< HEAD
                                 @elseif ($type == 1)
                                 <form action="{{ route('admin.role.permission.edit', [Session::get('roll_id')]) }}"
                                     method="POST">
@@ -233,6 +291,8 @@
                                     </div>
                                 </form>
                                 @endif
+=======
+>>>>>>> 516d6c5567d80e2b5a0647025168fd1c6425198c
                             </tbody>
                         </table>
 

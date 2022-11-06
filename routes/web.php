@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\accounts\TransactionController;
+use App\Http\Controllers\accounts\TransactionsController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
@@ -10,10 +10,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModuleGroupsController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\OnlineCustomersController;
-use App\Http\Controllers\operations\TransactionController as OperationsTransactionController;
+use App\Http\Controllers\operations\TransactionsController as OperationsTransactionsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TransactionDataController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -114,18 +115,33 @@ Route::prefix('admin')->group(function () {
                     Route::post('/delete', [ModuleGroupsController::class, 'delete_admin_module_group'])->name('admin.modules_groups.delete');
                 });
             });
+            Route::prefix('user')->group(function () {
+                Route::get('/', [UserController::class, 'index'])->name('admin.user.index');
+                Route::match(['get', 'post'], '/create', [UserController::class, 'create'])->name('admin.user.create');
+                Route::match(['get', 'post'], '/edit', [UserController::class, 'edit'])->name('admin.user.edit');
+                Route::post('/delete', [UserController::class, 'delete'])->name('admin.user.delete');
+            });
         });
         Route::prefix('accounts')->group(function () {
             Route::prefix('transactions')->group(function () {
                 //sending side revenue
                 Route::prefix('sending')->group(function () {
-                    Route::get('/', [TransactionController::class, 'sending_index'])->name('admin.accounts.transactions.sending_side_revenue');
-                    Route::post('/', [TransactionController::class, 'sending_filter'])->name('admin.accounts.transactions.sending_side_revenue');
+                    Route::get('/', [TransactionsController::class, 'sending_index'])->name('admin.accounts.transactions.sending_side_revenue');
+                    Route::post('/', [TransactionsController::class, 'sending_filter'])->name('admin.accounts.transactions.sending_side_revenue');
                 });
                 //receiving side revenue
                 Route::prefix('receiving')->group(function () {
-                    Route::get('/', [TransactionController::class, 'receiving_index'])->name('admin.accounts.transactions.receiving_side_revenue');
-                    Route::post('/', [TransactionController::class, 'receiving_filter'])->name('admin.accounts.transactions.receiving_side_revenue');
+                    Route::get('/', [TransactionsController::class, 'receiving_index'])->name('admin.accounts.transactions.receiving_side_revenue');
+                    Route::post('/', [TransactionsController::class, 'receiving_filter'])->name('admin.accounts.transactions.receiving_side_revenue');
+                });
+            });
+        });
+        Route::prefix('operations')->group(function () {
+            Route::prefix('transactions')->group(function () {
+                //Sending wise hourly transait report
+                Route::prefix('hourly')->group(function () {
+                    Route::get('/', [OperationsTransactionsController::class, 'sending_index'])->name('admin.operations.transactions.hourly');
+                    Route::post('/', [OperationsTransactionsController::class, 'sending_filter'])->name('admin.operations.transactions.hourly');
                 });
             });
         });

@@ -37,7 +37,11 @@ class OnlineCustomersController extends Controller
             } elseif (!empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('d/m/Y',  strtotime($request->date_to));
+<<<<<<< HEAD
                 $online_customers = OnlineCustomer::whereBetween('register_date', [$date_from, $date_to])->get();
+=======
+                $online_customers = OnlineCustomer::whereBetween('register_date', [$date_from, $date_to])->orwhere('register_date', '=', $date_from)->orwhere('register_date', '<=', $date_to)->get();
+>>>>>>> 516d6c5567d80e2b5a0647025168fd1c6425198c
                 return
                     view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
             } else {

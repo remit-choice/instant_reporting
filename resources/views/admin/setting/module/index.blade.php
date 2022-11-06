@@ -29,7 +29,6 @@
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
     @Include('layouts.links.toastr.head')
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script> --}}
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -336,14 +335,16 @@
                                 </div>
                                 <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.card-body -->
                         </div>
+                        <!-- /.card -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-        </div>
+                </div>
+                <!-- /.row -->
+        </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
     </div>
 
     <form action="" method="post" id="module_update_form">
@@ -365,52 +366,69 @@
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="form-group">
-                            <label for="module_name" class="text-capitalize">Name</label>
-                            <div class="input-group">
-                                <input type="hidden" name="module_id" id="module_id" value="">
-                                <input type="text" name="module_name" id="module_name" class="form-control">
+                        <div class="modal-body">
+                            <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
+                                role="alert" style="display: none">
+                                <span class="text_fails"></span>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <span class="edit_name_status" style="color: #dc3545"></span>
-                            <span class="text-danger" id="module_name_error">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label for="module_icon" class="text-capitalize">Icon</label>
-                            <div class="input-group">
-                                <input type="text" name="module_icon" id="module_icon" class="form-control">
+                            <div class="form-group">
+                                <label for="module_name" class="text-capitalize">Name</label>
+                                <div class="input-group">
+                                    <input type="hidden" name="module_id" id="module_id" value="">
+                                    <input type="text" name="module_name" id="module_name" class="form-control">
+                                </div>
+                                <span class="edit_name_status" style="color: #dc3545"></span>
+                                <span class="text-danger" id="module_name_error">
+                                </span>
                             </div>
-                            <span class="text-danger" id="module_icon_error">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label for="m_g_id" class="text-capitalize">Module Group</label>
-                            <div class="input-group">
-                                <select id="m_g_id" data-live-search="true" title="Select"
-                                    class="selectpicker show-tick form-control" name="m_g_id" required>
-                                    <option id="edit_m_g_id" selected hidden value="">
-                                        @foreach ($modules_groups as $modules_group)
-                                    <option value="{{ $modules_group->id }}">
-                                        {{ $modules_group->name }}
-                                    </option>
-                                    @endforeach
-                                </select>
+                            <div class="form-group">
+                                <label for="module_icon" class="text-capitalize">Icon</label>
+                                <div class="input-group">
+                                    <input type="text" name="module_icon" id="module_icon" class="form-control">
+                                </div>
+                                <span class="text-danger" id="module_icon_error">
+                                </span>
                             </div>
-                            <span class="text-danger" id="m_g_id_error">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label for="module_type" class="text-capitalize">Type</label>
-                            <div class="input-group">
-                                <select id="module_type" data-live-search="true" title="Select"
-                                    class="selectpicker show-tick form-control" name="module_type" required>
-                                    <option id="edit_module_type" selected hidden value="">
-                                    <option value="0">SideBar</option>
-                                    <option value="1">Inside Page</option>
-                                </select>
+                            <div class="form-group">
+                                <label for="m_g_id" class="text-capitalize">Module Group</label>
+                                <div class="input-group">
+                                    <select id="m_g_id" data-live-search="true" title="Select"
+                                        class="selectpicker show-tick form-control" name="m_g_id" required>
+                                        <option id="edit_m_g_id" selected hidden value="">
+                                            @foreach ($modules_groups as $modules_group)
+                                        <option value="{{ $modules_group->id }}">
+                                            {{ $modules_group->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <span class="text-danger" id="m_g_id_error">
+                                </span>
                             </div>
-                            <span class="text-danger" id="module_type_error">
-                            </span>
+                            <div class="form-group">
+                                <label for="module_type" class="text-capitalize">Type</label>
+                                <div class="input-group">
+                                    <select id="module_type" data-live-search="true" title="Select"
+                                        class="selectpicker show-tick form-control" name="module_type" required>
+                                        <option id="edit_module_type" selected hidden value="">
+                                        <option value="0">SideBar</option>
+                                        <option value="1">Inside Page</option>
+                                    </select>
+                                </div>
+                                <span class="text-danger" id="module_type_error">
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_status" class="text-capitalize">
+                                    <div class="input-group">
+                                        <input type="checkbox" name="module_status me-2" id="module_status"
+                                            value="0">Status
+                                    </div>
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="module_status" class="text-capitalize">
@@ -428,9 +446,7 @@
                 </div>
                 <!-- /.modal-content -->
             </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!-- /.modal -->
+            <!-- /.modal -->
     </form>
 
     @Include('layouts.links.admin.foot')
