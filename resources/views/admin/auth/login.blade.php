@@ -11,14 +11,14 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     @if (env('APP_ENV') =='production')
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('public/assets/plugins/fontawesome-free/css/all.min.css')}}">
+    <link rel="stylesheet" href="/public/assets/plugins/fontawesome-free/css/all.min.css">
     <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+    <link rel="stylesheet" href="/public/assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
     <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('public/assets/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/assets/dist/css/alt/login.css') }}">
+    <link rel="stylesheet" href="/public/assets/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="/public/assets/dist/css/alt/login.css">
 
-    <script src="{{ asset('public/assets/dist/js/pages/login.js')}}"></script>
+    <script src="/public/assets/dist/js/pages/login.js"></script>
 
     @else
     <!-- Font Awesome -->
