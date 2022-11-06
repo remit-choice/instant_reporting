@@ -9,7 +9,7 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    @if (config('app.env') =='production')
+    @if (env('APP_ENV') =='production')
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{ asset('public/assets/plugins/fontawesome-free/css/all.min.css')}}">
     <!-- icheck bootstrap -->
@@ -149,7 +149,7 @@
         <!-- /.card -->
     </div>
     <!-- /.login-box -->
-    @if (config('app.env')=='production')
+    @if (env('APP_ENV') =='production')
     <!-- jQuery -->
     <script src="{{ asset('public/assets/plugins/jquery/jquery.min.js')}}"></script>
     <!-- Bootstrap 4 -->
