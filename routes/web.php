@@ -42,15 +42,12 @@ Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login']);
 
     Route::middleware('Routing')->group(function () {
-        //For Login
         Route::prefix('auth')->group(function () {
             Route::view('/forget', 'user.auth.forget');
             Route::view('/reset', 'user.auth.reset');
             Route::post('/forget', [ForgotPasswordController::class, 'user_forget_password']);
             Route::post('/reset', [ResetPasswordController::class, 'user_reset_password']);
         });
-
-        //DashboardController
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [DashboardController::class, 'admin_dashboard'])->name("admin.dashboard");
         });
@@ -89,7 +86,6 @@ Route::prefix('admin')->group(function () {
                     Route::match(['get', 'post'], '/edit', [PermissionController::class, 'edit_permissions'])->name('admin.role.permission.edit');
                 });
             });
-
             Route::prefix('module')->group(function () {
                 Route::get('/', [ModulesController::class, 'admin_module_list'])->name('admin.module.index');
                 Route::match(['get', 'post'], '/create', [ModulesController::class, 'add_admin_module'])->name('admin.module.create');

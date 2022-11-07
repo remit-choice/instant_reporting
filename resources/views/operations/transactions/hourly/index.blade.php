@@ -43,6 +43,7 @@
     @Include('layouts.favicon')
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
+    @Include('layouts.links.toastr.head')
     <script>
         setTimeout(function() {
             $('#failed').slideUp('slow');
@@ -99,9 +100,9 @@
                                             method="post">
                                             @csrf
                                             <div class="row d-flex justify-content-center">
-                                                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                     <label>Select Country</label>
-                                                    <select class="form-control" name="search_filter" id="search_filter"
+                                                    <select class="form-control countries_filter" name="search_filter" id="search_filter"
                                                         style="width: 100%">
                                                         <option class="py-1" hidden selected
                                                             value="{{ request()->input('search_filter', old('search_filter')) }}">
@@ -111,11 +112,27 @@
                                                                 SELECT
                                                             @endif
                                                         </option>
-                                                        <option value="Customer Country" class="py-1">Customer
+                                                        <option value="customer_country" class="py-1">Customer
+                                                            Country</option>
+                                                        <option value="beneficiary_country" class="py-1">Beneficiary
                                                             Country</option>
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                    <label>Select Country</label>
+                                                    <select class="form-control" name="countries" id="countries"
+                                                        style="width: 100%">
+                                                        <option class="py-1" hidden selected
+                                                            value="{{ request()->input('countries', old('countries')) }}">
+                                                            @if (request()->input('countries'))
+                                                                {{ request()->input('countries', old('countries')) }}
+                                                            @else
+                                                                SELECT Country
+                                                            @endif
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                     <label>From Date</label>
                                                     @if (request()->input('date_from'))
                                                         <input type="date" name="date_from" id=""
@@ -127,7 +144,7 @@
                                                             class="form-control" value="" style="width: 100%">
                                                     @endif
                                                 </div>
-                                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                     <label>To Date</label>
                                                     @if (request()->input('date_to'))
                                                         <input type="date" name="date_to" id=""
@@ -194,18 +211,23 @@
                                                                         <tbody>
                                                                             @php
                                                                                 $counts = 1;
+                                                                                // dd($transactions_data->toArray());
                                                                             @endphp
-                                                                            @foreach ($transactions_data as $transaction_data)
+                                                                            @if (!$transactions_data->isEmpty())
+                                                                                @foreach ($transactions_data as $transaction_data)
                                                                                 @foreach ($transaction_data as $array)                                                                                    
                                                                                     @if ($transaction->hours==$array->hours)
                                                                                         <tr>
                                                                                             <td>{{ $counts++ }}</td>
-                                                                                            <td>{{ $array->customer_country }}</td>
+                                                                                            <td>@if (!empty($array->customer_country)) {{ $array->customer_country }} @else {{ $array->beneficiary_country }} @endif </td>
                                                                                             <td>{{ $array->count_of_tr_no }}</td>
                                                                                         </tr>
                                                                                     @endif
                                                                                 @endforeach
                                                                             @endforeach
+                                                                            @else
+                                                                                
+                                                                            @endif
                                                                         </tbody>
                                                                     </table>
                                                                 </td>
@@ -240,6 +262,44 @@
         </div>
         @Include('layouts.links.admin.foot')
         @Include('layouts.links.datatable.foot')
+        @Include('layouts.links.sweet_alert.foot')
+        <script type="text/javascript">
+            $(document).on('change', '.countries_filter', function() {
+                var search_filter = $('.countries_filter').val();
+                console.log(search_filter);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $.ajax({
+                    type: "get",
+                    url: "{{ route('admin.operations.transactions.hourly') }}",
+                    data: {
+                        "search_filter": search_filter,
+                    },
+                    success: function(response) {
+                            console.log(response)
+                            if(response.beneficiary_country){
+                                $('#countries').html('<option value="">Select beneficiary_country</option>');
+                                $.each(response.beneficiary_country, function (key, value) {
+                                    $("#countries").append('<option>' + value.beneficiary_country + '</option>');
+                                });
+                            }else{
+                                $('#countries').html('<option value="">Select customer_country</option>');
+                                $.each(response.customer_country, function (key, value) {
+                                    $("#countries").append('<option>' + value.customer_country + '</option>');
+                                });
+                            }
+                            
+  
+                    },
+                    error: (error) => {
+                        console.log(JSON.stringify(error));
+                    }
+                });
+            });
+        </script>
     @endsection
 </body>
 

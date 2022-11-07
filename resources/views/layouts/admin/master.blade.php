@@ -121,26 +121,28 @@
                   <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
               </div>
           </li>
+          <!-- Profile -->
           <li class="nav-item">
               <a class="nav-link" data-widget="fullscreen" href="#" role="button">
                   <i class="fas fa-expand-arrows-alt"></i>
               </a>
           </li>
-          <li class="nav-item dropdown">
-              <a class="nav-link" data-toggle="dropdown" href="#">
-                  <i class="fas fa-sign-out-alt"></i>
-              </a>
-              <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                  <form action="/logout" method="post">
-                      @csrf
-                      <button type="submit" class="dropdown-item">
-                          <i class="fas fa-sign-out-alt mr-2"></i> Logout
-                      </button>
+          <!-- Profile Dropdown Menu -->
+            <li class="nav-item dropdown">
+                <a class="nav-link" data-toggle="dropdown" href="#">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                    <a href="http://"><button type="submit" class="dropdown-item"><i class="fas fa-user mr-2"></i> Profile </button></a>
+                    <form action="/logout" method="post">
+                        @csrf
+                        <button type="submit" class="dropdown-item">
+                            <i class="fas fa-sign-out-alt mr-2"></i> Logout
+                        </button>
 
-                  </form>
-
-              </div>
-          </li>
+                    </form>
+                </div>
+            </li>
       </ul>
   </nav>
   <!-- /.navbar -->

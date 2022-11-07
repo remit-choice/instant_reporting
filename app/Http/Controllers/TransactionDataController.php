@@ -55,17 +55,18 @@ class TransactionDataController extends Controller
             if ($request->file('transaction_file')) {
                 $file = $request->file('transaction_file');
                 $extension = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
+                // $filename = time() . '.' . $extension;
                 // dd($filename);
-                $allowed =  array("csv", 'xsls');
+                $allowed =  array("csv");
                 // $maxFileSize = 2097152; // Uploaded file size limit is 2mb
-                $fileSize = $file->getSize(); //Get size of uploaded file in bytes
-                $location = 'assets/dist/img/transaction_file/';
-                $filepath = public_path($location . $filename);
+                // $fileSize = $file->getSize(); //Get size of uploaded file in bytes
+                // $location = 'assets/dist/img/transaction_file/';
+                // $filepath = public_path($location . $filename);
+                $filepath = $file->getRealPath();
 
                 if (in_array($extension, $allowed)) {
-                    File::delete(public_path($location . $filename));
-                    $file->move($location, $filename);
+                    // File::delete(public_path($location . $filename));
+                    // $file->move($location, $filename);
                     $i = 0; //so we can skip first row
                     // if ($fileSize <= $maxFileSize) {
                     $files = fopen($filepath, "r");

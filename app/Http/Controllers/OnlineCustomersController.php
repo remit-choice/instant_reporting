@@ -57,14 +57,14 @@ class OnlineCustomersController extends Controller
             if ($request->file('online_customer_file')) {
                 $file = $request->file('online_customer_file');
                 $extension = $file->getClientOriginalExtension();
-                $filename = time() . '.' . $extension;
-                $allowed =  array("csv", 'xsls');
-                $location = 'assets/dist/img/online_customer_file/';
-                $filepath = public_path($location . $filename);
-                // dd($filename);
+                // $filename = time() . '.' . $extension;
+                $allowed =  array("csv");
+                // $location = 'assets/dist/img/online_customer_file/';
+                // $filepath = public_path($location . $filename);
+                $filepath = $file->getRealPath();
                 if (in_array($extension, $allowed)) {
-                    File::delete(public_path($location . $filename));
-                    $file->move($location, $filename);
+                    // File::delete(public_path($location . $filename));
+                    // $file->move($location, $filename);
                     $i = 0;
                     $files = fopen($filepath, "r");
                     while (($emapData = fgetcsv($files, 10000, ",")) !== FALSE) {
