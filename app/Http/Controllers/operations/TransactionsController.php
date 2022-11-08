@@ -22,17 +22,19 @@ class TransactionsController extends Controller
     {
         if (FacadesRequest::isMethod('get')) {
             return view('operations.transactions.hourly.index');
-        } elseif (FacadesRequest::isMethod('get') && !empty($request->search_filter)) {
-            dd(1);
-            if ($request->search_filter == 'customer_country') {
-                $customer_countries['customer_country'] = TransactionsData::groupBy('customer_country')->orderBy('customer_country', 'ASC')->get();
-                return response()->json($customer_countries);
-            } elseif ($request->search_filter == 'beneficiary_country') {
-                $beneficiary_countries['beneficiary_country'] = TransactionsData::select('beneficiary_country')->groupBy('beneficiary_country')->orderBy('beneficiary_country', 'ASC')->get();
-                return response()->json($beneficiary_countries);
-            } else {
-            }
+        } else {
         }
+        // elseif (FacadesRequest::isMethod('get') && !empty($request->search_filter)) {
+        //     dd(1);
+        //     if ($request->search_filter == 'customer_country') {
+        //         $customer_countries['customer_country'] = TransactionsData::groupBy('customer_country')->orderBy('customer_country', 'ASC')->get();
+        //         return response()->json($customer_countries);
+        //     } elseif ($request->search_filter == 'beneficiary_country') {
+        //         $beneficiary_countries['beneficiary_country'] = TransactionsData::select('beneficiary_country')->groupBy('beneficiary_country')->orderBy('beneficiary_country', 'ASC')->get();
+        //         return response()->json($beneficiary_countries);
+        //     } else {
+        //     }
+        // }
     }
     public function sending_filter(Request $request)
     {

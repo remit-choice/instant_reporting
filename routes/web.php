@@ -15,6 +15,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TransactionDataController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -142,4 +143,14 @@ Route::prefix('admin')->group(function () {
             });
         });
     });
+});
+
+
+
+Route::get('/cache', function () {
+    Artisan::call('cache:clear');
+});
+
+Route::get('/storage', function () {
+    Artisan::call('storage:link');
 });

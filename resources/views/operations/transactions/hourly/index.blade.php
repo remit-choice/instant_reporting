@@ -100,7 +100,7 @@
                                             method="post">
                                             @csrf
                                             <div class="row d-flex justify-content-center">
-                                                <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                     <label>Select Country</label>
                                                     <select class="form-control countries_filter" name="search_filter" id="search_filter"
                                                         style="width: 100%">
@@ -118,7 +118,7 @@
                                                             Country</option>
                                                     </select>
                                                 </div>
-                                                <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                {{-- <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                     <label>Select Country</label>
                                                     <select class="form-control" name="countries" id="countries"
                                                         style="width: 100%">
@@ -131,8 +131,8 @@
                                                             @endif
                                                         </option>
                                                     </select>
-                                                </div>
-                                                <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                </div> --}}
+                                                <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                     <label>From Date</label>
                                                     @if (request()->input('date_from'))
                                                         <input type="date" name="date_from" id=""
@@ -144,7 +144,7 @@
                                                             class="form-control" value="" style="width: 100%">
                                                     @endif
                                                 </div>
-                                                 <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                 <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
                                                     <label>To Date</label>
                                                     @if (request()->input('date_to'))
                                                         <input type="date" name="date_to" id=""
@@ -262,21 +262,22 @@
         </div>
         @Include('layouts.links.admin.foot')
         @Include('layouts.links.datatable.foot')
-        @Include('layouts.links.sweet_alert.foot')
+        {{-- @Include('layouts.links.sweet_alert.foot')
         <script type="text/javascript">
             $(document).on('change', '.countries_filter', function() {
                 var search_filter = $('.countries_filter').val();
                 console.log(search_filter);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                });
+                // $.ajaxSetup({
+                //     headers: {
+                //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                //     }
+                // });
                 $.ajax({
-                    type: "get",
-                    url: "{{ route('admin.operations.transactions.hourly') }}",
+                    type: "post",
+                    url: "{{ route('admin.operations.transactions.hourly.countries') }}",
                     data: {
                         "search_filter": search_filter,
+                        '_token': '{{csrf_token()}}'
                     },
                     success: function(response) {
                             console.log(response)
@@ -299,7 +300,7 @@
                     }
                 });
             });
-        </script>
+        </script> --}}
     @endsection
 </body>
 
