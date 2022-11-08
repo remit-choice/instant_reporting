@@ -5,12 +5,7 @@
 
 
   
-@if (config('app.env')=='production')
-  <!-- Select2 -->
-    <link rel="stylesheet" href="{{ secure_asset('assets/plugins/select2/css/select2.min.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-@else
+
     <!-- Select2 -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
-@endif

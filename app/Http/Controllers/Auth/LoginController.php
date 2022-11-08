@@ -56,10 +56,10 @@ class LoginController extends Controller
                     $email_cookie =  Cookie::make('emailcookie', $email, time() + 86400);
                     $password_cookie = Cookie::make('passwordcookie', $password, time() + 86400);
 
-                    return redirect('/admin/dashboard')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
+                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
                 } else {
                     $this->admin_login_sessions($request);
-                    return redirect('/admin/dashboard')->with('module_groups', $module_groups);
+                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups);
                 }
             }
         } else {

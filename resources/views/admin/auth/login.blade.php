@@ -52,7 +52,7 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in</p>
-                <form action="/admin" method="post">
+                <form action="{{ route('admin') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
                         <div class="input-group-append">
@@ -161,11 +161,11 @@
         <script src="{{ secure_asset('assets/dist/js/adminlte.min.js')}}"></script>
     @else
         <!-- jQuery -->
-        <script src="{{ secure_asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+        <script src="{{ asset('assets/plugins/jquery/jquery.min.js')}}"></script>
         <!-- Bootstrap 4 -->
-        <script src="{{ secure_asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
         <!-- AdminLTE App -->
-        <script src="{{ secure_asset('assets/dist/js/adminlte.min.js')}}"></script>
+        <script src="{{ asset('assets/dist/js/adminlte.min.js')}}"></script>
     @endif
 </body>
 
