@@ -22,6 +22,8 @@ return new class extends Migration
             $table->integer('edit')->nullable();
             $table->integer('delete')->nullable();
             $table->timestamps();
+        });
+        Schema::table('permissions', function (Blueprint $table) {
             $table->foreign('r_id')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('m_id')->references('id')->on('modules')->onDelete('cascade');
         });
