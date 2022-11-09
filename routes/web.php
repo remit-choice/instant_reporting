@@ -40,7 +40,7 @@ Route::get('/', function () {
 Route::post('/logout', [LogoutController::class, 'logout']);
 
 Route::prefix('admin')->group(function () {
-    Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login']);
+    Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login'])->name('admin');
 
     Route::middleware('Routing')->group(function () {
         Route::prefix('auth')->group(function () {
@@ -149,8 +149,14 @@ Route::prefix('admin')->group(function () {
 
 Route::get('/cache', function () {
     Artisan::call('cache:clear');
+    return "Cache is cleared";
 });
 
 Route::get('/storage', function () {
     Artisan::call('storage:link');
+    return "Storage is linked";
+});
+Route::get('/migrate', function () {
+    Artisan::call('migrate_in_order');
+    return "Database Migrated Successfully";
 });
