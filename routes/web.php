@@ -151,7 +151,6 @@ Route::get('/cache', function () {
     Artisan::call('cache:clear');
     return "Cache is cleared";
 });
-
 Route::get('/storage', function () {
     Artisan::call('storage:link');
     return "Storage is linked";
@@ -159,4 +158,8 @@ Route::get('/storage', function () {
 Route::get('/migrate', function () {
     Artisan::call('migrate_in_order');
     return "Database Migrated Successfully";
+});
+Route::get('/seeding', function () {
+    Artisan::call('db:seed');
+    return "Database Seeding Successfully";
 });
