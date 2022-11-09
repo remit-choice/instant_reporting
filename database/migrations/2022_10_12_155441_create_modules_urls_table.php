@@ -21,8 +21,6 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();
-        });
-        Schema::table('modules_urls', function (Blueprint $table) {
             $table->foreign('m_id')->references('id')->on('modules')->onDelete('cascade');
         });
     }

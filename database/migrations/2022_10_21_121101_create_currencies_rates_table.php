@@ -23,8 +23,6 @@ class CreateCurrenciesRatesTable extends Migration
             $table->string('rate')->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
-        });
-        Schema::table('currencies_rates', function (Blueprint $table) {
             $table->foreign('c_id')->references('id')->on('currencies')->onDelete('cascade');
         });
     }

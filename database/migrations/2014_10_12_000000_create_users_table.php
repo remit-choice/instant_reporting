@@ -25,8 +25,6 @@ return new class extends Migration
             $table->integer('status');
             $table->string('designation')->nullable();
             $table->timestamps();
-        });
-        Schema::table('users', function (Blueprint $table) {
             $table->foreign('r_id')->references('id')->on('roles')->onDelete('cascade');
         });
     }

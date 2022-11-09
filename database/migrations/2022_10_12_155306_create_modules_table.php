@@ -22,8 +22,6 @@ return new class extends Migration
             $table->bigInteger('sort')->nullable();
             $table->string('type');
             $table->timestamps();
-        });
-        Schema::table('modules', function (Blueprint $table) {
             $table->foreign('m_g_id')->references('id')->on('modules_groups')->onDelete('cascade');
         });
     }
