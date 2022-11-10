@@ -54,6 +54,7 @@ class MigrateInOrder extends Command
             '2019_08_19_000000_create_failed_jobs_table.php',
             '2019_12_14_000001_create_personal_access_tokens_table.php',
             '2022_10_13_092422_create_currencies_table.php',
+            '2022_10_13_092422_create_currencies_receiving_countries_table.php',
             '2022_10_21_121101_create_currencies_rates_table.php',
             '2022_10_13_122848_create_transactions_data_table.php',
             '2022_10_20_130918_create_online_customers_table.php',

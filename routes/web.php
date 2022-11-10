@@ -37,7 +37,7 @@ Route::get('/', function () {
         return view('admin.auth.login');
     }
 });
-Route::post('/logout', [LogoutController::class, 'logout']);
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login'])->name('admin');
@@ -137,8 +137,8 @@ Route::prefix('admin')->group(function () {
             Route::prefix('transactions')->group(function () {
                 //Sending wise hourly transait report
                 Route::prefix('hourly')->group(function () {
-                    Route::get('/', [OperationsTransactionsController::class, 'sending_index'])->name('admin.operations.transactions.hourly');
-                    Route::post('/', [OperationsTransactionsController::class, 'sending_filter'])->name('admin.operations.transactions.hourly');
+                    Route::get('/', [OperationsTransactionsController::class, 'index'])->name('admin.operations.transactions.hourly');
+                    Route::post('/', [OperationsTransactionsController::class, 'filter'])->name('admin.operations.transactions.hourly');
                 });
             });
         });
@@ -162,4 +162,20 @@ Route::get('/migrate', function () {
 Route::get('/seeding', function () {
     Artisan::call('db:seed');
     return "Database Seeding Successfully";
+});
+Route::get('/queue-clear', function () {
+    Artisan::call('queue:clear', [
+        '--force' => true
+    ]);
+    return "Queue Successfully Clear";
+});
+Route::get('/cleareverything', function () {
+    $clearcache = Artisan::call('cache:clear');
+    echo "Cache cleared<br>";
+
+    $clearview = Artisan::call('view:clear');
+    echo "View cleared<br>";
+
+    $clearconfig = Artisan::call('config:cache');
+    echo "Config cleared<br>";
 });
