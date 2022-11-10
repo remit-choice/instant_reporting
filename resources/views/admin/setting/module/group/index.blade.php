@@ -289,7 +289,7 @@
                             <label for="module_group_status" class="text-capitalize">
                                 <div class="input-group">
                                     <input type="checkbox" name="module_group_status me-2"
-                                        id="module_group_status">Status
+                                        id="module_group_status" value="0">Status
                                 </div>
                             </label>
                         </div>

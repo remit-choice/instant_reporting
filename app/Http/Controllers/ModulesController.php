@@ -69,11 +69,8 @@ class ModulesController extends Controller
             $icon = $request->icon;
             $type = $request->type;
 
-            if (isset($request->status)) {
-                $status = $request->status;
-            } else {
-                $status = 0;
-            }
+            $status = $request->status;
+
 
             Module::insert([
                 'm_g_id' => $m_g_id,
@@ -127,11 +124,8 @@ class ModulesController extends Controller
                 $name = $request->name;
                 $icon = $request->icon;
                 $m_g_id = $request->m_g_id;
-                if (isset($request->status)) {
-                    $status = $request->status;
-                } else {
-                    $status = 0;
-                }
+                $status = $request->status;
+
                 $type = $request->type;
                 Module::where('id', $id)->update([
                     'name' => $name,
@@ -188,18 +182,8 @@ class ModulesController extends Controller
 
             $name = $request->url;
             $m_id = $request->m_id;
-            if (isset($request->status)) {
-                $status = $request->status;
-            } else {
-                $status = 0;
-            }
-            // $m_type =  Module::where('id', $m_id)->select('type')->first();
-            if (!empty($request->type)) {
-                $type = $request->type;
-            } else {
-                $type = $request->type;
-            }
-            // dd(count($url));
+            $status = $request->status;
+            $type = $request->type;
             ModulesUrl::insert([
                 'm_id' => $m_id,
                 'url' => $url,
@@ -236,17 +220,8 @@ class ModulesController extends Controller
 
             $name = $request->url;
             $m_id = $request->m_id;
-
-            if (isset($request->status)) {
-                $status = $request->status;
-            } else {
-                $status = 0;
-            }
-            if (!empty($request->type)) {
-                $type = $request->type;
-            } else {
-                $type = $request->type;
-            }
+            $status = $request->status;
+            $type = $request->type;
             ModulesUrl::where('id', $id)->update([
                 'url' => $url,
                 'name' => $name,

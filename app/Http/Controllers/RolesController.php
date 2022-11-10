@@ -39,29 +39,11 @@ class RolesController extends Controller
                 ]
             );
             $name = $request->name;
-            if (!empty($request->status)) {
-                $status = '1';
-            } else {
-                $status = '0';
-            }
-            Role::create([
+            $status = $request->status;
+            Role::insert([
                 'name' => $name,
                 'status' => $status,
             ]);
-            $id = DB::getPdo()->lastInsertId();
-            $modules = Module::get();
-            if ($name == "Super Admin") {
-                foreach ($modules as $module) {
-                    Permission::create([
-                        'r_id' => $id,
-                        'm_id' => $module->id,
-                        'view' => '1',
-                        'add' => '1',
-                        'edit' => '1',
-                        'delete' => '1',
-                    ]);
-                }
-            }
         } else {
             return back();
         }
@@ -83,11 +65,8 @@ class RolesController extends Controller
             );
             $id = $request->id;
             $name = $request->name;
-            if (!empty($request->status)) {
-                $status = '1';
-            } else {
-                $status = '0';
-            }
+            $status = $request->status;
+
             Role::where('id', $id)->update(['name' => $name, 'status' => $status]);
         } else {
             return back();

@@ -56,11 +56,8 @@ class ModuleGroupsController extends Controller
             );
             $name = $request->name;
             $icon = $request->icon;
-            if (!empty($request->status)) {
-                $status = '1';
-            } else {
-                $status = '0';
-            }
+            $status = $request->status;
+
             ModulesGroup::insert([
                 'name' => $name,
                 'icon' => $icon,
@@ -108,11 +105,7 @@ class ModuleGroupsController extends Controller
                 $id = $request->id;
                 $name = $request->name;
                 $icon = $request->icon;
-                if (!empty($request->status)) {
-                    $status = 1;
-                } else {
-                    $status = 0;
-                }
+                $status = $request->status;
 
                 ModulesGroup::where('id', $id)->update([
                     'name' => $name,

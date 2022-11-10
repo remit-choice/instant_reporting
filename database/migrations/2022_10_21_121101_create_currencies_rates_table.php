@@ -22,8 +22,8 @@ class CreateCurrenciesRatesTable extends Migration
             $table->string('dated')->nullable();
             $table->string('rate')->nullable();
             $table->integer('status')->nullable();
-            $table->foreign('c_id')->references('id')->on('currencies')->onDelete('cascade');
             $table->timestamps();
+            $table->foreign('c_id')->references('id')->on('currencies')->onDelete('cascade');
         });
     }
 
