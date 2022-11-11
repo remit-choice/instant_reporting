@@ -28,9 +28,7 @@
     @Include('layouts.favicon')
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
-    {{-- @Include('layouts.links.modals.head') --}}
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    @Include('layouts.links.toastr.head')
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -190,12 +188,13 @@
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="role_data">
+                                            <tbody class="role_data" id="tablecontents">
                                                 @php
                                                     $counter = 1;
                                                 @endphp
                                                 @foreach ($modules_groups as $module_group)
-                                                    <tr>
+                                                    <tr data-widget="expandable-table" aria-expanded="false"
+                                                        class="row1" data-id="{{ $module_group->id }}">
                                                         <td>{{ $counter++ }}<input type="hidden"
                                                                 name="db_module_group_id" class="db_module_group_id"
                                                                 value="{{ $module_group->id }}">
@@ -337,7 +336,7 @@
                             <div class="form-group">
                                 <label for="module_group_status" class="text-capitalize">
                                     <input type="checkbox" name="module_group_status me-2"
-                                        id="module_group_status">Status</label>
+                                        id="module_group_status" value="0">Status</label>
                             </div>
                         </div>
                         <div class="modal-footer justify-content-between">
@@ -352,10 +351,12 @@
             <!-- /.modal-dialog -->
         </div>
         <!-- /.modal -->
+        @Include('layouts.links.admin.foot')
         @Include('layouts.links.datatable.foot')
+        @Include('layouts.links.sweet_alert.foot')
+        @Include('layouts.links.toastr.foot')
 
         <script type="text/javascript">
-            $(function() {
                 $('#module_group_status').click(function() {
                     if ($(this).is(':checked')) {
                         $(this).attr("checked", true)
@@ -374,7 +375,6 @@
                         $(this).val(this.checked ? 1 : 0);
                     }
                 });
-            });
             $('.edit_module_group').on('click', function() {
                 var _this = $(this).parents('tr');
                 $('#module_group_id').val(_this.find('.db_module_group_id').val());
@@ -389,7 +389,13 @@
                     $('#module_group_status').prop('checked', false);
                 }
             });
-            $(document).ready(function() {
+            $(function() {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
+                });
                 $('.create').click(function(e) {
                     e.preventDefault();
                     var name = $('#create_module_group_name').val();

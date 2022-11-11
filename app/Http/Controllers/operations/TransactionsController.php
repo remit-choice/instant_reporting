@@ -125,13 +125,22 @@ class TransactionsController extends Controller
                         ->orderBy('customer_country', 'ASC')
                         ->orderBy('beneficiary_country', 'ASC')
                         ->get();
-                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)
-                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country', 'beneficiary_country'])
+                    $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
                         ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
                         ->orderBy('transaction_time', 'ASC')
                         ->orderBy('customer_country', 'ASC')
                         ->orderBy('beneficiary_country', 'ASC')
                         ->get()->groupBy('hours');
+                    // dd($transactions_data->toArray());
+                    $transactions_data_sub_menus = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country', 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy(['hours', 'customer_country']);
+                    // dd($transactions_data_sub_menus->toArray());
                 } elseif ($request->customer_country == 'All Customer Countries' && $request->beneficiary_country != 'All Beneficiary Countries') {
                     $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
                         ->groupBy(DB::raw('HOUR(transaction_time)'))
@@ -176,7 +185,7 @@ class TransactionsController extends Controller
                         ->orderBy('beneficiary_country', 'ASC')
                         ->get()->groupBy('hours', 'customer_country');
                 }
-                return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
+                return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'transactions_data_sub_menus' => $transactions_data_sub_menus, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } elseif (!empty($request->customer_country) && empty($request->beneficiary_country) && !empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('d/m/Y', strtotime($request->date_to));

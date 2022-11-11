@@ -207,7 +207,7 @@
                                         @endforeach
                                     @endforeach
                                     <div class="d-flex justify-content-between">
-                                        <a href="/admin/setting/role" class="btn float-end my-4"
+                                        <a href="{{route('admin.role.index')}}" class="btn float-end my-4"
                                             style="background-color: #091E3E;color: white">Back</a>
                                         <button type="submit" id="Save" class="btn float-end my-4"
                                             style="background-color: #091E3E;color: white">

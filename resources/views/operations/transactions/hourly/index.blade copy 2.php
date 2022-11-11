@@ -276,15 +276,16 @@
                                                                                                                         @foreach ($transactions_data_sub_menus as $transactions_data_sub_menu)
                                                                                                                             @foreach ($transactions_data_sub_menu as $key=> $inner_array) 
                                                                                                                                 @foreach ($inner_array as $key1=> $sub_array)
-                                                                                                                                    @if ($num1==$nums1)   
+                                                                                                                                    @if ($num1==$nums1)                                                                                                
                                                                                                                                         @if (!empty($sub_array->customer_country) && empty($sub_array->beneficiary_country))
                                                                                                                                             <th>Customer Country</th>
                                                                                                                                         @elseif (empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
                                                                                                                                             <th>Beneficiary Country</th>
                                                                                                                                         @elseif(!empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
+                                                                                                                                            <th>Customer Country</th>
                                                                                                                                             <th>Beneficiary Country</th>
                                                                                                                                         @else
-                                                                                                                                        @endif                                                                                        
+                                                                                                                                        @endif
                                                                                                                                         @php
                                                                                                                                             $nums1++
                                                                                                                                         @endphp
@@ -304,11 +305,17 @@
                                                                                                                         @foreach ($transactions_data_sub_menus as $transactions_data_sub_menu)
                                                                                                                             @foreach ($transactions_data_sub_menu as $key => $inner_array) 
                                                                                                                                 @foreach ($inner_array as $key1 => $sub_array)
-                                                                                                                                    @if ($array->hours==$sub_array->hours && $array->customer_country==$key)
+                                                                                                                                    @if ($array->hours==$key)
                                                                                                                                         <tr data-widget="expandable-table" aria-expanded="false" role='button'>
-                                                                                                                                            <td>{{ $counts1++ }}</td>
-                                                                                                                                            @if(!empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
+                                                                                                                                            <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{ $counts1++ }}</td>
+                                                                                                                                            @if (!empty($sub_array->customer_country) && empty($sub_array->beneficiary_country))
+                                                                                                                                                <td> {{ $sub_array->customer_country }} </td>
+                                                                                                                                            @elseif (empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
                                                                                                                                                 <td> {{ $sub_array->beneficiary_country }} </td>
+                                                                                                                                            @elseif(!empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
+                                                                                                                                                <td> {{ $sub_array->customer_country }} </td>
+                                                                                                                                                <td> {{ $sub_array->beneficiary_country }} </td>
+                                                                                                                                            @else
                                                                                                                                             @endif
                                                                                                                                             <td>{{ $sub_array->count_of_tr_no }}</td>
                                                                                                                                         </tr>
@@ -316,6 +323,7 @@
                                                                                                                                 @endforeach
                                                                                                                             @endforeach
                                                                                                                         @endforeach
+                                                                                                                        
                                                                                                                     @endif
                                                                                                                 </tbody>
                                                                                                             </table>
