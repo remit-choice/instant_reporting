@@ -32,7 +32,7 @@ use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
     if (Session::has('r_id') && Session::get('status') == 1) {
-        return redirect('/admin/dashboard');
+        return redirect()->route('admin.dashboard');
     } else {
         return view('admin.auth.login');
     }

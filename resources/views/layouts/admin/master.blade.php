@@ -185,47 +185,60 @@
                   role="menu" data-accordion="false">
                   <!-- Add icons to the links using the .nav-icon class
        with font-awesome or any other icon font library -->
+                    
                   @foreach ($module_groups as $module_group)
-                      @if ($module_group->status == 1)
-                          <li
-                              class="nav-item @php $REQUEST_URI = '/' . Route::current(['id'])->uri(); @endphp @foreach ($module_group->modules as $module) @if (!empty($module->permissions) && !empty($module->modules_urls)) @foreach ($module->modules_urls as $modules_url) @if ($modules_url->url == $REQUEST_URI)  {{ 'menu-open' }} @endif @endforeach @endif @endforeach">
-                              <a href="#" class="nav-link">
-                                  <i class="nav-icon {{ $module_group->icon }}"></i>
-                                  <p>
-                                      {{ $module_group->name }}
-                                      <i class="right fas fa-angle-left"></i>
-                                  </p>
-                              </a>
-                              <ul class="nav nav-treeview">
-                                  @php
-                                      $REQUEST_URI = '/' . Route::current(['id'])->uri();
-                                  @endphp
-                                  @foreach ($module_group->modules as $module)
-                                      @if (!empty($module->permissions) && !empty($module->modules_urls))
-                                          @foreach ($module->modules_urls as $modules_url)
-                                              @if ($module->id == $module->permissions['m_id'] &&
-                                                  $module->permissions['view'] == 1 &&
-                                                  $module->status == 1 &&
-                                                  $module->type == 0 &&
-                                                  $modules_url->type == 0)
-                                                  <li class="nav-item menu-open">
-                                                      @php
-                                                          $route_url = URL($modules_url->url);
-                                                      @endphp
-                                                      <a href="{{ $route_url }}"
-                                                          class="nav-link @if ($modules_url->url == $REQUEST_URI) {{ 'active' }} @endif">
-                                                          <i class="{{ $module->icon }} nav-icon"></i>
-                                                          <p style="word-wrap: break-word;white-space: nowrap;">
-                                                              {{ $module->name }}</p>
-                                                      </a>
-                                                  </li>
-                                              @endif
-                                          @endforeach
-                                      @endif
-                                  @endforeach
-                              </ul>
-                          </li>
-                      @endif
+                    @php
+                        $counts = 1;
+                    @endphp
+                    @if ($module_group->status == 1)
+                    @foreach ($module_group->modules as $module)
+                        @if (!empty($module->permissions))
+                            @if ($module->permissions['view'] == 1 && $counts == 1)
+                                <li
+                                    class="nav-item @php $REQUEST_URI = '/' . Route::current(['id'])->uri(); @endphp @foreach ($module_group->modules as $module) @if (!empty($module->permissions) && !empty($module->modules_urls)) @foreach ($module->modules_urls as $modules_url) @if ($modules_url->url == $REQUEST_URI)  {{ 'menu-open' }} @endif @endforeach @endif @endforeach">
+                                    <a href="#" class="nav-link">
+                                        <i class="nav-icon {{ $module_group->icon }}"></i>
+                                        <p>
+                                            {{ $module_group->name }}
+                                            <i class="right fas fa-angle-left"></i>
+                                        </p>
+                                    </a>
+                                    <ul class="nav nav-treeview">
+                                        @php
+                                            $REQUEST_URI = '/' . Route::current(['id'])->uri();
+                                        @endphp
+                                        @foreach ($module_group->modules as $module)
+                                            @if (!empty($module->permissions) && !empty($module->modules_urls))
+                                                @foreach ($module->modules_urls as $modules_url)
+                                                    @if ($module->id == $module->permissions['m_id'] &&
+                                                        $module->permissions['view'] == 1 &&
+                                                        $module->status == 1 &&
+                                                        $module->type == 0 &&
+                                                        $modules_url->type == 0)
+                                                        <li class="nav-item menu-open">
+                                                            @php
+                                                                $route_url = URL($modules_url->url);
+                                                            @endphp
+                                                            <a href="{{ $route_url }}"
+                                                                class="nav-link @if ($modules_url->url == $REQUEST_URI) {{ 'active' }} @endif">
+                                                                <i class="{{ $module->icon }} nav-icon"></i>
+                                                                <p style="word-wrap: break-word;white-space: nowrap;">
+                                                                    {{ $module->name }}</p>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                @endforeach
+                                            @endif
+                                        @endforeach
+                                    </ul>
+                                </li>
+                                @php
+                                    $counts++;
+                                @endphp
+                            @endif
+                        @endif
+                    @endforeach
+                    @endif
                   @endforeach
               </ul>
           </nav>

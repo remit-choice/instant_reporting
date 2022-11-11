@@ -52,120 +52,265 @@ class TransactionsController extends Controller
             if (!empty($request->customer_country) && empty($request->beneficiary_country) && !empty($request->date_from) && empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $customer_country = $request->customer_country;
-                $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')
-                    ->groupBy(DB::raw('HOUR(transaction_time)'))
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get();
+                if ($request->customer_country == 'All Customer Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get()->groupBy('hours');
+                    // dd($transactions_data->toArray());
+                } else {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get();
 
-                $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get()->groupBy('hours');
-                // dd($transactions_data->toArray());
-
+                    $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get()->groupBy('hours');
+                    // dd($transactions_data->toArray());
+                }
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } elseif (empty($request->customer_country) && !empty($request->beneficiary_country) && !empty($request->date_from) && empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $beneficiary_country = $request->beneficiary_country;
-                $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy(DB::raw('HOUR(transaction_time)'))
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get();
-                $transactions_data = TransactionsData::select('beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('beneficiary_country', 'ASC')
-                    ->get()->groupBy('hours');
+                if ($request->beneficiary_country == 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } else {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                }
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } elseif (!empty($request->customer_country) && !empty($request->beneficiary_country) && !empty($request->date_from) && empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $customer_country = $request->customer_country;
                 $beneficiary_country = $request->beneficiary_country;
-                $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)')])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get();
-                // dd(
-                //     $transactions->toArray()
-                // );
-                $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)')])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('beneficiary_country', 'ASC')
-                    ->get()->groupBy('hours', 'customer_country');
-                // dd($transactions_data->toArray());
+                if ($request->customer_country == 'All Customer Countries' && $request->beneficiary_country == 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country', 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } elseif ($request->customer_country == 'All Customer Countries' && $request->beneficiary_country != 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } elseif ($request->customer_country != 'All Customer Countries' && $request->beneficiary_country == 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } else {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)')])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->where('transaction_date', $date_from)->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)')])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours', 'customer_country');
+                }
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } elseif (!empty($request->customer_country) && empty($request->beneficiary_country) && !empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('d/m/Y', strtotime($request->date_to));
                 $customer_country = $request->customer_country;
-                $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')
-                    ->groupBy(DB::raw('HOUR(transaction_time)'))
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get();
-                // dd(
-                //     $transactions->toArray()
-                // );
-
-                $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)')])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('beneficiary_country', 'ASC')
-                    ->get()->groupBy('hours', 'customer_country');
+                if ($request->customer_country == 'All Customer Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } else {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)')])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get()->groupBy('hours', 'customer_country');
+                }
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } elseif (empty($request->customer_country) && !empty($request->beneficiary_country) && !empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('d/m/Y', strtotime($request->date_to));
                 $beneficiary_country = $request->beneficiary_country;
-                $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy(DB::raw('HOUR(transaction_time)'))
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get();
-                $transactions_data = TransactionsData::select('beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)')])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('beneficiary_country', 'ASC')
-                    ->get()->groupBy('hours', 'beneficiary_country');
+                if ($request->beneficiary_country == 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } else {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)')])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours', 'beneficiary_country');
+                }
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } elseif (!empty($request->customer_country) && !empty($request->beneficiary_country) && !empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('d/m/Y', strtotime($request->date_to));
                 $customer_country = $request->customer_country;
                 $beneficiary_country = $request->beneficiary_country;
-                $transactions = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)')])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('customer_country', 'ASC')
-                    ->get();
-                // dd(
-                //     $transactions->toArray()
-                // );
-                $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
-                    ->groupBy([DB::raw('HOUR(transaction_time)')])
-                    ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
-                    ->orderBy('transaction_time', 'ASC')
-                    ->orderBy('beneficiary_country', 'ASC')
-                    ->get()->groupBy('hours');
-                // dd(
-                //     $transactions_data->toArray()
-                // );
+                if ($request->customer_country == 'All Customer Countries' && $request->beneficiary_country == 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country', 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } elseif ($request->customer_country == 'All Customer Countries' && $request->beneficiary_country != 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'customer_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } elseif ($request->customer_country != 'All Customer Countries' && $request->beneficiary_country == 'All Beneficiary Countries') {
+                    $transactions = TransactionsData::select($hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy(DB::raw('HOUR(transaction_time)'))
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get();
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)'), 'beneficiary_country'])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                } else {
+                    $transactions = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)')])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('customer_country', 'ASC')
+                        ->get();
+                    // dd(
+                    //     $transactions->toArray()
+                    // );
+                    $transactions_data = TransactionsData::select('customer_country', 'beneficiary_country', $hours, $tr_no_count)->whereBetween('transaction_date', [$date_from, $date_to])->where('customer_country', 'LIKE', '%' . $customer_country . '%')->where('beneficiary_country', 'LIKE', '%' . $beneficiary_country . '%')
+                        ->groupBy([DB::raw('HOUR(transaction_time)')])
+                        ->orderBy(DB::raw('HOUR(transaction_time)'), 'ASC')
+                        ->orderBy('transaction_time', 'ASC')
+                        ->orderBy('beneficiary_country', 'ASC')
+                        ->get()->groupBy('hours');
+                    // dd(
+                    //     $transactions_data->toArray()
+                    // );
+                }
                 return view('operations.transactions.hourly.index', ['transactions' => $transactions, 'transactions_data' => $transactions_data, 'sending_currencies' => $sending_currencies, 'receiving_currencies' => $receiving_currencies]);
             } else {
                 return redirect()->back()->with('failed', "From Date Mandatory");

@@ -112,7 +112,8 @@
                                                                 SELECT
                                                             @endif
                                                         </option>
-                                                        <option value="" id="customer_country_clear">Reset</option>
+                                                        <option value="" id="customer_country_clear" class="text-center">Reset</option>
+                                                        <option value="All Customer Countries">All Customer Countries</option>
                                                         @foreach ($sending_currencies as $sending_currency)
                                                             <option value="{{ $sending_currency->name }}" class="py-1">{{ $sending_currency->name }}</option>
                                                         @endforeach
@@ -130,7 +131,8 @@
                                                                 SELECT
                                                             @endif
                                                         </option>
-                                                        <option value="" id="beneficiary_country_clear">Reset</option>
+                                                        <option value="" id="beneficiary_country_clear" class="text-center">Reset</option>
+                                                        <option value="All Beneficiary Countries">All Beneficiary Country</option>
                                                         @foreach ($receiving_currencies as $receiving_currency)
                                                             <option value="{{ $receiving_currency->name }}" class="py-1">{{ $receiving_currency->name }}</option>
                                                         @endforeach
