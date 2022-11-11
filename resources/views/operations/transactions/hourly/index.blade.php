@@ -268,31 +268,33 @@
                                                                                                             <table class="table table-hover">
                                                                                                                 <thead>
                                                                                                                     <tr>
-                                                                                                                        <th>#</th>
                                                                                                                         @php
                                                                                                                             $num1 = 0;
                                                                                                                             $nums1 = 0;
                                                                                                                         @endphp
-                                                                                                                        @foreach ($transactions_data_sub_menus as $transactions_data_sub_menu)
-                                                                                                                            @foreach ($transactions_data_sub_menu as $key=> $inner_array) 
-                                                                                                                                @foreach ($inner_array as $key1=> $sub_array)
-                                                                                                                                    @if ($num1==$nums1)   
-                                                                                                                                        @if (!empty($sub_array->customer_country) && empty($sub_array->beneficiary_country))
-                                                                                                                                            <th>Customer Country</th>
-                                                                                                                                        @elseif (empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
-                                                                                                                                            <th>Beneficiary Country</th>
-                                                                                                                                        @elseif(!empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
-                                                                                                                                            <th>Beneficiary Country</th>
-                                                                                                                                        @else
-                                                                                                                                        @endif                                                                                        
-                                                                                                                                        @php
-                                                                                                                                            $nums1++
-                                                                                                                                        @endphp
-                                                                                                                                    @endif                                                                                            
+                                                                                                                        @if (!empty($transactions_data_sub_menus))
+                                                                                                                        <th>#</th>
+                                                                                                                            @foreach ($transactions_data_sub_menus as $transactions_data_sub_menu)
+                                                                                                                                @foreach ($transactions_data_sub_menu as $key=> $inner_array) 
+                                                                                                                                    @foreach ($inner_array as $key1=> $sub_array)
+                                                                                                                                        @if ($num1==$nums1)   
+                                                                                                                                            @if (!empty($sub_array->customer_country) && empty($sub_array->beneficiary_country))
+                                                                                                                                                <th>Customer Country</th>
+                                                                                                                                            @elseif (empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
+                                                                                                                                                <th>Beneficiary Country</th>
+                                                                                                                                            @elseif(!empty($sub_array->customer_country) && !empty($sub_array->beneficiary_country))
+                                                                                                                                                <th>Beneficiary Country</th>
+                                                                                                                                            @else
+                                                                                                                                            @endif                                                                                        
+                                                                                                                                            @php
+                                                                                                                                                $nums1++
+                                                                                                                                            @endphp
+                                                                                                                                        @endif                                                                                            
+                                                                                                                                    @endforeach
                                                                                                                                 @endforeach
                                                                                                                             @endforeach
-                                                                                                                        @endforeach
-                                                                                                                        <th>Count of Tr_No</th>
+                                                                                                                            <th>Count of Tr_No</th>
+                                                                                                                        @endif 
                                                                                                                     </tr>
                                                                                                                 </thead>
                                                                                                                 <tbody>
@@ -300,7 +302,7 @@
                                                                                                                         $counts1 = 1;
                                                                                                                         // dd($transactions_data->toArray());
                                                                                                                     @endphp
-                                                                                                                    @if (!$transactions_data_sub_menus->isEmpty())
+                                                                                                                    @if (!empty($transactions_data_sub_menus))
                                                                                                                         @foreach ($transactions_data_sub_menus as $transactions_data_sub_menu)
                                                                                                                             @foreach ($transactions_data_sub_menu as $key => $inner_array) 
                                                                                                                                 @foreach ($inner_array as $key1 => $sub_array)
