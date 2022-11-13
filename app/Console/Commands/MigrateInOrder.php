@@ -18,7 +18,7 @@ class MigrateInOrder extends Command
      *
      * @var string
      */
-    protected $description = 'Migrated Successfully';
+    protected $description = 'Execute the migrations in the order specified in the file app/Console/Comands/MigrateInOrder.php \n Drop all the table in db before execute the command.';
 
     /**
      * Create a new command instance.
@@ -33,7 +33,7 @@ class MigrateInOrder extends Command
     /**
      * Execute the console command.
      *
-     * @return int
+     * @return mixed
      */
     public function handle()
     {
@@ -45,18 +45,19 @@ class MigrateInOrder extends Command
          */
         $migrations = [
             '2022_10_12_155342_create_modules_groups_table.php',
-            '2014_10_12_100000_create_password_resets_table.php',
-            '2019_08_19_000000_create_failed_jobs_table.php',
-            '2019_12_14_000001_create_personal_access_tokens_table.php',
             '2022_10_12_154944_create_roles_table.php',
-            '2014_10_12_000000_create_users_table.php',
             '2022_10_12_155306_create_modules_table.php',
             '2022_10_12_155441_create_modules_urls_table.php',
             '2022_10_12_155525_create_permissions_table.php',
+            '2014_10_12_000000_create_users_table.php',
+            '2014_10_12_100000_create_password_resets_table.php',
+            '2019_08_19_000000_create_failed_jobs_table.php',
+            '2019_12_14_000001_create_personal_access_tokens_table.php',
             '2022_10_13_092422_create_currencies_table.php',
+            '2022_10_13_092422_create_currencies_receiving_countries_table.php',
+            '2022_10_21_121101_create_currencies_rates_table.php',
             '2022_10_13_122848_create_transactions_data_table.php',
             '2022_10_20_130918_create_online_customers_table.php',
-            '2022_10_21_121101_create_currencies_rates_table.php',
         ];
 
         foreach ($migrations as $migration) {

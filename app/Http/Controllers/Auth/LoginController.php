@@ -25,7 +25,7 @@ class LoginController extends Controller
     {
         if (FacadesRequest::isMethod('get')) {
             if (Session::has('r_id') && Session::get('status') == 1) {
-                return redirect('admin/dashboard');
+                return redirect()->route('admin.dashboard');
             } else {
                 return view('admin.auth.login');
             }
@@ -56,10 +56,10 @@ class LoginController extends Controller
                     $email_cookie =  Cookie::make('emailcookie', $email, time() + 86400);
                     $password_cookie = Cookie::make('passwordcookie', $password, time() + 86400);
 
-                    return redirect('/admin/dashboard')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
+                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
                 } else {
                     $this->admin_login_sessions($request);
-                    return redirect('/admin/dashboard')->with('module_groups', $module_groups);
+                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups);
                 }
             }
         } else {
@@ -67,8 +67,6 @@ class LoginController extends Controller
     }
     public function admin_login_sessions($request)
     {
-        $email = $request->email;
-        $password = $request->password;
         $user = User::where('email', '=', $request->input('email'))->first();
         $full_name = $user->full_name;
         $user_name = $user->user_name;
@@ -82,6 +80,7 @@ class LoginController extends Controller
                     'status' => 1,
                 ]
             );
+
         $selectStatus = User::where('email', '=', $email)->first();
         $request->session()->put('full_name', $full_name);
         $request->session()->put('user_name', $user_name);
@@ -90,6 +89,6 @@ class LoginController extends Controller
         $request->session()->put('r_id',  $r_id);
         $request->session()->put('u_id',  $u_id);
         $request->session()->put('session_time',  time());
-        $request->session()->put('status',  $selectStatus->Status);
+        $request->session()->put('status',  $selectStatus->status);
     }
 }

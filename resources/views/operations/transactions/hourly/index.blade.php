@@ -43,6 +43,7 @@
     @Include('layouts.favicon')
     @Include('layouts.links.admin.head')
     @Include('layouts.links.datatable.head')
+    @Include('layouts.links.toastr.head')
     <script>
         setTimeout(function() {
             $('#failed').slideUp('slow');
@@ -97,23 +98,53 @@
                                     <form action="{{ route('admin.operations.transactions.hourly') }}" method="post">
                                         @csrf
                                         <div class="row d-flex justify-content-center">
-                                            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
-                                                <label>Select Country</label>
-                                                <select class="form-control" name="search_filter" id="search_filter"
-                                                    style="width: 100%">
+                                            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <label>Sending Country</label>
+                                                <select class="form-control countries_filter" name="customer_country"
+                                                    id="customer_country" style="width: 100%">
                                                     <option class="py-1" hidden selected
-                                                        value="{{ request()->input('search_filter', old('search_filter')) }}">
-                                                        @if (request()->input('search_filter'))
-                                                        {{ request()->input('search_filter', old('search_filter')) }}
+                                                        value="{{ request()->input('customer_country', old('customer_country')) }}">
+                                                        @if (request()->input('customer_country'))
+                                                        {{ request()->input('customer_country', old('customer_country'))
+                                                        }}
                                                         @else
                                                         SELECT
                                                         @endif
                                                     </option>
-                                                    <option value="Customer Country" class="py-1">Customer
-                                                        Country</option>
+                                                    <option value="" id="customer_country_clear" class="text-center">
+                                                        Reset</option>
+                                                    <option value="All Customer Countries">All Customer Countries
+                                                    </option>
+                                                    @foreach ($sending_currencies as $sending_currency)
+                                                    <option value="{{ $sending_currency->name }}" class="py-1">{{
+                                                        $sending_currency->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
-                                            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                                                <label>Receiving Country</label>
+                                                <select class="form-control" name="beneficiary_country"
+                                                    id="beneficiary_country" style="width: 100%">
+                                                    <option class="py-1" hidden selected
+                                                        value="{{ request()->input('beneficiary_country', old('beneficiary_country')) }}">
+                                                        @if (request()->input('beneficiary_country'))
+                                                        {{ request()->input('beneficiary_country',
+                                                        old('beneficiary_country')) }}
+                                                        @else
+                                                        SELECT
+                                                        @endif
+                                                    </option>
+                                                    <option value="" id="beneficiary_country_clear" class="text-center">
+                                                        Reset</option>
+                                                    <option value="All Beneficiary Countries">All Beneficiary Country
+                                                    </option>
+                                                    @foreach ($receiving_currencies as $receiving_currency)
+                                                    <option value="{{ $receiving_currency->name }}" class="py-1">{{
+                                                        $receiving_currency->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                 <label>From Date</label>
                                                 @if (request()->input('date_from'))
                                                 <input type="date" name="date_from" id="" class="form-control"
@@ -124,7 +155,7 @@
                                                     style="width: 100%">
                                                 @endif
                                             </div>
-                                            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-6">
+                                            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
                                                 <label>To Date</label>
                                                 @if (request()->input('date_to'))
                                                 <input type="date" name="date_to" id="" class="form-control"
@@ -156,15 +187,17 @@
                                         </thead>
                                         <tbody>
                                             @if (!empty($transactions))
-                                            @if (request()->input('search_filter'))
                                             @php
                                             $day_start_hours = 0;
-                                            $day_end_hours = 1;
+                                            $end_hour = 0;
+                                            $day_end_hours = 24;
+                                            $total_count_of_tr_no = 0;
                                             @endphp
                                             @foreach ($transactions as $transaction)
                                             @php
                                             $counter = $transaction->hours;
                                             $counters = $day_start_hours;
+                                            // dd($counter);
                                             @endphp
                                             @for ($day_start_hours;
                                             $day_start_hours!=$transaction->hours;$day_start_hours++)
@@ -180,66 +213,244 @@
                                                 <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i></td>
                                                 <td>{{ $transaction->hours }} - {{ ++$counter }}</td>
                                                 <td>{{ $transaction->count_of_tr_no }}</td>
+                                                @php
+                                                $total_count_of_tr_no += $transaction->count_of_tr_no
+                                                @endphp
                                             </tr>
                                             <tr class="expandable-body">
                                                 <td colspan="6">
-                                                    <table class="table table-hover" id="example2">
+                                                    <table class="table table-hover">
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
+                                                                @php
+                                                                $num = 0;
+                                                                $nums = 0;
+                                                                @endphp
+                                                                @foreach ($transactions_data as $transaction_data)
+                                                                @foreach ($transaction_data as $array)
+                                                                @if ($num==$nums)
+                                                                @if (!empty($array->customer_country) &&
+                                                                empty($array->beneficiary_country))
                                                                 <th>Customer Country</th>
+                                                                @elseif (empty($array->customer_country) &&
+                                                                !empty($array->beneficiary_country))
+                                                                <th>Beneficiary Country</th>
+                                                                @elseif(!empty($array->customer_country) &&
+                                                                !empty($array->beneficiary_country))
+                                                                <th>Customer Country</th>
+                                                                <th>Beneficiary Country</th>
+                                                                @else
+                                                                @endif
+                                                                @php
+                                                                $nums++
+                                                                @endphp
+                                                                @else
+                                                                @endif
+                                                                @endforeach
+                                                                @endforeach
                                                                 <th>Count of Tr_No</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             @php
                                                             $counts = 1;
+                                                            // dd($transactions_data->toArray());
                                                             @endphp
-                                                            @foreach ($transactions_data as $transaction_data)
+                                                            @if (!$transactions_data->isEmpty())
+                                                            @foreach ($transactions_data as $tr_hours =>
+                                                            $transaction_data)
+                                                            @if ($transaction->hours==$tr_hours)
                                                             @foreach ($transaction_data as $array)
-                                                            @if ($transaction->hours==$array->hours)
-                                                            <tr>
-                                                                <td>{{ $counts++ }}</td>
-                                                                <td>{{ $array->customer_country }}</td>
+                                                            <tr data-widget="expandable-table" aria-expanded="false"
+                                                                role='button'>
+                                                                <td><i
+                                                                        class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{
+                                                                    $counts++ }}</td>
+                                                                @if (!empty($array->customer_country) &&
+                                                                empty($array->beneficiary_country))
+                                                                <td> {{ $array->customer_country }} </td>
+                                                                @elseif (empty($array->customer_country) &&
+                                                                !empty($array->beneficiary_country))
+                                                                <td> {{ $array->beneficiary_country }} </td>
+                                                                @elseif(!empty($array->customer_country) &&
+                                                                !empty($array->beneficiary_country))
+                                                                <td> {{ $array->customer_country }} </td>
+                                                                <td> {{ $array->beneficiary_country }} </td>
+                                                                @else
+                                                                @endif
                                                                 <td>{{ $array->count_of_tr_no }}</td>
                                                             </tr>
+                                                            <tr class="expandable-body">
+                                                                <td colspan="6">
+                                                                    <table class="table table-hover">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                @php
+                                                                                $num1 = 0;
+                                                                                $nums1 = 0;
+                                                                                @endphp
+                                                                                @if(!empty($transactions_data_sub_menus))
+                                                                                <th>#</th>
+                                                                                @foreach ($transactions_data_sub_menus
+                                                                                as $transactions_data_sub_menu)
+                                                                                @foreach ($transactions_data_sub_menu as
+                                                                                $key=> $inner_array)
+                                                                                @foreach ($inner_array as $key1=>
+                                                                                $sub_array)
+                                                                                @if ($num1==$nums1)
+                                                                                @if(!empty($sub_array->customer_country)
+                                                                                &&
+                                                                                empty($sub_array->beneficiary_country))
+                                                                                <th>Customer Country</th>
+                                                                                @elseif(empty($sub_array->customer_country)
+                                                                                &&
+                                                                                !empty($sub_array->beneficiary_country))
+                                                                                <th>Beneficiary Country</th>
+                                                                                @elseif(!empty($sub_array->customer_country)
+                                                                                &&
+                                                                                !empty($sub_array->beneficiary_country))
+                                                                                <th>Beneficiary Country</th>
+                                                                                @else
+                                                                                @endif
+                                                                                @php
+                                                                                $nums1++
+                                                                                @endphp
+                                                                                @endif
+                                                                                @endforeach
+                                                                                @endforeach
+                                                                                @endforeach
+                                                                                <th>Count of Tr_No</th>
+                                                                                @endif
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @php
+                                                                            $counts1 = 1;
+                                                                            // dd($transactions_data->toArray());
+                                                                            @endphp
+                                                                            @if (!empty($transactions_data_sub_menus))
+                                                                            @foreach ($transactions_data_sub_menus as
+                                                                            $transactions_data_sub_menu)
+                                                                            @foreach ($transactions_data_sub_menu as
+                                                                            $key => $inner_array)
+                                                                            @foreach ($inner_array as $key1 =>
+                                                                            $sub_array)
+                                                                            @if ($array->hours==$sub_array->hours &&
+                                                                            $array->customer_country==$key)
+                                                                            <tr data-widget="expandable-table"
+                                                                                aria-expanded="false" role='button'>
+                                                                                <td>{{ $counts1++ }}</td>
+                                                                                @if(!empty($sub_array->customer_country)
+                                                                                &&
+                                                                                !empty($sub_array->beneficiary_country))
+                                                                                <td> {{ $sub_array->beneficiary_country
+                                                                                    }} </td>
+                                                                                @endif
+                                                                                <td>{{ $sub_array->count_of_tr_no }}
+                                                                                </td>
+                                                                            </tr>
+                                                                            @endif
+                                                                            @endforeach
+                                                                            @endforeach
+                                                                            @endforeach
+                                                                            @endif
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
                                                             @endif
                                                             @endforeach
-                                                            @endforeach
+                                                            @endif
                                                         </tbody>
                                                     </table>
                                                 </td>
                                             </tr>
                                             @php
-                                            $day_start_hours++;
+                                            $end_hour = $transaction->hours;
+                                            $start_hours = $day_start_hours++;
                                             @endphp
+
                                             @endforeach
-                                            @endif
-                                            @else
-                                            @endif
+                                            @if ($end_hour<$day_end_hours)
+                                                @for(++$end_hour;$end_hour<$day_end_hours;$end_hour++) @php
+                                                $counters=$end_hour; @endphp <tr data-widget="expandable-table"
+                                                aria-expanded="false" role='button' class="bg-light">
+                                                <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i></td>
+                                                <td>{{ $end_hour }} - {{ ++$counters }}</td>
+                                                <td>{{ 0 }}</td>
+                                                </tr>
+                                                @endfor
+                                                @endif
+                                                <tr>
+                                                    <td class="no-sort"><Strong>Total</Strong></td>
+                                                    <td class="text-capitalize"></td>
+                                                    <td class="text-capitalize">{{$total_count_of_tr_no}}</td>
+                                                </tr>
+                                                @endif
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th class="no-sort">#</th>
-                                                <th class="text-capitalize">Hours</th>
-                                                <th class="text-capitalize">Count of Tr_No</th>
-                                            </tr>
-                                        </tfoot>
                                     </table>
                                 </div>
                                 <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.card-body -->
                         </div>
+                        <!-- /.card -->
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-        </div>
+                </div>
+                <!-- /.row -->
+        </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
     </div>
     @Include('layouts.links.admin.foot')
     @Include('layouts.links.datatable.foot')
+    @Include('layouts.links.sweet_alert.foot')
+    <script type="text/javascript">
+        $(document).on('click', '#beneficiary_country_clear', function() {
+                $('#beneficiary_country').val(null).trigger("change");
+            });
+             $(document).on('click', '#customer_country_clear', function() {
+                $('#customer_country').val(null).text('SELECT').trigger("change");
+            });
+            // $(document).on('change', '.countries_filter', function() {
+            //     var search_filter = $('.countries_filter').val();
+            //     console.log(search_filter);
+            //     // $.ajaxSetup({
+            //     //     headers: {
+            //     //         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            //     //     }
+            //     // });
+            //     $.ajax({
+            //         type: "post",
+            //         url: "",
+            //         data: {
+            //             "search_filter": search_filter,
+            //             '_token': '{{csrf_token()}}'
+            //         },
+            //         success: function(response) {
+            //                 console.log(response)
+            //                 if(response.beneficiary_country){
+            //                     $('#countries').html('<option value="">Select beneficiary_country</option>');
+            //                     $.each(response.beneficiary_country, function (key, value) {
+            //                         $("#countries").append('<option>' + value.beneficiary_country + '</option>');
+            //                     });
+            //                 }else{
+            //                     $('#countries').html('<option value="">Select customer_country</option>');
+            //                     $.each(response.customer_country, function (key, value) {
+            //                         $("#countries").append('<option>' + value.customer_country + '</option>');
+            //                     });
+            //                 }
+                            
+  
+            //         },
+            //         error: (error) => {
+            //             console.log(JSON.stringify(error));
+            //         }
+            //     });
+            // });
+    </script>
     @endsection
 </body>
 

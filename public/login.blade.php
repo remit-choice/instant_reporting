@@ -9,15 +9,30 @@
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
-    <!-- icheck bootstrap -->
-    <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
-    <!-- Theme style -->
-    <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/dist/css/alt/login.css') }}">
 
-    <script src="{{ asset('assets/dist/js/pages/login.js')}}"></script>
+    @if (config('app.env')=='production')
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="{{ secure_asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+        <!-- icheck bootstrap -->
+        <link rel="stylesheet" href="{{ secure_asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{{ secure_asset('assets/dist/css/adminlte.min.css') }}">
+        <link rel="stylesheet" href="{{ secure_asset('assets/dist/css/alt/login.css') }}">
+
+        <script src="{{ secure_asset('assets/dist/js/pages/login.js')}}"></script>
+            
+    @else
+         <!-- Font Awesome -->
+        <link rel="stylesheet" href="{{ asset('assets/plugins/fontawesome-free/css/all.min.css')}}">
+        <!-- icheck bootstrap -->
+        <link rel="stylesheet" href="{{ asset('assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css')}}">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="{{ asset('assets/dist/css/adminlte.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assets/dist/css/alt/login.css') }}">
+
+        <script src="{{ asset('assets/dist/js/pages/login.js')}}"></script>
+    @endif
+   
     <script>
         setTimeout(function() {
             $('#failed').slideUp('slow');
@@ -37,7 +52,7 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in</p>
-                <form action="{{ route('admin') }}" method="post">
+                <form action="/admin" method="post">
                     @csrf
                     <div class="input-group mb-3">
                         <div class="input-group-append">
@@ -47,22 +62,22 @@
                         </div>
                         <input type="email" name="email" class="form-control" placeholder="Email">
                         @error('email')
-                        <div class="invalid-feedback order-last" id="email_msg">
-                            {{ $message }}
-                        </div>
+                            <div class="invalid-feedback order-last" id="email_msg">
+                                {{ $message }}
+                            </div>
                         @enderror
                         @if (session('failed'))
-                        <div class="invalid-feedback order-last" id="email_msg">
-                            {{ session('failed') }}
-                        </div>
+                            <div class="invalid-feedback order-last" id="email_msg">
+                                {{ session('failed') }}
+                            </div>
                         @endif
                         @if (session('UpdatedSuccess'))
-                        <div class="invalid-feedback order-last" id="email_msg">
-                            <span class="text-success error_message text-center to" style="margin-top: -5px"
-                                id="UpdatedSuccess">
-                                {{ session('UpdatedSuccess') }}
-                            </span>
-                        </div>
+                            <div class="invalid-feedback order-last" id="email_msg">
+                                <span class="text-success error_message text-center to" style="margin-top: -5px"
+                                    id="UpdatedSuccess">
+                                    {{ session('UpdatedSuccess') }}
+                                </span>
+                            </div>
                         @endif
                     </div>
                     <div class="input-group mb-3">
@@ -83,9 +98,9 @@
                             </div>
                         </div>
                         @error('password')
-                        <div class="invalid-feedback order-last" id="password_msg">
-                            {{ $message }}
-                        </div>
+                            <div class="invalid-feedback order-last" id="password_msg">
+                                {{ $message }}
+                            </div>
                         @enderror
                     </div>
                     <div class="row my-2">
@@ -137,12 +152,21 @@
     </div>
     <!-- /.login-box -->
 
-    <!-- jQuery -->
-    <script src="{{ asset('assets/plugins/jquery/jquery.min.js')}}"></script>
-    <!-- Bootstrap 4 -->
-    <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
-    <!-- AdminLTE App -->
-    <script src="{{ asset('assets/dist/js/adminlte.min.js')}}"></script>
+    @if (config('app.env')=='production')
+        <!-- jQuery -->
+        <script src="{{ secure_asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+        <!-- Bootstrap 4 -->
+        <script src="{{ secure_asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <!-- AdminLTE App -->
+        <script src="{{ secure_asset('assets/dist/js/adminlte.min.js')}}"></script>
+    @else
+        <!-- jQuery -->
+        <script src="{{ asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+        <!-- Bootstrap 4 -->
+        <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+        <!-- AdminLTE App -->
+        <script src="{{ asset('assets/dist/js/adminlte.min.js')}}"></script>
+    @endif
 </body>
 
 </html>

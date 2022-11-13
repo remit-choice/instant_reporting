@@ -106,7 +106,7 @@
 }
 
 .select-all,
-.check,
+.check,.row_check,
 .checks {
     width: 14px !important;
     height: 14px !important;
@@ -125,7 +125,7 @@
 }
 
 .select-all:checked:after,
-.check:checked:after,
+.check:checked:after,.row_check:checked::after,
 .checks:checked:after {
     /* content: ''!important; */
     content: '\2713' !important;

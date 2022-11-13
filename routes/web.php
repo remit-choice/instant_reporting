@@ -15,6 +15,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TransactionDataController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -31,26 +32,23 @@ use Illuminate\Support\Facades\Session;
 
 Route::get('/', function () {
     if (Session::has('r_id') && Session::get('status') == 1) {
-        return redirect('/admin/dashboard');
+        return redirect()->route('admin.dashboard');
     } else {
         return view('admin.auth.login');
     }
 });
-Route::post('/logout', [LogoutController::class, 'logout']);
+Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->group(function () {
-    Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login']);
+    Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login'])->name('admin');
 
     Route::middleware('Routing')->group(function () {
-        //For Login
         Route::prefix('auth')->group(function () {
             Route::view('/forget', 'user.auth.forget');
             Route::view('/reset', 'user.auth.reset');
             Route::post('/forget', [ForgotPasswordController::class, 'user_forget_password']);
             Route::post('/reset', [ResetPasswordController::class, 'user_reset_password']);
         });
-
-        //DashboardController
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [DashboardController::class, 'admin_dashboard'])->name("admin.dashboard");
         });
@@ -89,7 +87,6 @@ Route::prefix('admin')->group(function () {
                     Route::match(['get', 'post'], '/edit', [PermissionController::class, 'edit_permissions'])->name('admin.role.permission.edit');
                 });
             });
-
             Route::prefix('module')->group(function () {
                 Route::get('/', [ModulesController::class, 'admin_module_list'])->name('admin.module.index');
                 Route::match(['get', 'post'], '/create', [ModulesController::class, 'add_admin_module'])->name('admin.module.create');
@@ -140,8 +137,8 @@ Route::prefix('admin')->group(function () {
             Route::prefix('transactions')->group(function () {
                 //Sending wise hourly transait report
                 Route::prefix('hourly')->group(function () {
-                    Route::get('/', [OperationsTransactionsController::class, 'sending_index'])->name('admin.operations.transactions.hourly');
-                    Route::post('/', [OperationsTransactionsController::class, 'sending_filter'])->name('admin.operations.transactions.hourly');
+                    Route::get('/', [OperationsTransactionsController::class, 'index'])->name('admin.operations.transactions.hourly');
+                    Route::post('/', [OperationsTransactionsController::class, 'filter'])->name('admin.operations.transactions.hourly');
                 });
             });
         });
@@ -149,10 +146,45 @@ Route::prefix('admin')->group(function () {
             Route::prefix('transactions')->group(function () {
                 //Sending wise hourly transait report
                 Route::prefix('hourly')->group(function () {
-                    Route::get('/', [OperationsTransactionsController::class, 'sending_index'])->name('admin.operations.transactions.hourly');
-                    Route::post('/', [OperationsTransactionsController::class, 'sending_filter'])->name('admin.operations.transactions.hourly');
+                    Route::get('/', [OperationsTransactionsController::class, 'index'])->name('admin.operations.transactions.hourly');
+                    Route::post('/', [OperationsTransactionsController::class, 'filter'])->name('admin.operations.transactions.hourly');
                 });
             });
         });
     });
+});
+
+
+
+Route::get('/cache', function () {
+    Artisan::call('cache:clear');
+    return "Cache is cleared";
+});
+Route::get('/storage', function () {
+    Artisan::call('storage:link');
+    return "Storage is linked";
+});
+Route::get('/migrate', function () {
+    Artisan::call('migrate_in_order');
+    return "Database Migrated Successfully";
+});
+Route::get('/seeding', function () {
+    Artisan::call('db:seed');
+    return "Database Seeding Successfully";
+});
+Route::get('/queue-clear', function () {
+    Artisan::call('queue:clear', [
+        '--force' => true
+    ]);
+    return "Queue Successfully Clear";
+});
+Route::get('/cleareverything', function () {
+    $clearcache = Artisan::call('cache:clear');
+    echo "Cache cleared<br>";
+
+    $clearview = Artisan::call('view:clear');
+    echo "View cleared<br>";
+
+    $clearconfig = Artisan::call('config:cache');
+    echo "Config cleared<br>";
 });

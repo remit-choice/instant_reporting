@@ -52,166 +52,6 @@
                                 <li class="breadcrumb-item active">Users</li>
                             </ol>
                         </div><!-- /.col -->
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            {{-- <ul class="nav nav-pills text-center"> --}}
-                                <div id="success" class="alert alert-default-success alert-dismissible fade show"
-                                    role="alert" style="display: none">
-                                    <strong class="">{{ session('success') }}</strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
-                                    <!-- Button trigger modal -->
-                                    <a type="button" href="#" data-toggle="modal" data-target="#user_create"
-                                        class="border px-2 btn create_user" style="background-color: #091E3E;color: white">
-                                        Add User
-                                    </a>
-                                    <!-- Modal -->
-                                    <form action="{{ route('admin.user.create') }}" method="POST">
-                                        @csrf
-                                        <div class="modal fade" id="user_create">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">User</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-user"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="text" name="create_full_name"
-                                                                    id="create_full_name" class="form-control" placeholder="Full Name">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_full_name_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-user"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="text" name="create_user_name"
-                                                                    id="create_user_name" class="form-control" placeholder="User Name">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_user_name_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-level-up-alt"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="text" name="create_designation"
-                                                                    id="create_designation" class="form-control" placeholder="Designation">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_designation_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                 <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-envelope"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="email" name="create_email"
-                                                                    id="create_email" class="form-control" placeholder="Email">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_email_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group mb-3">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-lock"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="password" name="create_password" class="form-control" id="create_password"
-                                                                    placeholder="Password">
-                                                                <div class="input-group-append" onclick="Create_Password()">
-                                                                    <div class="input-group-text">
-                                                                        <span class="me-2 d-flex">
-                                                                            <i id="create_Show" class="far fa-eye"></i>
-                                                                            <i id="create_Hide" class="fas fa-eye-slash"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                @error('create_password')
-                                                                    <div class="invalid-feedback order-last" id="password_msg">
-                                                                        {{ $message }}
-                                                                    </div>
-                                                                @enderror
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_password_error">
-                                                            </span>
-                                                        </div>                                                  
-                                                        <div class="form-group">
-                                                           <div class="input-group mb-3">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-lock"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="password" name="retyp_password" class="form-control" id="create_retype_password"
-                                                                    placeholder="Password" placeholder="Retype Password">
-                                                                <div class="input-group-append" onclick="Create_Retype_Password()">
-                                                                    <div class="input-group-text">
-                                                                        <span class="me-2 d-flex">
-                                                                            <i id="create_retype_Show" class="far fa-eye"></i>
-                                                                            <i id="create_retype_Hide" class="fas fa-eye-slash"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_retype_password_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="role" class="text-capitalize">Role</label>
-                                                            <div class="input-group">
-                                                                <select name="create_role" id="create_role" class="form-control">
-                                                                    <option value="" selected disabled hidden>SELECT</option>
-                                                                    @foreach ($roles as $role)
-                                                                        <option value="{{$role->id}}">{{$role->name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_role_error">
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="border px-2 btn create"
-                                                            style="background-color: #091E3E;color: white">Save</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <!-- /.modal -->
-                                    </form>
-                                </div>
-
-                                {{--
-                            </ul> --}}
-                        </div>
                     </div><!-- /.row -->
                 </div><!-- /.container-fluid -->
             </div>
@@ -225,99 +65,58 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">User List</h3>
-
+                                    <h3 class="card-title">Profile</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body datatable_data">
-                                    <table id="example2" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Full Name</th>
-                                                <th>User Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Designation</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="role_data">
-                                            @php
-                                            $counter = 1;
-                                            @endphp
-                                            @foreach ($users as $user)
-                                                <tr>
-                                                    <td>{{ $counter++ }}<input type="hidden" name="db_user_id"
-                                                            class="db_user_id" value="{{ $user->id }}"> </td>
-                                                    <td>{{ $user->full_name }}<input type="hidden" name="db_full_name"
-                                                            class="db_full_name" value="{{ $user->full_name }}"></td>
-                                                    <td>{{ $user->user_name }}<input type="hidden" name="db_user_name"
-                                                            class="db_user_name" value="{{ $user->user_name }}"></td>
-                                                    <td>{{ $user->email }}<input type="hidden" name="db_email"
-                                                            class="db_email" value="{{ $user->email }}"><input type="hidden" name="db_password"
-                                                            class="db_password" value="{{ $user->password }}"></td>
-                                                    <td>{{ $user->roles['name'] }}
-                                                        <input type="hidden" name="db_role_id"
-                                                            class="db_role_id" value="{{ $user->roles['id'] }}">
-                                                        <input type="hidden" name="db_role_name"
-                                                            class="db_role_name" value="{{ $user->roles['name'] }}"></td>
-                                                    <td>{{ $user->designation }}<input type="hidden" name="db_designation"
-                                                            class="db_designation" value="{{ $user->designation }}"></td>
-                                                    <td>
-                                                        @if ($user->status == '1')
-                                                        <span class="badge badge-success">Active</span>
-                                                        @else
-                                                        <span class="badge badge-danger">InActive</span>
-                                                        @endif
-                                                        <input type="hidden" name="db_status" class="db_status"
-                                                            value="{{ $user->status }}"></td>
-                                                    <td>
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                id="dropdownMenuButton" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <div class="dropdown-menu edit_user"
-                                                                aria-labelledby="dropdownMenuButton">
-                                                                <li>
-                                                                    <a class="dropdown-item" type="button" href="#"
-                                                                        data-toggle="modal" data-target="#user_update">
-                                                                        Edit</a>
-                                                                </li>
-                                                                <li>
-                                                                    <form action="{{ route('admin.user.delete') }}"
-                                                                        method="POST">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id" class="id"
-                                                                            value="{{ $user->id }}">
-                                                                        <button class="dropdown-item delete" type="submit">
-                                                                            Delete
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Full Name</th>
-                                                <th>User Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Designation</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
+                                    <div class="tab-pane" id="settings">
+                                        <form class="form-horizontal">
+                                        <div class="form-group row">
+                                            <label for="inputName" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10">
+                                            <input type="email" class="form-control" id="inputName" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                                            <div class="col-sm-10">
+                                            <input type="email" class="form-control" id="inputEmail" placeholder="Email">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputName2" class="col-sm-2 col-form-label">Name</label>
+                                            <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputName2" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputExperience" class="col-sm-2 col-form-label">Experience</label>
+                                            <div class="col-sm-10">
+                                            <textarea class="form-control" id="inputExperience" placeholder="Experience"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputSkills" class="col-sm-2 col-form-label">Skills</label>
+                                            <div class="col-sm-10">
+                                            <input type="text" class="form-control" id="inputSkills" placeholder="Skills">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                            <div class="checkbox">
+                                                <label>
+                                                <input type="checkbox"> I agree to the <a href="#">terms and conditions</a>
+                                                </label>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="offset-sm-2 col-sm-10">
+                                            <button type="submit" class="btn btn-danger">Submit</button>
+                                            </div>
+                                        </div>
+                                        </form>
+                                    </div>
                                 </div>
                                 <!-- /.card-body -->
                             </div>

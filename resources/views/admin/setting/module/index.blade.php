@@ -837,7 +837,6 @@
             });
     </script>
     @endsection
-    {{-- @Include('layouts.links.modals.foot') --}}
 </body>
 
 </html>

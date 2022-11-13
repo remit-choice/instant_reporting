@@ -78,7 +78,7 @@
                                         <div class="nav-link" aria-current="page"
                                             style="background-color: #091E3E;color: white">
                                             @foreach ($roles as $role)
-                                            {{ $role->name }}
+                                                {{ $role->name }}
                                             @endforeach
                                             Permissions <span class="badge ms-2"
                                                 style="background-color: #091E3E;"></span>
@@ -177,46 +177,32 @@
                                         @if (!empty($module->permissions['r_id']))
                                             @if (!empty($module->permissions['view']) || !empty($module->permissions['add']) || !empty($module->permissions['edit']) || !empty($module->permissions['delete']))
                                                 <tr class="checoboxes">
-                                                    <td>
+                                                    <td class="d-flex justify-content-between text-left px-4">
                                                         <input type="hidden" name="r_id" id="R_id"
                                                             value="{{ $module->permissions['r_id'] }}">
                                                         <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
+                                                            <input type="checkbox" class="check row_check">
                                                         {{ $module->name }}
                                                     </td>
                                                     <td>
-                                                        @if (empty($module->permissions['view']) && $module->permissions['view'] !=
-                                                        0)
-                                                        @else
-                                                        <input type="checkbox" name="view[{{ $counter }}]" class="check"
+                                                        <input type="checkbox" name="view[{{ $counter }}]" class="check row_child_check"
                                                             value="{{ $module->permissions['view'] }}"
                                                             @if($module->permissions['view'] == 1) {{ 'checked' }} @endif>
-                                                        @endif
                                                     </td>
                                                     <td>
-                                                        @if (empty($module->permissions['add']) && $module->permissions['add'] != 0)
-                                                        @else
-                                                        <input type="checkbox" name="add[{{ $counter }}]" class="check"
+                                                        <input type="checkbox" name="add[{{ $counter }}]" class="check row_child_check"
                                                             value="{{ $module->permissions['add'] }}"
                                                             @if($module->permissions['add'] == 1) {{ 'checked' }} @endif>
-                                                        @endif
                                                     </td>
                                                     <td>
-                                                        @if (empty($module->permissions['edit']) && $module->permissions['edit'] !=
-                                                        0)
-                                                        @else
-                                                        <input type="checkbox" name="edit[{{ $counter }}]" class="check"
+                                                        <input type="checkbox" name="edit[{{ $counter }}]" class="check row_child_check"
                                                             value="{{ $module->permissions['edit'] }}"
                                                             @if($module->permissions['edit'] == 1) {{ 'checked' }} @endif>
-                                                        @endif
                                                     </td>
                                                     <td>
-                                                        @if (empty($module->permissions['delete']) && $module->permissions['delete']
-                                                        != 0)
-                                                        @else
-                                                        <input type="checkbox" name="delete[{{ $counter }}]" class="check"
+                                                        <input type="checkbox" name="delete[{{ $counter }}]" class="check row_child_check"
                                                             value="{{ $module->permissions['delete'] }}"
                                                             @if($module->permissions['delete'] == 1) {{ 'checked' }} @endif>
-                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @php
@@ -228,7 +214,7 @@
                                     @endforeach
                                     @endforeach
                                     <div class="d-flex justify-content-between">
-                                        <a href="/admin/setting/role" class="btn float-end my-4"
+                                        <a href="{{route('admin.role.index')}}" class="btn float-end my-4"
                                             style="background-color: #091E3E;color: white">Back</a>
                                         <button type="submit" id="Save" class="btn float-end my-4"
                                             style="background-color: #091E3E;color: white">
@@ -326,6 +312,22 @@
                     $('input:checkbox').attr('checked', false);
                     $('.check').val(this.checked ? 1 : 0);
                 }
+            });
+            $(document).on('change', '.row_check', function() {
+                var _this = $(this).parents('tr');
+                 if ($(this).is(':checked')) {
+                    $(this).attr("checked", true)
+                    $(this).val(this.checked ? 1 : 0);
+                    $(_this.find('.row_child_check')).prop('checked', true);
+                    $(_this.find('.row_child_check')).attr('checked', true);
+                    $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
+                } else {
+                    $(this).attr('checked', false);
+                    $(this).val(this.checked ? 1 : 0);
+                    $(_this.find('.row_child_check')).prop('checked', false);
+                    $(_this.find('.row_child_check')).attr('checked', false);
+                    $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
+            }
             });
     </script>
     @endsection

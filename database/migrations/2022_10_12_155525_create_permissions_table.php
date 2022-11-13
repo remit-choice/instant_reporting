@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('r_id')->index('r_id');
-            $table->unsignedBigInteger('m_id')->index('m_id');
+            $table->unsignedBigInteger('r_id')->index('r_id')->nullable();
+            $table->unsignedBigInteger('m_id')->index('m_id')->nullable();
             $table->integer('view')->nullable();
             $table->integer('add')->nullable();
             $table->integer('edit')->nullable();
