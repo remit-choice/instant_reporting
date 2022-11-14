@@ -177,7 +177,7 @@
                                                 <tr>
                                                     <th class="no-sort">#</th>
                                                     <th class="text-capitalize">Hours</th>
-                                                    <th class="text-capitalize">Count of Transactions</th>
+                                                    <th class="text-capitalize">Count of Tr_No</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -244,7 +244,7 @@
                                                                                             @endif
                                                                                     @else
                                                                                     @endif
-                                                                                    <th>Count of Transactions</th>
+                                                                                    <th>Count of Tr_No</th>
                                                                                 </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -357,7 +357,7 @@
                                                                                                                                 <tr>
                                                                                                                                     <th>#</th>
                                                                                                                                     <th>Beneficiary Country</th>
-                                                                                                                                    <th>Count of Transactions</th>
+                                                                                                                                    <th>Count of Tr_No</th>
                                                                                                                                 </tr>
                                                                                                                         </thead>
                                                                                                                         <tbody>
@@ -386,28 +386,39 @@
                                                                                         @if(!empty($transaction->customer)==1)
                                                                                            
                                                                                             @foreach ($transaction->beneficiary_country as $beneficiary_countrys => $beneficiary_countries)
-                                                                                                <tr data-widget="expandable-table" aria-expanded="false">
-                                                                                                    @if (!empty($beneficiary_countries[0]) && !empty($beneficiary_countries[1])) 
-                                                                                                        <td role='button'><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{ $counts++ }}</td>
-                                                                                                        <td>                                                                                                       
-                                                                                                            {{ $beneficiary_countrys }}
-                                                                                                        </td>
-                                                                                                        <td>                                                                                                       
-                                                                                                            {{ $beneficiary_countries[0]->beneficiary_country }}
-                                                                                                        </td>
-                                                                                                    @else
-                                                                                                        <td>{{ $counts++ }}</td>
-                                                                                                        <td>
-                                                                                                            {{ $beneficiary_countries[0]->customer_country  }}
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            {{ $beneficiary_countries[0]->beneficiary_country }}
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            {{ $beneficiary_countries[0]->count_of_tr_no }}
-                                                                                                        </td>
-                                                                                                    @endif 
-                                                                                                </tr>
+                                                                                             @php
+                                                                                                // dd( $beneficiary_countries[0]->customer_country);
+                                                                                            @endphp
+                                                                                                        <tr data-widget="expandable-table" aria-expanded="false">
+                                                                                                            @if (!empty($beneficiary_countries[0]) && !empty($beneficiary_countries[1])) 
+                                                                                                                
+                                                                                                                <td role='button'><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{ $counts++ }}</td>
+                                                                                                                <td>                                                                                                       
+                                                                                                                    {{ $beneficiary_countrys }}
+                                                                                                                </td>
+                                                                                                                <td>                                                                                                       
+                                                                                                                    {{ $beneficiary_countries[0]->beneficiary_country }}
+                                                                                                                </td>
+                                                                                                            @else
+                                                                                                                <td>{{ $counts++ }}</td>
+                                                                                                                <td>
+                                                                                                                    {{ $beneficiary_countries[0]->customer_country  }}
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    {{ $beneficiary_countries[0]->beneficiary_country }}
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    {{ $beneficiary_countries[0]->count_of_tr_no }}
+                                                                                                                </td>
+                                                                                                            @endif 
+                                                                                                            {{-- <td>
+                                                                                                                @if (!empty($beneficiary_countries[0]) && !empty($beneficiary_countries[1]))
+                                                                                                                {{ $beneficiary_countries[1] }}
+                                                                                                                @else
+                                                                                                                    {{ $beneficiary_countries[0]->count_of_tr_no }}
+                                                                                                                @endif
+                                                                                                            </td> --}}
+                                                                                                        </tr>
                                                                                             @endforeach
                                                                                         @else
                                                                                         @endif
