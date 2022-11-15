@@ -10,6 +10,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModuleGroupsController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\OnlineCustomersController;
+use App\Http\Controllers\operations\CustomerTransactionsController;
 use App\Http\Controllers\operations\TransactionsController as OperationsTransactionsController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RolesController;
@@ -41,7 +42,6 @@ Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/', [LoginController::class, 'admin_login'])->name('admin');
-
     Route::middleware('Routing')->group(function () {
         Route::prefix('auth')->group(function () {
             Route::view('/forget', 'user.auth.forget');
@@ -140,6 +140,10 @@ Route::prefix('admin')->group(function () {
                     Route::get('/', [OperationsTransactionsController::class, 'index'])->name('admin.operations.transactions.hourly');
                     Route::post('/', [OperationsTransactionsController::class, 'filter'])->name('admin.operations.transactions.hourly');
                 });
+                Route::prefix('customers')->group(function () {
+                    Route::get('/', [CustomerTransactionsController::class, 'index'])->name('admin.operations.transactions.customers');
+                    Route::post('/', [CustomerTransactionsController::class, 'filter'])->name('admin.operations.transactions.customers');
+                });
             });
         });
     });
@@ -154,6 +158,10 @@ Route::get('/cache', function () {
 Route::get('/storage', function () {
     Artisan::call('storage:link');
     return "Storage is linked";
+});
+Route::get('/route', function () {
+    Artisan::call('route:clear');
+    return "Route is Cleared";
 });
 Route::get('/migrate', function () {
     Artisan::call('migrate_in_order');

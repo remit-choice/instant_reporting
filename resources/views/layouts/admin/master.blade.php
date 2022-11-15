@@ -134,7 +134,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
                     <a href="http://"><button type="submit" class="dropdown-item"><i class="fas fa-user mr-2"></i> Profile </button></a>
-                    <form action="/logout" method="post">
+                    <form action="{{route('logout')}}" method="post">
                         @csrf
                         <button type="submit" class="dropdown-item">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout

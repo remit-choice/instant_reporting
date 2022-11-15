@@ -103,24 +103,50 @@ class PermissionController extends Controller
                 $add =  [];
                 $edit =  [];
                 $delete =  [];
+                // dd($request->toArray());
                 for ($i = 0; $i < $count_m_id; $i++) {
                     if (empty($request->view[$i])) {
-                        $view[] = "0";
+                        $check_view_null = Permission::where([['r_id', '=', $r_id], ['m_id', '=', $m_id[$i]]])->select('view')->first();
+                        if (!empty($check_view_null->view) == NULL) {
+                            $view[] = NULL;
+                        } elseif (!empty($check_view_null->view) == '0' || !empty($check_view_null->view) == '1') {
+                            $view[] = "0";
+                        } else {
+                        }
                     } else {
                         $view[] = "1";
                     }
                     if (empty($request->add[$i])) {
-                        $add[] = "0";
+                        $check_add_null = Permission::where([['r_id', '=', $r_id], ['m_id', '=', $m_id[$i]]])->select('add')->first();
+                        // dd($check_add_null->add);
+                        if (!empty($check_add_null->add) == NULL) {
+                            $add[] = NULL;
+                        } elseif (!empty($check_add_null->add) == '0' || !empty($check_add_null->add) == '1') {
+                            $add[] = "0";
+                        } else {
+                        }
                     } else {
                         $add[] = "1";
                     }
                     if (empty($request->edit[$i])) {
-                        $edit[] = "0";
+                        $check_edit_null = Permission::where([['r_id', '=', $r_id], ['m_id', '=', $m_id[$i]]])->select('edit')->first();
+                        if (!empty($check_edit_null->edit) == NULL) {
+                            $edit[] = NULL;
+                        } elseif (!empty($check_edit_null->edit) == '0' || !empty($check_edit_null->edit) == '1') {
+                            $edit[] = "0";
+                        } else {
+                        }
                     } else {
                         $edit[] = "1";
                     }
                     if (empty($request->delete[$i])) {
-                        $delete[] = "0";
+                        $check_delete_null = Permission::where([['r_id', '=', $r_id], ['m_id', '=', $m_id[$i]]])->select('delete')->first();
+                        if (!empty($check_delete_null->delete) == NULL) {
+                            $delete[] = NULL;
+                        } elseif (!empty($check_delete_null->delete) == '0' || !empty($check_delete_null->delete) == '1') {
+                            $delete[] = "0";
+                        } else {
+                        }
                     } else {
                         $delete[] = "1";
                     }
@@ -149,7 +175,7 @@ class PermissionController extends Controller
             $modules = function ($query) use ($id) {
                 $query->where('r_id', $id);
             };
-            $modules_groups = ModulesGroup::whereDoesntHave('modules.permissions', $modules)
+            $modules_groups = ModulesGroup::whereHas('modules.permissions', $modules)->orwhereDoesntHave('modules.permissions', $modules)
                 ->with('modules.permissions', $modules)
                 ->get();
             return view('admin.setting.role.permission.create', ['roles' => $roles, 'modules_groups' => $modules_groups]);
@@ -157,7 +183,6 @@ class PermissionController extends Controller
             if (!empty($request->m_id)) {
                 $r_id =  $request->r_id;
                 $m_id =  $request->m_id;
-                // dd($m_id);
                 $m_ids =  $request->m_ids;
                 if (!empty($request->m_ids)) {
                     $m_id_count =  count($m_ids);
@@ -165,7 +190,7 @@ class PermissionController extends Controller
                 } else {
                     $m_id_count = 0;
                 }
-                // dd($request->toArray());
+
                 $view =  [];
                 $add =  [];
                 $edit =  [];
