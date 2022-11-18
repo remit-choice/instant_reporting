@@ -178,6 +178,7 @@ class ModulesController extends Controller
             $url = route($request->url, ['id']);
             $url = parse_url($url, PHP_URL_PATH);
             $url  = str_replace("id", "{id}", $url);
+            $url  = str_replace("/instantreporting", "", $url);
             // dd($url);
 
             $name = $request->url;
@@ -215,6 +216,8 @@ class ModulesController extends Controller
             $url = route($request->url, ['id']);
             $url = parse_url($url, PHP_URL_PATH);
             $url  = str_replace("id", "{id}", $url);
+            $url  = str_replace("/instantreporting", "", $url);
+
 
             // dd($id);
 

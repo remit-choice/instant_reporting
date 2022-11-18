@@ -49,6 +49,7 @@ class CustomerTransactionsController extends Controller
                 if ($request->customer_country == 'All Customer Countries') {
                     $customers_transactions = function ($query) use ($date_from) {
                         $query->where('customer_register_date', $date_from);
+                        // $query->groupBY(['customer_country']);
                     };
                     $customers = OnlineCustomer::whereHas('transactions', $customers_transactions)->orwhereDoesntHave('transactions')->with('transactions', $customers_transactions)
                         ->withCount([
@@ -69,113 +70,71 @@ class CustomerTransactionsController extends Controller
                             // },
                         ])->where('register_date', $customer_date_from)
                         ->get()->groupBy('register_date')->map(function ($row) {
-                            // return $row->groupBY('country');
                             $array = [];
                             $transacting_count = 0;
                             $non_transacting_count = 0;
-                            $no_attempt_count = 0;
-                            $no_attempt_counts = 0;
-                            foreach ($row->groupBY('country') as $customer_countries => $inner_row) {
-                                $array[$customer_countries] =
-                                    $inner_row->map(function ($inner_rows) use ($no_attempt_count, $no_attempt_counts) {
-                                        $no_attempt_count = 0;
-                                        if ($inner_rows['transactions']->isEmpty()) {
-                                            $no_attempt_count += 1;
-                                        } else {
-                                            $no_attempt_count += $inner_rows['no_attempt_count'];
-                                        }
+                            foreach ($row as $inner_row) {
+                                $no_attempt_count = 0;
+                                if ($inner_row['transactions']->isEmpty()) {
+                                    $no_attempt_count += 1;
+                                } else {
+                                    $no_attempt_count += $inner_row['no_attempt_count'];
+                                }
 
-                                        $customers_array =  [
-                                            'customer_id' => $inner_rows['customer_id'],
-                                            'transacting_count' => $inner_rows['transacting_count'],
-                                            'non_transacting_count' => $inner_rows['non_transacting_count'],
-                                            'no_attempt_count' => $no_attempt_count,
-                                            'transactions' => $inner_rows['transactions'],
-                                        ];
-                                        if (empty($inner_rows['transactions'])) {
-                                            $no_attempt_count +=  1;
-                                        }
-                                        // else {
-                                        //     $no_attempt_count += $inner_rows['no_attempt_count'];
-                                        // }
 
-                                        return json_decode(json_encode($customers_array));
-                                    });
-                                $transacting_count =  $row->sum('transacting_count');
-                                $non_transacting_count = $row->sum('non_transacting_count');
-                                $no_attempt_counts = $no_attempt_count;
+                                $transacting_count += $inner_row['transacting_count'];
+                                $non_transacting_count += $inner_row['non_transacting_count'];
+                                $no_attempt_count += $inner_row['no_attempt_count'];
+
+                                $array[] = [
+                                    'customer_id' => $inner_row['customer_id'],
+                                    'transacting_count' => $inner_row['transacting_count'],
+                                    'non_transacting_count' => $inner_row['non_transacting_count'],
+                                    'no_attempt_count' => $no_attempt_count,
+                                    'transactions' => json_decode(
+                                        json_encode(
+                                            [
+                                                'customer_country' => $inner_row['transactions']->groupBY('customer_country')->map->get('customer_country'),
+                                                'transacting_count' => $inner_row['transactions']->groupBY('customer_country')->map(function ($transactions_row) {
+                                                    // return $transactions_row;
+                                                    if ($transactions_row->where('status', 'Paid') || $transactions_row->where('status', 'Ok') || $transactions_row->where('status', 'Compliance Hold')) {
+
+                                                        return $transactions_row->where('status', 'Paid')->count() + $transactions_row->where('status', 'Ok')->count() + $transactions_row->where('status', 'Compliance Hold')->count();
+                                                    }
+                                                }),
+                                                'non_transacting_count' => $inner_row['transactions']->groupBY('customer_country')->map(function ($transactions_row) {
+                                                    if ($transactions_row->where('status', 'Cancled')) {
+                                                        return $transactions_row->where('status', 'Cancled')->count();
+                                                    }
+                                                }),
+                                                'no_attempt_count' => $no_attempt_count,
+                                            ]
+                                        )
+                                    ),
+                                    // $inner_row['transactions']->map(function ($transactions_row) use ($no_attempt_count, $inner_row) {
+                                    //     // return $transactions_row;
+
+                                    //     $transactions_rows = [
+                                    //         'customer_country' => $transactions_row->customer_country,
+                                    //         'beneficiary_country' => $transactions_row->beneficiary_country,
+                                    //         'transacting_count' => $transactions_row->where('customer_id', $inner_row['customer_id'])->orwhere('status', 'Paid')->orwhere('status', 'Ok')->orwhere('status', 'Compliance Hold')->count(),
+                                    //         'non_transacting_count' => $transactions_row->where('customer_id', $inner_row['customer_id'])->where('status', 'Cancled')->count(),
+                                    //         'no_attempt_count' => $no_attempt_count,
+                                    //     ];
+                                    //     return json_decode(json_encode($transactions_rows));
+                                    // }),
+                                ];
+                                $no_attempt_count = 0;
+                                // $transacting_count += $inner_row['transacting_count'];
+                                // $non_transacting_count += $inner_row['non_transacting_count'];
+                                if ($inner_row['transactions']->isEmpty()) {
+                                    $no_attempt_count += 1;
+                                } else {
+                                    $no_attempt_count += $inner_row['no_attempt_count'];
+                                }
                             }
-                            return json_decode(json_encode(['data' => $array, 'transacting_count' => $transacting_count, 'non_transacting_count' => $non_transacting_count, 'no_attempt_count' => $no_attempt_counts]));
+                            return json_decode(json_encode(['data' => $array, 'transacting_count' => $transacting_count, 'non_transacting_count' => $non_transacting_count, 'no_attempt_count' => $no_attempt_count]));
                         });
-                    // dd($inner_rows['customer_id']);
-                    // foreach ($inner_rows as $inner_sub_row) {
-                    // return $inner_sub_row->customer_id;
-                    // dd($inner_sub_row->toArray());
-                    // foreach ($inner_sub_row as $inner_inner_sub_row_key => $inner_inner_sub_row) {
-                    //     // return $inner_inner_sub_row;
-                    //     $no_attempt_count = 0;
-                    //     if ($inner_sub_row['transactions']->isEmpty()) {
-                    //         $no_attempt_count += 1;
-                    //     } else {
-                    //         $no_attempt_count += $inner_sub_row['no_attempt_count'];
-                    //     }
-
-
-                    //     $transacting_count += $inner_sub_row['transacting_count'];
-                    //     $non_transacting_count += $inner_sub_row['non_transacting_count'];
-                    //     $no_attempt_count += $inner_sub_row['no_attempt_count'];
-
-                    //     $customer_countries =   [
-                    //         'customer_id' => $inner_sub_row['customer_id'],
-                    //         'transacting_count' => $inner_sub_row['transacting_count'],
-                    //         'non_transacting_count' => $inner_sub_row['non_transacting_count'],
-                    //         'no_attempt_count' => $no_attempt_count,
-                    //         'transactions' => $inner_sub_row['transactions']->map(function ($transactions_row) use ($no_attempt_count, $inner_sub_row) {
-                    //             $transactions_rows = [
-                    //                 'customer_country' => $transactions_row->customer_country,
-                    //                 'beneficiary_country' => $transactions_row->beneficiary_country,
-                    //             ];
-                    //             return json_decode(json_encode($transactions_rows));
-                    //         })->groupBY(['customer_country']),
-                    //         // json_decode(
-                    //         //     json_encode(
-                    //         //         [
-                    //         //             'customer_country' => $inner_sub_row['transactions']->map(function ($transactions_row) {
-                    //         //                 $beneficiary_country = [
-                    //         //                     'customer_country' => $transactions_row->customer_country,
-                    //         //                     'beneficiary_country' => $transactions_row->beneficiary_country
-                    //         //                 ];
-                    //         //                 return json_decode(json_encode($beneficiary_country));
-                    //         //             })->groupBY('customer_country'),
-                    //         //             'transacting_count' => $inner_sub_row['transactions']->groupBY('customer_country')->map(function ($transactions_row) {
-                    //         //                 // return $transactions_row;
-                    //         //                 if ($transactions_row->where('status', 'Paid') || $transactions_row->where('status', 'Ok') || $transactions_row->where('status', 'Compliance Hold')) {
-
-                    //         //                     return $transactions_row->where('status', 'Paid')->count() + $transactions_row->where('status', 'Ok')->count() + $transactions_row->where('status', 'Compliance Hold')->count();
-                    //         //                 }
-                    //         //             }),
-                    //         //             'non_transacting_count' => $inner_sub_row['transactions']->groupBY('customer_country')->map(function ($transactions_row) {
-                    //         //                 if ($transactions_row->where('status', 'Cancled')) {
-                    //         //                     return $transactions_row->where('status', 'Cancled')->count();
-                    //         //                 }
-                    //         //             }),
-                    //         //             'no_attempt_count' => $no_attempt_count,
-                    //         //         ]
-                    //         //     )
-                    //         // ),
-
-                    //     ];
-                    //     $no_attempt_count = 0;
-                    //     // $transacting_count += $inner_sub_row['transacting_count'];
-                    //     // $non_transacting_count += $inner_sub_row['non_transacting_count'];
-                    //     if ($inner_sub_row['transactions']->isEmpty()) {
-                    //         $no_attempt_count += 1;
-                    //     } else {
-                    //         $no_attempt_count += $inner_sub_row['no_attempt_count'];
-                    //     }
-                    // }
-                    // }
-
 
                     // ->groupBy('register_date')->withCount('register_date');
                     dd($customers->toArray());
