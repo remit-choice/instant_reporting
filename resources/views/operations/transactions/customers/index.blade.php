@@ -191,70 +191,95 @@
                                                             $total_count_of_tr_no= 0;
                                                         @endphp
                                                         @foreach ($customers as $customer_reg_date => $customer)
-                                                                    <tr data-widget="expandable-table" aria-expanded="false" role='button' class="bg-light">
-                                                                        <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{$count++}}</td>
-                                                                        <td>{{  $customer_reg_date }}</td>                                                                        
-                                                                         <td>{{ $customer->transacting_count }}</td>
-                                                                        <td>{{  $customer->non_transacting_count }}</td>
-                                                                        <td>{{  $customer->no_attempt_count }}</td>
-                                                                        <td>{{ $customer->transacting_count + $customer->non_transacting_count + $customer->no_attempt_count  }}</td>
-                                                                        @php
-                                                                            $total_count_of_tr_no_date += $customer->transacting_count + $customer->non_transacting_count + $customer->no_attempt_count;
-                                                                        @endphp
-                                                                    </tr>
-                                                                    <tr class="expandable-body">
-                                                                        <td colspan="6">
-                                                                            <table class="table table-hover">
-                                                                                <thead>
-                                                                                        <tr>
-                                                                                            <th>#</th>
-                                                                                            <th>Customer Country</th>
-                                                                                             <th class="text-capitalize">Transacting</th>
-                                                                                            <th class="text-capitalize">Non Transacting</th>
-                                                                                            <th class="text-capitalize">No Attempt</th>
-                                                                                            <th class="text-capitalize">Total</th>
-                                                                                        </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                    @php
-                                                                                        $counts1 = 1;
-                                                                                    @endphp
-                                                                                    @if (!empty($customer->data))
-                                                                                        @foreach ($customer->data as $inner_country)
-                                                                                            @foreach ($inner_country->transactions as $customer_country_key => $sub_inner_country)
+                                                            <tr data-widget="expandable-table" aria-expanded="false" role='button' class="bg-light">
+                                                                <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{$count++}}</td>
+                                                                <td>{{  $customer_reg_date }}</td>                                                                        
+                                                                    <td>{{ $customer->transacting_count }}</td>
+                                                                <td>{{  $customer->non_transacting_count }}</td>
+                                                                <td>{{  $customer->no_attempt_count }}</td>
+                                                                <td>{{ $customer->transacting_count + $customer->non_transacting_count + $customer->no_attempt_count  }}</td>
+                                                                @php
+                                                                    $total_count_of_tr_no_date += $customer->transacting_count + $customer->non_transacting_count + $customer->no_attempt_count;
+                                                                @endphp
+                                                            </tr>
+                                                            <tr class="expandable-body">
+                                                                <td colspan="6">
+                                                                    <table class="table table-hover">
+                                                                        <thead>
+                                                                                <tr>
+                                                                                    <th>#</th>
+                                                                                    <th>Customer Country</th>
+                                                                                        <th class="text-capitalize">Transacting</th>
+                                                                                    <th class="text-capitalize">Non Transacting</th>
+                                                                                    <th class="text-capitalize">No Attempt</th>
+                                                                                    <th class="text-capitalize">Total</th>
+                                                                                </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @php
+                                                                                $counts1 = 1;
+                                                                            @endphp
+                                                                            @if (!empty($customer->data))
+                                                                                @foreach ($customer->data as $customer_country_key => $inner_country)
+                                                                                        <tr data-widget="expandable-table" aria-expanded="false" role='button'>
+                                                                                            <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{ $counts1++ }}</td>
+                                                                                            <td>
                                                                                                 @php
-                                                                                                    // dd(count($inner_country->transactions));
+                                                                                                    $countings = 1;
                                                                                                 @endphp
-                                                                                                <tr data-widget="expandable-table" aria-expanded="false" role='button'>
-                                                                                                    <td>{{ $counts1++ }}</td>
-                                                                                                    <td>
+                                                                                                    @if ($countings==1)
+                                                                                                        {{ $customer_country_key }}
                                                                                                         @php
-                                                                                                            $countings = 1;
+                                                                                                            $countings++;
                                                                                                         @endphp
-                                                                                                      
+                                                                                                    @endif
+                                                                                                    
+                                                                                            </td>
+                                                                                            <td>{{ $inner_country->transacting_count }}</td>
+                                                                                            <td>{{ $inner_country->non_transacting_count }}</td>
+                                                                                            <td>{{ $inner_country->no_attempt_count }}</td>
+                                                                                            <td>{{ $inner_country->transacting_count + $inner_country->non_transacting_count + $inner_country->no_attempt_count  }}</td>
+                                                                                        </tr>
+                                                                                        <tr class="expandable-body">
+                                                                                            <td colspan="6">
+                                                                                                <table class="table table-hover">
+                                                                                                    <thead>
+                                                                                                        <tr>
+                                                                                                            <th>#</th>
+                                                                                                            <th>Beneficiary Country</th>
+                                                                                                        </tr>
+                                                                                                    </thead>
+                                                                                                    <tbody>
                                                                                                         @php
-                                                                                                            // dd($customer_country_key);
+                                                                                                            $counts = 1;
+                                                                                                            $array = [];
                                                                                                         @endphp
-                                                                                                            @if ($countings==1)
-                                                                                                                {{ $customer_country_key }}
-                                                                                                                @php
-                                                                                                                    $countings++;
-                                                                                                                @endphp
-                                                                                                            @endif
-                                                                                                         
-                                                                                                    </td>
-                                                                                                    <td>{{ $inner_country->transacting_count }}</td>
-                                                                                                    <td>{{ $inner_country->non_transacting_count }}</td>
-                                                                                                    <td>{{ $inner_country->no_attempt_count }}</td>
-                                                                                                    <td>{{ $inner_country->transacting_count + $inner_country->non_transacting_count + $inner_country->no_attempt_count  }}</td>
-                                                                                                </tr>
-                                                                                            @endforeach
-                                                                                        @endforeach
-                                                                                    @endif
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </td>
-                                                                    </tr>
+                                                                                                        @if (!empty($inner_country->transactions))
+                                                                                                            @foreach ($inner_country->transactions as $transaction)
+                                                                                                                @foreach ($transaction as $beneficiary_countries => $beneficiary_country)
+                                                                                                                    @if (!in_array($beneficiary_countries,$array))
+                                                                                                                        @php
+                                                                                                                            $array[] = $beneficiary_countries;
+                                                                                                                        @endphp
+                                                                                                                        <tr data-widget="expandable-table" aria-expanded="false">
+                                                                                                                            <td role='button'>{{ $counts++ }}</td>
+                                                                                                                            <td>{{ $beneficiary_countries }}</td>
+                                                                                                                        </tr>
+                                                                                                                    @endif
+                                                                                                                @endforeach       
+                                                                                                            @endforeach       
+
+                                                                                                        @endif                                                                               
+                                                                                                    </tbody>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </tbody>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
                                                         @endforeach
                                                         <tr>
                                                             <td class="no-sort"><Strong>Total</Strong></td>
