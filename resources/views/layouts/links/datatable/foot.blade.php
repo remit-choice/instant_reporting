@@ -31,9 +31,9 @@
             ],
             // "pageLength": 10,
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-
         }).buttons().container().appendTo(
             '#example1_wrapper .col-md-6:eq(1)');
+         
         $("#example2").DataTable({
             "paging": true,
             "autoWidth": true,
@@ -48,5 +48,42 @@
             // "pageLength": 10,
         });
     });
+    //   $('#example1 tbody').on('click', 'tr.sub_table', function() {
+    //     // alert(1);
+    //     $(`.sub_table_dt`).DataTable();
+    //     //  $('.sub_table').each(function(index, tableElement) {
+    //     //           let table = $(`.sub_table_dt`).DataTable({
+    //     //     responsive: true,
+    //     //     stateSave: true
+    //     // });
 
+    //     // tableList.push(table);
+    //     // });
+    // });
+
+    // function getChildren($row) {
+    //     var children = [];
+    //     while ($row.next().hasClass('child')) {
+    //         children.push($row.next());
+    //         $row = $row.next();
+    //     }
+    //     return children;
+    // }
+
+    // $('.parent').on('click', function () {
+
+    //     var children = getChildren($(this));
+    //     $.each(children, function () {
+    //         $(this).toggle();
+    //     })
+    // });
+
+    // $.each($('.parent'), function () {
+
+    //     var children = getChildren($(this));
+    //     $.each(children, function () {
+    //         $(this).toggle();
+    //     })
+
+    // });
 </script>

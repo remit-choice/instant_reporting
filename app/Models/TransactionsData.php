@@ -12,6 +12,6 @@ class TransactionsData extends Model
     use HasFactory;
     public function customers()
     {
-        return $this->hasOne(OnlineCustomer::class, 'customer_id', 'customer_id');
+        return $this->belongsTo(OnlineCustomer::class, 'customer_id', 'customer_id');
     }
 }

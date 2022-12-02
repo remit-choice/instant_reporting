@@ -157,8 +157,6 @@ class TransactionDataController extends Controller
                                 'customer_id_2' => $emapData[80],
                                 'log_export_date' => $emapData[81],
                                 'last_transaction_date' => $emapData[81],
-                                'registered_by' => $emapData[82],
-                                'transaction_by_device' => $emapData[83],
                             ]);
                         }
                         $i++;
