@@ -47,25 +47,22 @@ class CustomerTransactionsController extends Controller
             ];
             if (!empty($request->customer_country) && empty($request->beneficiary_country) && !empty($request->date_from) && empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
-                // $date_from_trx = date('j/n/Y', strtotime($request->date_from));
+                $date_from_trx = date('j/n/Y', strtotime($request->date_from));
                 // dd($date_from_trx);
                 $customer_country = $request->customer_country;
                 if ($request->customer_country == 'All Customer Countries') {
-                    // $customers_transactions = function ($query) use ($date_from_trx) {
-                    //     $query->where('customer_register_date', $date_from_trx);
-                    // };
-                    $customers = OnlineCustomer::where('register_date', $date_from)->with('transactions')
-                        ->withCount($transacting_query)->orderBy('country', 'ASC')
-                        // ->toSql();
-                        ->get()
-                        ->groupBy('country')
+                    $customers_transactions = function ($query) use ($date_from_trx) {
+                        $query->where('transaction_date', $date_from_trx);
+                    };
+                    $customers = OnlineCustomer::where('register_date', $date_from)->with('transactions', $customers_transactions)
+                        ->withCount($transacting_query)->get()->groupBy('country')
                         ->map(function ($row) {
                             return $this->filter_funciton($row);
                         });
                     // $customers = OnlineCustomer::where('register_date', $date_from)->with('transactions')
                     //     ->withCount($transacting_query)->groupBy('country')->toSql();
                     // dd($customers);
-                    // dd($customers->toArray());
+                    dd($customers->toArray());
                 } else {
                     $customers_transactions = function ($query) use ($customer_country) {
                         $query->where('customer_country', 'LIKE', '%' . $customer_country . '%');
@@ -252,39 +249,39 @@ class CustomerTransactionsController extends Controller
     public function filter_funciton($row)
     {
         $array = [];
-        $no_attempt_count = 0;
-        $transacting_count = 0;
-        $non_transacting_count = 0;
+        $no_attempt_counts = 0;
         foreach ($row as $inner_row) {
-            if ($inner_row->transactions()->count() == 0) {
+            $no_attempt_count = 0;
+            $transacting_count = 0;
+            $non_transacting_count = 0;
+
+            $transacting_count += $inner_row->transacting_count;
+            $non_transacting_count += $inner_row->non_transacting_count;
+            if ($inner_row->transactions->isEmpty()) {
                 $no_attempt_count += 1;
+                $no_attempt_counts += 1;
             }
             $transacting_counts = 0;
             $non_transacting_counts = 0;
-            foreach ($inner_row->transactions as $transaction) {
-                if ($transaction->status == "Paid" || $transaction->status == "Ok" || $transaction->status == "Compliance Hold") {
+
+            foreach ($inner_row->transactions as $beneficiary_country) {
+                if ($beneficiary_country->status == "Paid" || $beneficiary_country->status == "Ok" || $beneficiary_country->status == "Compliance Hold") {
                     $transacting_counts = 1;
-                    $transacting_count += 1;
-                } else {
-                    $transacting_counts = 0;
                 }
-                if ($transaction->status == "Canceled") {
+                if ($beneficiary_country->status == "Canceled") {
                     $non_transacting_counts = 1;
-                    $non_transacting_count += 1;
-                } else {
-                    $non_transacting_counts = 0;
                 }
-                $array[$transaction->beneficiary_country][] = [
-                    'customer_id' => $transaction->customer_id,
-                    'transaction_time' => $transaction->transaction_time,
+                $array[$beneficiary_country->beneficiary_country][] = [
+                    // 'customer_id' => $beneficiary_country->customer_id,
+                    // 'beneficiary_country' => $beneficiary_country->beneficiary_country,
                     'transacting_count' => $transacting_counts,
                     'non_transacting_count' => $non_transacting_counts,
                 ];
             }
+            $transacting_count =  $row->sum('transacting_count');
+            $non_transacting_count = $row->sum('non_transacting_count');
         }
 
-        // $transacting_count =  $row->sum('transacting_count');
-        // $non_transacting_count = $row->sum('non_transacting_count');
-        return json_decode(json_encode(['data' => $array, 'transacting_count' => $transacting_count, 'non_transacting_count' => $non_transacting_count, 'no_attempt_count' => $no_attempt_count]));
+        return json_decode(json_encode(['data' => $array, 'transacting_count' => $transacting_count, 'non_transacting_count' => $non_transacting_count, 'no_attempt_count' => $no_attempt_counts]));
     }
 }

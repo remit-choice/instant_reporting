@@ -231,29 +231,25 @@
                                                                                 <tbody>
                                                                                 
                                                                                         @foreach ($customer->data as $customer_country_key => $inner_country)
-                                                                                        @php
-                                                                                                // dd($customer->data);
-                                                                                        @endphp
-                                                                                        @php
-                                                                                            $transacting_count = 0;
-                                                                                            $non_transacting_count = 0;
-                                                                                            $no_attempt_count = 0; 
-                                                                                    @endphp
-                                                                                                        @foreach ($inner_country as $beneficiary_country => $transaction)
-                                                                                                            @php
-                                                                                                        
-                                                                                                                    $transacting_count += $transaction->transacting_count;
-                                                                                                                    $non_transacting_count += $transaction->non_transacting_count;
-                                                                                                                    // $no_attempt_count += $transaction->no_attempt_count;  
-                                                                                                                @endphp
-                                                                                                        @endforeach
-                                                                                                            <tr data-widget="expandable-table" aria-expanded="false">
-                                                                                                                    <td role='button'>{{ $counts++ }}</td>
-                                                                                                                    <td>{{ $customer_country_key }}</td>
-                                                                                                                    <td>{{ $transacting_count }}</td>
-                                                                                                                    <td>{{ $non_transacting_count }}</td>
-                                                                                                                    {{-- <td>{{ $no_attempt_count }}</td> --}}
-                                                                                                                </tr>   
+                                                                                            @php
+                                                                                                    // dd($customer->data);
+                                                                                                $transacting_count = 0;
+                                                                                                $non_transacting_count = 0;
+                                                                                                $no_attempt_count = 0; 
+                                                                                            @endphp
+                                                                                            @foreach ($inner_country as $beneficiary_country => $transaction)
+                                                                                                @php
+                                                                                            
+                                                                                                        $transacting_count += $transaction->transacting_count;
+                                                                                                        $non_transacting_count += $transaction->non_transacting_count;
+                                                                                                    @endphp
+                                                                                            @endforeach
+                                                                                            <tr data-widget="expandable-table" aria-expanded="false">
+                                                                                                <td role='button'>{{ $counts++ }}</td>
+                                                                                                <td>{{ $customer_country_key }}</td>
+                                                                                                <td>{{ $transacting_count }}</td>
+                                                                                                <td>{{ $non_transacting_count }}</td>
+                                                                                            </tr>   
                                                                                         @endforeach
                                                                                 </tbody>
                                                                             </table>

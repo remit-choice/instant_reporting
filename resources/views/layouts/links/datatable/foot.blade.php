@@ -19,12 +19,17 @@
 
 <script>
     $(function() {
+        // $('#example1 tfoot th').each(function () {
+        //     var title = $(this).text();
+        //     $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        // });
         $("#example1").DataTable({
             "paging": true,
-            "autoWidth": true,
+            "autoWidth": false,
             "searching": true,
             "responsive": true,
             "order": [[0, 'asc']],
+            "aaSorting": [[ 0, "asc" ]],
             "aLengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
@@ -33,10 +38,13 @@
             "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo(
             '#example1_wrapper .col-md-6:eq(1)');
-         
+        // $('#example2 tfoot th').each(function () {
+        //     var title = $(this).text();
+        //     $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        // });
         $("#example2").DataTable({
             "paging": true,
-            "autoWidth": true,
+            "autoWidth": false,
             "searching": true,
             "responsive": true,
             "order": [[0, 'asc']],
@@ -45,7 +53,20 @@
                 [10, 25, 50, "All"]
             ],
 
-            // "pageLength": 10,
+            // "initComplete": function () {
+            // // Apply the search
+            // this.api()
+            //     .columns()
+            //     .every(function () {
+            //         var that = this;
+ 
+            //         $('input', this.footer()).on('keyup change clear', function () {
+            //             if (that.search() !== this.value) {
+            //                 that.search(this.value).draw();
+            //             }
+            //         });
+            //     });
+            // },
         });
     });
     //   $('#example1 tbody').on('click', 'tr.sub_table', function() {
