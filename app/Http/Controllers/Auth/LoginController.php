@@ -3,17 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\UserController;
 use App\Models\User;
-use App\Models\Attandence;
-use App\Models\Employee;
-use App\Models\ModuleGroup;
 use App\Models\ModulesGroup;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 use Illuminate\Support\Facades\Session;
@@ -57,10 +50,10 @@ class LoginController extends Controller
                     $email_cookie =  Cookie::make('emailcookie', $email, time() + 86400);
                     $password_cookie = Cookie::make('passwordcookie', $password, time() + 86400);
 
-                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
+                    return redirect()->route('admin.dashboard.index')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
                 } else {
                     $this->admin_login_sessions($request);
-                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups);
+                    return redirect()->route('admin.dashboard.index')->with('module_groups', $module_groups);
                 }
             }
         } else {

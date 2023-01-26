@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\operations;
+namespace App\Http\Controllers\copies;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserController;

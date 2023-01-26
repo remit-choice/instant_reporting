@@ -475,9 +475,10 @@
                 }
             });
             $('.edit_module').on('click', function() {
-                var _this = $(this).parents('tr');
+                var _this = $(this).closest("tr");
                 $('#module_id').val(_this.find('.db_module_id').val());
                 $('#module_name').val(_this.find('.db_module_name').val());
+                console.log(_this.find('.db_module_name').val());
                 $('#module_icon').val(_this.find('.db_module_icon').val());
                 $('#module_status').val(_this.find('.db_module_status').val());
                 $('#edit_m_g_id').text(_this.find('.m_g_name').val());

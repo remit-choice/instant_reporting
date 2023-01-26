@@ -21,7 +21,7 @@ class ModuleGroupsController extends Controller
         });
     }
 
-    public function admin_module_group_list()
+    public function index()
     {
         if (FacadesRequest::isMethod('get')) {
             $roles = Role::get();
@@ -31,7 +31,7 @@ class ModuleGroupsController extends Controller
             return back();
         }
     }
-    public function add_admin_module_group(Request $request)
+    public function create(Request $request)
     {
         if (FacadesRequest::isMethod('get')) {
             if ($request->name) {
@@ -67,7 +67,7 @@ class ModuleGroupsController extends Controller
             return back();
         }
     }
-    public function edit_admin_module_group(Request $request)
+    public function edit(Request $request)
     {
         if (FacadesRequest::isMethod('get')) {
             if ($request->name) {
@@ -145,7 +145,7 @@ class ModuleGroupsController extends Controller
             return back();
         }
     }
-    public function delete_admin_module_group(Request $request)
+    public function delete(Request $request)
     {
         $id = $request->id;
         ModulesGroup::where('id', $id)->delete();

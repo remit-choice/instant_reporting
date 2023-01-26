@@ -21,31 +21,31 @@ class OnlineCustomersController extends Controller
         if (FacadesRequest::isMethod('get')) {
             $online_customers =  OnlineCustomer::get();
             return view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
+        } elseif (FacadesRequest::isMethod('post')) {
+            return $this->filter($request);
         } else {
         }
     }
-    public function filter(Request $request)
+    public function filter($request)
     {
-        if (FacadesRequest::isMethod('post')) {
-            $date_from = '';
-            $date_to = '';
-            if (!empty($request->date_from) && empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $online_customers = OnlineCustomer::where('register_date', $date_from)->get();
-                return
-                    view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
-            } elseif (!empty($request->date_from) && !empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $date_to = date('d/m/Y',  strtotime($request->date_to));
-                $online_customers = OnlineCustomer::whereBetween('register_date', [$date_from, $date_to])->orwhere('register_date', '=', $date_from)->orwhere('register_date', '<=', $date_to)->get();
-                return
-                    view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
+        $date_from = '';
+        $date_to = '';
+        if (!empty($request->date_from) && empty($request->date_to)) {
+            $date_from = date('d/m/Y', strtotime($request->date_from));
+            $online_customers = OnlineCustomer::where('register_date', $date_from)->get();
+            return
+                view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
+        } elseif (!empty($request->date_from) && !empty($request->date_to)) {
+            $date_from = date('d/m/Y', strtotime($request->date_from));
+            $date_to = date('d/m/Y',  strtotime($request->date_to));
+            $online_customers = OnlineCustomer::whereBetween('register_date', [$date_from, $date_to])->orwhere('register_date', '=', $date_from)->orwhere('register_date', '<=', $date_to)->get();
+            return
+                view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
+        } else {
+            if (empty($request->date_from) && !empty($request->date_to)) {
+                return redirect()->back()->with('failed', "From Date Mandatory");
             } else {
-                if (empty($request->date_from) && !empty($request->date_to)) {
-                    return redirect()->back()->with('failed', "From Date Mandatory");
-                } else {
-                    return redirect()->back()->with('failed', "Dates Fields Required");
-                }
+                return redirect()->back()->with('failed', "Dates Fields Required");
             }
         }
     }

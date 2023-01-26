@@ -96,7 +96,7 @@
                                         <h3 class="card-title col-lg-6 col-md-6 col-sm-6 col-xs-6">Transactions List</h3>
                                     </div>
                                     <div class="card-header container-fluid">
-                                        <form action="{{ route('admin.operations.transactions.hourly') }}"
+                                        <form action="{{ route('admin.operations.transactions.hourly.index') }}"
                                             method="post">
                                             @csrf
                                             <div class="row d-flex justify-content-center">

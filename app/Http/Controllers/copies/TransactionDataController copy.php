@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\copies;
 
 use App\Models\TransactionsData;
 use Illuminate\Http\Request;
@@ -20,30 +20,31 @@ class TransactionDataController extends Controller
     {
         if (FacadesRequest::isMethod('get')) {
             return view('admin.upload_data.transactions.index');
+        } elseif (FacadesRequest::isMethod('post')) {
+            $this->filter($request);
+        } else {
         }
     }
-    public function filter(Request $request)
+    public function filter($request)
     {
-        if (FacadesRequest::isMethod('post')) {
-            $date_from = '';
-            $date_to = '';
-            if (!empty($request->date_from) && empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $transactions = TransactionsData::where('transaction_date', $date_from)->get();
-                return
-                    view('admin.upload_data.transactions.index', ['transactions' => $transactions]);
-            } elseif (!empty($request->date_from) && !empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $date_to = date('n/j/Y', strtotime($request->date_to));
-                $transactions = TransactionsData::whereBetween('transaction_date', [$date_from, $date_to])->get();
-                return
-                    view('admin.upload_data.transactions.index', ['transactions' => $transactions]);
+        $date_from = '';
+        $date_to = '';
+        if (!empty($request->date_from) && empty($request->date_to)) {
+            $date_from = date('d/m/Y', strtotime($request->date_from));
+            $transactions = TransactionsData::where('transaction_date', $date_from)->get();
+            return
+                view('admin.upload_data.transactions.index', ['transactions' => $transactions]);
+        } elseif (!empty($request->date_from) && !empty($request->date_to)) {
+            $date_from = date('d/m/Y', strtotime($request->date_from));
+            $date_to = date('n/j/Y', strtotime($request->date_to));
+            $transactions = TransactionsData::whereBetween('transaction_date', [$date_from, $date_to])->get();
+            return
+                view('admin.upload_data.transactions.index', ['transactions' => $transactions]);
+        } else {
+            if (empty($request->date_from) && !empty($request->date_to)) {
+                return redirect()->back()->with('failed', "From Date Mandatory");
             } else {
-                if (empty($request->date_from) && !empty($request->date_to)) {
-                    return redirect()->back()->with('failed', "From Date Mandatory");
-                } else {
-                    return redirect()->back()->with('failed', "Dates Fields Required");
-                }
+                return redirect()->back()->with('failed', "Dates Fields Required");
             }
         }
     }

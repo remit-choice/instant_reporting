@@ -204,34 +204,61 @@
                         $(this).val(this.checked ? 1 : 0);
                     }
                 });
-            });
-            $(document).on('change', '#selectall', function() {
-                if ($(this).prop('checked')) {
-                    $('.check').prop('checked', true)
-                    $('input:checkbox').attr('checked', true);
-                    $('.check').val(this.checked ? 1 : 0);
-                } else {
-                    $('.check').prop('checked', false);
-                    $('input:checkbox').attr('checked', false);
-                    $('.check').val(this.checked ? 1 : 0);
-                }
-            });
-            $(document).on('change', '.row_check', function() {
+                $('#selectall').change(function() {
+                    if ($(this).prop('checked')) {
+                        // $('.check').prop('checked', true);
+                        $('.check').attr('checked', true);
+                        $('.check').val(this.checked ? 1 : 0);
+                    } else {
+                        // $('.check').prop('checked', false);
+                        $('.check').attr('checked', false);
+                        $('.check').val(this.checked ? 1 : 0);
+                    }
+                });
+                $('.row_check').change(function() {
                 var _this = $(this).parents('tr');
                  if ($(this).is(':checked')) {
                     $(this).attr("checked", true)
                     $(this).val(this.checked ? 1 : 0);
-                    $(_this.find('.row_child_check')).prop('checked', true);
+                    // $(_this.find('.row_child_check')).prop('checked', true);
                     $(_this.find('.row_child_check')).attr('checked', true);
                     $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
                 } else {
                     $(this).attr('checked', false);
                     $(this).val(this.checked ? 1 : 0);
-                    $(_this.find('.row_child_check')).prop('checked', false);
+                    // $(_this.find('.row_child_check')).prop('checked', false);
                     $(_this.find('.row_child_check')).attr('checked', false);
                     $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
             }
             });
+            });
+            // $(document).on('change', '#selectall', function() {
+            //     if ($(this).prop('checked')) {
+            //         $('.check').prop('checked', true)
+            //         $('input:checkbox').attr('checked', true);
+            //         $('.check').val(this.checked ? 1 : 0);
+            //     } else {
+            //         $('.check').prop('checked', false);
+            //         $('input:checkbox').attr('checked', false);
+            //         $('.check').val(this.checked ? 1 : 0);
+            //     }
+            // });
+            // $(document).on('change', '.row_check', function() {
+            //     var _this = $(this).parents('tr');
+            //      if ($(this).is(':checked')) {
+            //         $(this).attr("checked", true)
+            //         $(this).val(this.checked ? 1 : 0);
+            //         $(_this.find('.row_child_check')).prop('checked', true);
+            //         $(_this.find('.row_child_check')).attr('checked', true);
+            //         $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
+            //     } else {
+            //         $(this).attr('checked', false);
+            //         $(this).val(this.checked ? 1 : 0);
+            //         $(_this.find('.row_child_check')).prop('checked', false);
+            //         $(_this.find('.row_child_check')).attr('checked', false);
+            //         $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
+            // }
+            // });
     </script>
     @endsection
 </body>

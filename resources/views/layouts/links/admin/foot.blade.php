@@ -19,8 +19,8 @@
     <!-- jQuery Knob Chart -->
     <script src="{{ asset('assets/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
     <!-- daterangepicker -->
-    {{-- <script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
-    <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
+    <script src="{{ asset('assets/plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('assets/plugins/daterangepicker/daterangepicker.js') }}"></script> 
     <!-- Tempusdominus Bootstrap 4 -->
     <script src="{{ asset('assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js') }}"></script>
     <!-- Summernote -->
@@ -32,4 +32,4 @@
     <!-- AdminLTE for demo purposes -->
     {{-- <script src="{{ asset('assets/dist/js/demo.js') }}"></script> --}}
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-    <script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script>
+    {{-- <script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script> --}}

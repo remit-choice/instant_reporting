@@ -96,7 +96,7 @@
                                         <h3 class="card-title col-lg-6 col-md-6 col-sm-6 col-xs-6">Transactions List</h3>
                                     </div>
                                     <div class="card-header container-fluid">
-                                        <form action="{{ route('admin.operations.transactions.customers') }}"
+                                        <form action="{{ route('admin.operations.transactions.customers.index') }}"
                                             method="post">
                                             {{ csrf_field() }}
                                             <div class="row d-flex justify-content-center">
@@ -194,8 +194,8 @@
                                                             $total_count_of_tr_no_date =0;
                                                         @endphp
                                                         @foreach ($customers as $customer_reg_date => $customer)
-                                                                <tr data-widget="expandable-table" aria-expanded="false" role='button' class="bg-light">
-                                                                    <td><i class="expandable-table-caret fas fa-caret-right fa-fw"></i>{{$count++}}</td>
+                                                                <tr <?php if($customer->transacting_count !=0 || $customer->non_transacting_count !=0){ ?> data-widget="expandable-table" aria-expanded="false" role='button' class="bg-light btn-click" <?php }?> >
+                                                                    <td><?php if($customer->transacting_count !=0 || $customer->non_transacting_count !=0){ ?> <i class="expandable-table-caret fas fa-caret-right fa-fw"></i><?php }else{ ?><i class="expandable-table-caret fas fa-caret-right fa-fw invisible"></i><?php } ?>{{$count++}}</td>
                                                                     <td>{{  $customer_reg_date }}</td>                                                                        
                                                                     <td>{{ $customer->transacting_count }}</td>
                                                                     <td>{{  $customer->non_transacting_count }}</td>
@@ -208,31 +208,24 @@
                                                                         $total_count_of_tr_no_date += $customer->transacting_count + $customer->non_transacting_count + $customer->no_attempt_count;
                                                                     @endphp
                                                                 </tr>
-                                                                @php
-                                                                    $counts1 = 1;
-                                                                @endphp
                                                                 @if (!empty($customer->data))
-                                                                    @php
-                                                                        $counts = 1;
-                                                                        $array = [];
-                                                                    @endphp
                                                                     <tr class="expandable-body">
                                                                         <td colspan="6">
-                                                                            <table class="table table-hover">
-                                                                                <thead>
+                                                                                <table class="w-100 border-bottom">
+                                                                                    <thead>
                                                                                         <tr>
                                                                                             <th>#</th>
                                                                                             <th>Beneficiary Country</th>
                                                                                             <th>Transacting</th>
                                                                                             <th>Non Transacting</th>
-                                                                                            {{-- <th>No Attempt Count</th> --}}
                                                                                         </tr>
-                                                                                </thead>
-                                                                                <tbody>
-                                                                                
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                        @php
+                                                                                            $counts = 1;
+                                                                                        @endphp
                                                                                         @foreach ($customer->data as $customer_country_key => $inner_country)
                                                                                             @php
-                                                                                                    // dd($customer->data);
                                                                                                 $transacting_count = 0;
                                                                                                 $non_transacting_count = 0;
                                                                                                 $no_attempt_count = 0; 
@@ -244,18 +237,19 @@
                                                                                                         $non_transacting_count += $transaction->non_transacting_count;
                                                                                                     @endphp
                                                                                             @endforeach
-                                                                                            <tr data-widget="expandable-table" aria-expanded="false">
-                                                                                                <td role='button'>{{ $counts++ }}</td>
+                                                                                            <tr>
+                                                                                                <td>{{ $counts++ }}</td>
                                                                                                 <td>{{ $customer_country_key }}</td>
                                                                                                 <td>{{ $transacting_count }}</td>
                                                                                                 <td>{{ $non_transacting_count }}</td>
                                                                                             </tr>   
                                                                                         @endforeach
-                                                                                </tbody>
-                                                                            </table>
+                                                                                    </tbody>
+                                                                                </table>
+                                                                        
                                                                         </td>
                                                                     </tr>
-                                                                @endif
+                                                             @endif
                                                         @endforeach
                                                         <tr>
                                                             <td class="no-sort"><Strong>Total</Strong></td>
@@ -265,9 +259,6 @@
                                                             <td class="text-capitalize">{{$total_no_attempt_count}}</td>
                                                             <td class="text-capitalize">{{$total_count_of_tr_no_date}}</td>
                                                         </tr>
-                                                        @php
-                                                            // dd($customers->toArray());
-                                                        @endphp
                                                 @endif
                                             </tbody>
                                         </table>
