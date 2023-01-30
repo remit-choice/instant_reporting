@@ -20,11 +20,10 @@ use App\Http\Controllers\OnlineCustomersController;
 use App\Http\Controllers\operations\CustomerTransactionsController;
 use App\Http\Controllers\operations\TransactionsController as OperationsTransactionsController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RolesController;
 use App\Http\Controllers\TransactionDataController;
 use App\Http\Controllers\UserController;
-use App\Models\BuyerPaymentMethod;
-use App\Models\PaymentMethod;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -58,6 +57,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/forget', [ForgotPasswordController::class, 'user_forget_password']);
             Route::post('/reset', [ResetPasswordController::class, 'user_reset_password']);
         });
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::get('/', [ProfileController::class, 'index'])->name('index');
+        });
         Route::prefix('dashboard')->name('dashboard.')->group(function () {
             Route::get('/', [DashboardController::class, 'index'])->name('index');
         });
@@ -83,6 +85,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::post('/create', [BuyerPaymentMethodController::class, 'create'])->name('create');
                 Route::post('/update', [BuyerPaymentMethodController::class, 'update'])->name('update');
                 Route::post('/delete', [BuyerPaymentMethodController::class, 'delete'])->name('delete');
+            });
+            Route::prefix('/{id}/report')->name('report.')->group(function () {
+                Route::match(['get', 'post'], '/', [BuyerController::class, 'filter'])->name('index');
             });
         });
 

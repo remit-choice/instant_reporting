@@ -15,6 +15,7 @@ class CreateBuyersPaymentMethodsTable extends Migration
     {
         Schema::create('buyers_payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('country')->nullable();
             $table->unsignedBigInteger('b_id')->index('b_id')->nullable()->onDelete('cascade');
             $table->foreign('b_id')->references('id')->on('buyers');
             $table->unsignedBigInteger('c_id')->index('c_id')->nullable()->onDelete('cascade');

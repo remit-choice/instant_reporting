@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class BuyerPaymentMethod extends Model
 {
 
-    protected $fillable = ['id', 'b_id', 'c_id', 'p_m_id', 'rate', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'country', 'b_id', 'c_id', 'p_m_id', 'rate', 'status', 'created_at', 'updated_at'];
     protected $table = 'buyers_payment_methods';
     use HasFactory;
 

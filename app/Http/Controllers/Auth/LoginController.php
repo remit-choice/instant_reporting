@@ -68,6 +68,7 @@ class LoginController extends Controller
         $email = $user->email;
         $r_id = $user->r_id;
         $u_id = $user->id;
+        $designation = $user->designation;
         User::where('email', $email)
             ->update(
                 [
@@ -82,6 +83,7 @@ class LoginController extends Controller
         $request->session()->put('email',  $email);
         $request->session()->put('r_id',  $r_id);
         $request->session()->put('u_id',  $u_id);
+        $request->session()->put('designation',  $designation);
         $request->session()->put('session_time',  time());
         $request->session()->put('status',  $selectStatus->status);
     }

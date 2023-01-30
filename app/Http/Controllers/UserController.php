@@ -121,6 +121,7 @@ class UserController extends Controller
             $id = $request->id;
             $designation = $request->designation;
             $hash_password = Hash::make($password);
+            $status = $request->status;
 
             $users_count = User::where('email', $email)->count();
 
@@ -135,6 +136,7 @@ class UserController extends Controller
                         'r_id' => $r_id,
                         'designation' => $designation,
                         'password' => $hash_password,
+                        'status' => $status,
                     ]);
                 } else {
                     User::where('id', $id)->update([
@@ -143,6 +145,7 @@ class UserController extends Controller
                         'email' => $email,
                         'r_id' => $r_id,
                         'designation' => $designation,
+                        'status' => $status,
                     ]);
                 }
                 $users =  User::where('id', $id)->first();

@@ -58,8 +58,11 @@ class MigrateInOrder extends Command
             // '2022_10_21_121101_create_currencies_rates_table.php',
             // '2022_10_13_122848_create_transactions_data_table.php',
             // '2022_10_20_130918_create_online_customers_table.php',
+            // '2023_01_26_083349_create_buyers_table.php',
             // '2023_01_26_091156_create_payment_methods_table.php',
-            '2023_01_26_083754_create_buyers_payment_methods_table.php',
+            // '2023_01_26_083754_create_buyers_payment_methods_table.php',
+            // '2023_01_27_112059_add_type_to_buyers_table.php',
+            '2023_01_28_085921_add_country_to_buyers_payment_methods_table.php',
         ];
 
         foreach ($migrations as $migration) {

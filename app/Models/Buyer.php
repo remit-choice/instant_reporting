@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Buyer extends Model
 {
-    protected $fillable = ['id', 'name', 'status', 'created_at', 'updated_at'];
+    protected $fillable = ['id', 'name', 'type', 'status', 'created_at', 'updated_at'];
     protected $table = 'buyers';
     use HasFactory;
 

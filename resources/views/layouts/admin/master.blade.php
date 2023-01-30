@@ -133,7 +133,7 @@
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                    <a href="http://"><button type="submit" class="dropdown-item"><i class="fas fa-user mr-2"></i> Profile </button></a>
+                    <a href="{{route('admin.profile.index')}}"><button type="submit" class="dropdown-item"><i class="fas fa-user mr-2"></i> Profile </button></a>
                     <form action="{{route('logout')}}" method="post">
                         @csrf
                         <button type="submit" class="dropdown-item">

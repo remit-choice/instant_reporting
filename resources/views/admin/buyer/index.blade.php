@@ -90,6 +90,16 @@
                                                             </span>
                                                         </div>
                                                         <div class="form-group">
+                                                            <label for="create_buyer_type" class="text-capitalize">Dealing Type</label>
+                                                            <select name="create_buyer_type" id="create_buyer_type" class="form-control" required>
+                                                                <option selected hidden disabled>SELECT</option>
+                                                                <option value="1">Percentage</option>
+                                                                <option value="2">Fixed Amount</option>
+                                                            </select>
+                                                            <span class="invalid-feedback" id="create_buyer_type_error">
+                                                            </span>
+                                                        </div>
+                                                        <div class="form-group">
                                                             <label for="create_buyer_status" class="text-capitalize">
                                                                 <div class="input-group">
                                                                     <input type="checkbox"
@@ -138,7 +148,8 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-capitalize">#</th>
-                                                <th class="text-capitalize">Buyer name</th>
+                                                <th class="text-capitalize">Name</th>
+                                                <th class="text-capitalize">Dealing Type</th>
                                                 <th class="text-capitalize">Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -154,6 +165,15 @@
                                                 </td>
                                                 <td>{{ $buyer->name }}<input type="hidden" name="db_buyer_name"
                                                         class="db_buyer_name" value="{{ $buyer->name }}"></td>
+                                                <td>
+                                                    @if ($buyer->type==1)
+                                                        <span class="bg-secondary badge"><i class="fa fa-percent" aria-hidden="true"></i> Percentage</span>
+                                                    @elseif ($buyer->type==2)
+                                                        <span class="bg-secondary badge"><i class="fas fa-sort-amount-down" aria-hidden="true"></i> Fixed Amount</span>
+                                                    @endif
+                                                    <input type="hidden" name="db_buyer_type"
+                                                        class="db_buyer_type" value="{{ $buyer->type }}">
+                                                </td>
                                                 <td>
                                                     @if ($buyer->status==1)
                                                         <span class="bg-success badge">Active</span>
@@ -182,6 +202,10 @@
                                                                 Add Payment Method</a>
                                                             </li>
                                                             <li>
+                                                                <a class="dropdown-item" type="button" href="{{ route('admin.buyer.report.index', ['id' => $buyer->id]) }}">
+                                                                View Report</a>
+                                                            </li>
+                                                            <li>
                                                                 <form action="{{ route('admin.buyer.delete') }}"
                                                                     method="POST">
                                                                     @csrf
@@ -202,7 +226,8 @@
                                         <tfoot>
                                             <tr>
                                                 <th class="text-capitalize">#</th>
-                                                <th class="text-capitalize">Buyer name</th>
+                                                <th class="text-capitalize">Name</th>
+                                                <th class="text-capitalize">Dealing Type</th>
                                                 <th class="text-capitalize">Status</th>
                                                 <th>Action</th>
                                             </tr>
@@ -244,6 +269,15 @@
                             </span>
                         </div>
                         <div class="form-group">
+                            <label for="buyer_name" class="text-capitalize">Dealing Type</label>
+                            <select name="edit_buyer_type" id="edit_buyer_type" class="form-control" required>
+                                <option value="1">Percentage</option>
+                                <option value="2">Fixed Amount</option>
+                            </select>
+                            <span class="invalid-feedback" id="edit_buyer_type_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
                             <label for="edit_buyer_status" class="text-capitalize">
                                 <div class="input-group">
                                     <input type="checkbox"
@@ -272,6 +306,7 @@
             var _this = $(this).parents('tr');
             $('#edit_buyer_id').val(_this.find('.db_buyer_id').val());
             $('#edit_buyer_name').val(_this.find('.db_buyer_name').val());
+            $('#edit_buyer_type').val(_this.find('.db_buyer_type').val());
             $('#edit_buyer_status').val(_this.find('.db_buyer_status').val());
             var status = $('#edit_buyer_status').val();
             if (status == 1) {
@@ -290,24 +325,28 @@
             $('.create').click(function(e) {
                     e.preventDefault();
                     var name = $('#create_buyer_name').val();
+                    var type = $('#create_buyer_type').val();
+                    
                     if ($('#create_buyer_status').prop('checked')) {
                         var status = 1;
                     } else {
                         var status = 0;
                     }
                     console.log(name);
+                    console.log(type);
                     console.log(status);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    if (name != '') {
+                    if (name != '' && type != '') {
                         $.ajax({
                             type: "post",
                             url: "{{ route('admin.buyer.create') }}",
                             data: {
                                 "name": name,
+                                "type": type,
                                 "status": status,
                             },
                             success: function(response) {
@@ -324,6 +363,7 @@
                             }
                         });
                     } else {
+                        if(name = ''){
                         $('#create_buyer_name_error').show();
                         $('#create_buyer_name_error').html(
                             "Required!");
@@ -331,6 +371,15 @@
                             $('#create_buyer_name_error').slideUp('slow');
                             $('#create_buyer_name_error').empty();
                         }, 4000);
+                    }else if(type = ''){
+                        $('#create_buyer_type_error').show();
+                        $('#create_buyer_type_error').html(
+                            "Required!");
+                        window.setInterval(function() {
+                            $('#create_buyer_type_error').slideUp('slow');
+                            $('#create_buyer_type_error').empty();
+                        }, 4000);
+                    }else{}
                     }
                 });
 
@@ -338,6 +387,7 @@
                 e.preventDefault();
                 var id = $('#edit_buyer_id').val();
                 var name = $('#edit_buyer_name').val();
+                var type = $('#edit_buyer_type').val();
                 var status = $('#edit_buyer_status').val();
                 if ($('#edit_buyer_status').prop('checked')) {
                     var status = 1;
@@ -346,13 +396,14 @@
                 }
                 console.log(id);
                 console.log(name);
+                console.log(type);
                 console.log(status);
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-                if (name != '') {
+                if (name != '' && type != '') {
                 Swal.fire({
                     title: 'Are you sure?',
                     icon: 'warning',
@@ -368,6 +419,7 @@
                                 data: {
                                     "id": id,
                                     "name": name,
+                                    "type": type,
                                     "status": status,
                                 },
                                 success: function(response) {
@@ -386,6 +438,7 @@
                         }
                     });
                 }else {
+                    if (name != '') {
                     $('#edit_buyer_name_error').show();
                     $('#edit_buyer_name_error').html(
                         "Required!");
@@ -393,6 +446,15 @@
                         $('#edit_buyer_name_error').slideUp('slow');
                         $('#edit_buyer_name_error').empty();
                     }, 4000);
+                }else if (type != '') {}else{
+                    $('#edit_buyer_type_error').show();
+                    $('#edit_buyer_type_error').html(
+                        "Required!");
+                    window.setInterval(function() {
+                        $('#edit_buyer_type_error').slideUp('slow');
+                        $('#edit_buyer_type_error').empty();
+                    }, 4000);
+                }
                 }
             });
             $('.delete').click(function(e) {

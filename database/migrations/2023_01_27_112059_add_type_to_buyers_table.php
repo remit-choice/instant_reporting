@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateBuyersTable extends Migration
+class AddTypeToBuyersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateBuyersTable extends Migration
      */
     public function up()
     {
-        Schema::create('buyers', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name')->nullable();
-            $table->integer('type')->nullable();
-            $table->integer('status')->nullable();
-            $table->timestamps();
+        Schema::table('buyers', function (Blueprint $table) {
+            $table->integer('type')->after('name');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateBuyersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('buyers');
+        Schema::table('buyers', function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
     }
 }

@@ -39,17 +39,21 @@ class BuyerPaymentMethodController extends Controller
         $request->validate(
             [
                 'payment_methods' => 'required|array|max:255',
+                'countries' => 'required|array',
+                'countries.*' => 'required|string',
                 'currencies' => 'required|array|max:255',
-                'rates' => 'required|array|max:255',
+                'rates' => 'required|max:255',
             ],
             [
                 'payment_methods.required' => "*Payment Method is required",
+                'countries.required' => "*Country is required",
                 'currencies.required' => "*Currency is required",
                 'rates.required' => "*Rate is required",
             ]
         );
         $buyer_id = $request->buyer_id;
         $payment_methods = $request->payment_methods;
+        $countries = $request->countries;
         $currencies = $request->currencies;
         $rates = $request->rates;
         if (isset($request->status)) {
@@ -64,6 +68,7 @@ class BuyerPaymentMethodController extends Controller
             BuyerPaymentMethod::insert([
                 'b_id' => $buyer_id,
                 'p_m_id' => $payment_methods[$i],
+                'country' => $countries[$i],
                 'c_id' => $currencies[$i],
                 'rate' => $rates[$i],
                 'status' => $status
@@ -74,26 +79,41 @@ class BuyerPaymentMethodController extends Controller
     {
         $request->validate(
             [
-                'name' => 'required|string|max:255',
-                'status' => 'required|string|max:255',
+                'payment_methods' => 'required|integer|max:255',
+                'countries' => 'required|string|max:255',
+                'currencies' => 'required|integer|max:255',
+                'rates' => 'required|max:255',
             ],
             [
-                'name.required' => "*Name is required",
-                'status.required' => "*Status is required",
+                'payment_methods.required' => "*Payment Method is required",
+                'countries.required' => "*Country is required",
+                'currencies.required' => "*Currency is required",
+                'rates.required' => "*Rate is required",
             ]
         );
         $id = $request->id;
-        $name = $request->name;
-        $status = $request->status;
-
-        Buyer::where('id', $id)->update([
-            'name' => $name,
+        $buyer_id = $request->buyer_id;
+        $payment_methods = $request->payment_methods;
+        $countries = $request->countries;
+        $currencies = $request->currencies;
+        $rates = $request->rates;
+        if (isset($request->status)) {
+            $status = 1;
+        } else {
+            $status = 0;
+        }
+        BuyerPaymentMethod::where('id', $id)->update([
+            'b_id' => $buyer_id,
+            'p_m_id' => $payment_methods,
+            'country' => $countries,
+            'c_id' => $currencies,
+            'rate' => $rates,
             'status' => $status
         ]);
     }
     public function delete(Request $request)
     {
         $id = $request->id;
-        Buyer::where('id', $id)->delete();
+        BuyerPaymentMethod::where('id', $id)->delete();
     }
 }
