@@ -41,13 +41,16 @@
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">{{ $buyer_name->name }} Payment Methods</h1>
+                        <div class="col-sm-4">
+                            <h1 class="m-0">Payment Methods</h1>
                         </div><!-- /.col -->
-                        <div class="col-sm-6">
+                         <div class="col-sm-4">
+                            <h1 class="m-0 text-center">{{ $buyer_name->name }}</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-4">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">{{ $buyer_name->name }} Payment Methods</li>
+                                <li class="breadcrumb-item active">Payment Methods</li>
                             </ol>
                         </div><!-- /.col -->
                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -86,8 +89,20 @@
                                                                     <input type="hidden" name="buyer_id" value="{{ $id }}">
                                                                     <select class="form-control" name="payment_methods[]" required>
                                                                         <option selected hidden disabled>SELECT</option>
+                                                                        @php
+                                                                            $p_m_id = [];
+                                                                        @endphp
                                                                         @foreach ($payment_methods as $payment_method)
-                                                                            <option value="{{ $payment_method->id }}">{{ $payment_method->name }}</option>
+                                                                            @foreach ($buyers as $buyer)
+                                                                                @foreach ($buyer->buyer_payment_methods as $buyer_payment_method)
+                                                                                    @php
+                                                                                        $p_m_id[] = $buyer_payment_method->p_m_id;
+                                                                                    @endphp
+                                                                                @endforeach
+                                                                            @endforeach
+                                                                            @if (!in_array($payment_method->id,$p_m_id))                                                                                        
+                                                                                <option value="{{ $payment_method->id }}">{{ $payment_method->name }}</option>     
+                                                                            @endif
                                                                         @endforeach
                                                                     </select>
                                                                     <span class="invalid-feedback" id="create_buyer_name_error">
@@ -123,15 +138,6 @@
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="create_buyer_status" class="text-capitalize">
-                                                                <div class="input-group">
-                                                                    <input type="checkbox"
-                                                                        name="create_buyer_status me-2"
-                                                                        id="create_buyer_status" value="0">Status
-                                                                </div>
-                                                            </label>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer justify-content-between">
@@ -193,7 +199,7 @@
                                                                 <input type="hidden" name="db_buyer_payment_method_id"
                                                                 class="db_buyer_payment_method_id" value="{{ $buyer_payment_method->id }}">
                                                         </td>
-                                                        <td>{{ $buyer_payment_method['payment_methods']->name }}<input type="hidden" name="" class="db_payment_method_id" value="{{ $buyer_payment_method['payment_methods']->id }}"></td>
+                                                        <td>{{ $buyer_payment_method['payment_methods']->name }}<input type="hidden" name="" class="db_payment_method_id" value="{{ $buyer_payment_method['payment_methods']->id }}"><input type="hidden" name="" class="db_payment_method_name" value="{{ $buyer_payment_method['payment_methods']->name }}"></td>
                                                         <td>{{ $buyer_payment_method->country }}<input type="hidden" name="" class="db_payment_method_country" value="{{ $buyer_payment_method->country }}"></td>
                                                         <td>{{ $buyer_payment_method['currencies']->iso3 }}<input type="hidden" name="" class="db_c_id" value="{{ $buyer_payment_method['currencies']->id }}"></td>
                                                         <td>{{ $buyer_payment_method->rate }}<input type="hidden" name="" class="db_buyer_payment_method_rate" value="{{ $buyer_payment_method->rate }}"></td>
@@ -274,12 +280,14 @@
                                 <label for="buyer_name" class="text-capitalize">Name</label>
                                 <input type="hidden" name="buyer_id" value="{{ $id }}">
                                 <input type="hidden" name="id" id="edit_buyer_payment_method_id" value="">
-                                <select class="form-control" name="payment_methods" id="edit_payment_method_id" required>
+                                {{-- <select class="form-control" name="payment_methods" id="edit_payment_method_id" required>
                                     <option selected hidden disabled>SELECT</option>
                                     @foreach ($payment_methods as $payment_method)
                                         <option value="{{ $payment_method->id }}">{{ $payment_method->name }}</option>
                                     @endforeach
-                                </select>
+                                </select> --}}
+                                <input type="text" id="edit_payment_method_name" class="form-control" readonly>
+                                <input type="hidden" name="payment_methods" id="edit_payment_method_id" class="form-control">
                                 <span class="invalid-feedback" id="edit_buyer_name_error">
                                 </span>
                             </div>
@@ -313,15 +321,6 @@
                                 </span>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="edit_buyer_status" class="text-capitalize">
-                                <div class="input-group">
-                                    <input type="checkbox"
-                                        name="edit_buyer_status me-2"
-                                        id="edit_buyer_status" value="0">Status
-                                </div>
-                            </label>
-                        </div>
                     </div>
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-default"
@@ -347,16 +346,10 @@
             $('#edit_buyer_id').val(_this.find('.db_buyer_id').val());
             $('#edit_buyer_payment_method_id').val(_this.find('.db_buyer_payment_method_id').val());
             $('#edit_payment_method_id').val(_this.find('.db_payment_method_id').val());
+            $('#edit_payment_method_name').val(_this.find('.db_payment_method_name').val());
             $('#edit_payment_method_countries').val(_this.find('.db_payment_method_country').val());
             $('#edit_buyer_payment_method_currency').val(_this.find('.db_c_id').val());
             $('#edit_buyer_payment_method_rate').val(_this.find('.db_buyer_payment_method_rate').val());
-            $('#edit_buyer_status').val(_this.find('.db_buyer_status').val());
-            var status = $('#edit_buyer_status').val();
-            if (status == 1) {
-                $('#edit_buyer_status').prop('checked', true);
-            } else {
-                $('#edit_buyer_status').prop('checked', false);
-            }
         });
         $('.append_button').on('click', function() {
             var _this = $(this).parents('label').parents('div').parents('div');
@@ -401,6 +394,7 @@
 
             $('#buyer_pay_method_update_form').submit(function(e) {
                 e.preventDefault();
+                $('#edit_buyer_payment_method_id').val();
                 $.ajaxSetup({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -420,6 +414,7 @@
                                 url: $(this).attr('action'),
                                 data: $(this).serialize(),
                                 success: function(response) {
+                                    $('#edit_payment_method_id').prop('disabled',true);
                                     Swal.fire(
                                     'Done!',
                                     'Updated Successfully!',

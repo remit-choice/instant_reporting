@@ -184,6 +184,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 
+//Live Search
+
+
 //For Server Side Start
 Route::get('/cache', function () {
     Artisan::call('cache:clear');

@@ -84,21 +84,32 @@ class BuyerController extends Controller
         $id = $request->id;
         $buyers =  Buyer::where('id', $id)->get();
         $buyer_name =  Buyer::where('id', $id)->select('name')->first();
+        $buyers_rel = function ($query) {
+            $query->where('status', 1);
+        };
+        $buyer_charges =  Buyer::whereHas('buyer_payment_methods', $buyers_rel)->with('buyer_payment_methods', $buyers_rel)->where('id', $id)->get();
+        // dd($buyer_name->name);
+        // dd($buyer_charges->toArray());
         if (FacadesRequest::isMethod('get')) {
             $transactions = '';
             return view('admin.buyer.report.index', ['buyer_name' => $buyer_name, 'id' => $id, 'transactions' => $transactions]);
         } elseif (FacadesRequest::isMethod('post')) {
             $date_from = date('d/m/Y', strtotime($request->date_from));
             $date_to = date('d/m/Y', strtotime($request->date_to));
-            $vol_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(payin_amt-admin_charges),(payin_amt/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)-admin_charges))) AS vol_in_gbp');
             if (!empty($request->date_from) && empty($request->date_to)) {
-                $transactions = TransactionsData::select('paid_date', 'customer_country', $vol_in_gbp, 'bank_name', 'payout_ccy', 'amount', 'payment_method')->where(['paid_date', '=', $date_from, 'bank_name', $buyer_name->name])->get();
-            } elseif (!empty($request->date_from) && empty($request->date_to)) {
-                $transactions = TransactionsData::select('paid_date', 'customer_country', $vol_in_gbp, 'bank_name', 'payout_ccy', 'amount', 'payment_method')->where(['paid_date', '=', $date_from, 'bank_name', $buyer_name->name])->get();
+                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'bank_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where([['paid_date', $date_from], ['bank_name', $buyer_name->name]])->get();
+                // dd($transactions->toArray());
+            } elseif (empty($request->date_from) && !empty($request->date_to)) {
+                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'bank_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where([['paid_date', $date_to], ['bank_name', $buyer_name->name]])->get();
+                // dd($transactions->toArray());
             } elseif (!empty($request->date_from) && !empty($request->date_to)) {
-                $transactions = TransactionsData::select('paid_date', 'customer_country', $vol_in_gbp, 'bank_name', 'payout_ccy', 'amount', 'payment_method')->where('bank_name', $buyer_name->name)->whereBetween('paid_date', [$date_from, $date_to])->get();
+                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'bank_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where('bank_name', $buyer_name->name)->whereBetween('paid_date', [$date_from, $date_to])->get();
+                // dd($transactions->toArray());
+                // dd($transactions);
+            } else {
+                $transactions = '';
             }
-            return view('admin.buyer.report.index', ['buyer_name' => $buyer_name, 'id' => $id, 'transactions' => $transactions, 'buyers' => $buyers]);
+            return view('admin.buyer.report.index', ['buyer_name' => $buyer_name, 'id' => $id, 'transactions' => $transactions, 'buyers' => $buyers, 'buyer_charges' => $buyer_charges]);
         } else {
             $buyers =  Buyer::get();
             return view('admin.buyer.index', ['buyers' => $buyers]);

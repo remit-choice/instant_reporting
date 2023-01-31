@@ -40,13 +40,16 @@
             <div class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">{{ $buyer_name->name }} Buyer Report</h1>
+                        <div class="col-sm-4">
+                            <h1 class="m-0">Buyer Report</h1>
                         </div><!-- /.col -->
-                        <div class="col-sm-6">
+                         <div class="col-sm-4">
+                            <h1 class="m-0 text-center">{{ $buyer_name->name }}</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-4">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">{{ $buyer_name->name }} Buyer Report</li>
+                                <li class="breadcrumb-item active">Buyer Report</li>
                             </ol>
                         </div><!-- /.col -->
                     </div><!-- /.row -->
@@ -92,9 +95,9 @@
                                                             class="form-control" value="">
                                                     @endif
                                                 </div>
-                                                <div class="form-group col-lg-1 col-md-1 col-sm-3 col-xs-3 mt-4">
-                                                    <label></label>
-                                                    <button type="submit" name="filter" class="btn mt-2"
+                                                <div class="form-group col-lg-1 col-md-1 col-sm-3 col-xs-3">
+                                                    <label class="invisible">Filter</label>
+                                                    <button type="submit" name="filter" class="btn form-control"
                                                         style="background-color: #091E3E;color: white">Submit</button>
                                                 </div>
                                             </div>
@@ -116,6 +119,8 @@
                                                 <th class="text-capitalize">Payout CCY</th>
                                                 <th class="text-capitalize">Payout Amount</th>
                                                 <th class="text-capitalize">Payment Method</th>
+                                                <th class="text-capitalize">Payment Currency</th>
+                                                <th class="text-capitalize">Charges</th>
                                                 <th class="text-capitalize">Transact Count</th>
                                                 <th class="text-capitalize">Deal Type</th>
                                             </tr>
@@ -128,27 +133,36 @@
                                                 @php
                                                     $count_of_tr_no = 0;
                                                     $vol_in_gbp_show = 0;
+                                                    $charges_show = 0;
                                                     $amount = 0;
                                                 @endphp
                                                 @foreach ($transactions as $transaction)
                                                     @php
-                                                        $vol_in_gbp =0;
                                                         $rate = 0;
+                                                        // $vol_in_gbp = 0;
                                                         $rates = function ($query) {
                                                             $query->where('status', 1);
                                                         };
-                                                        $currencies_rates = App\Models\BuyerPaymentMethod::where('currency', $transaction->payin_ccy)
+                                                        $currencies_rates = App\Models\Currency::where('currency', $transaction->payin_ccy)
                                                             ->ordoesntHave('rates')
                                                             ->whereHas('rates', $rates)
                                                             ->with('rates', $rates)
                                                             ->get();
-                                                            //volume in gbp
+                                                        foreach ($currencies_rates as $currency_rate) {
+                                                            if (!empty($currency_rate->rates)) {
+                                                                foreach ($currency_rate->rates as $rate) {
+                                                                    $rate = $rate->rate;
+                                                                }
+                                                            } else {
+                                                                $rate = 0;
+                                                            }
+                                                        }
+                                                        //volume in gbp
                                                         if ($transaction->payin_ccy == 'GBP') {
                                                             $vol_in_gbp = $transaction->payin_amt - $transaction->admin_charges;
                                                         } elseif ($transaction->payin_ccy != 'GBP' && $rate != 0) {
                                                             $vol_in_gbp = $transaction->payin_amt / $rate - $transaction->admin_charges;
-                                                        } else {
-                                                        }
+                                                        }                                                       
                                                     @endphp
                                                 <tr>
                                                     <td>{{ $counter++ }}</td>
@@ -160,11 +174,29 @@
                                                         @php
                                                             $vol_in_gbp_show += $vol_in_gbp;
                                                         @endphp
-                                                    @endif</td>
+                                                        @endif
+                                                    </td>
                                                     <td>{{ $transaction->bank_name }}</td>
                                                     <td>{{ $transaction->payout_ccy }}</td>
                                                     <td>{{ $transaction->amount }}</td>
                                                     <td>{{ $transaction->payment_method }}</td>
+                                                    @foreach ($buyer_charges as $buyer_charge)
+                                                        @foreach ($buyer_charge->buyer_payment_methods as $buyer_payment_method)
+                                                            @php
+                                                                $payment_methods_name = $buyer_payment_method['payment_methods']->name;
+                                                                $currency = json_decode($buyer_payment_method->currencies);
+                                                            @endphp
+                                                            @if ($transaction->payment_method==$payment_methods_name)      
+                                                                <td>{{ $currency->iso3 }}</td>
+                                                                <td>
+                                                                    @php
+                                                                        $charges_show += $buyer_payment_method->rate;
+                                                                    @endphp                                                          
+                                                                    {{ $buyer_payment_method->rate }}
+                                                                </td>
+                                                            @endif
+                                                        @endforeach
+                                                    @endforeach
                                                     <td>1</td>
                                                     <td>
                                                         @foreach ($buyers as $buyer)
@@ -191,7 +223,10 @@
                                                     <td></td>
                                                     <td>{{ $amount }}</td>
                                                     <td></td>
+                                                    <td></td>
+                                                    <td>{{ $charges_show }}</td>
                                                     <td>{{ $count_of_tr_no }}</td>
+                                                    <td></td>
                                                 </tr>
                                             @endif
                                         </tbody>
@@ -205,6 +240,8 @@
                                                 <th class="text-capitalize">Payout CCY</th>
                                                 <th class="text-capitalize">Payout Amount</th>
                                                 <th class="text-capitalize">Payment Method</th>
+                                                <th class="text-capitalize">Payment Currency</th>
+                                                <th class="text-capitalize">Charges</th>
                                                 <th class="text-capitalize">Transact Count</th>
                                                 <th class="text-capitalize">Deal Type</th>
                                             </tr>
