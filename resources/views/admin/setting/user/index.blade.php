@@ -465,7 +465,7 @@
                                 <div class="input-group">
                                     <input type="checkbox"
                                         name="status me-2"
-                                        id="status" value="0">Status
+                                        id="status" value="">Status
                                 </div>
                             </label>
                         </div>
@@ -486,7 +486,7 @@
     @Include('layouts.links.datatable.foot')
     @Include('layouts.links.sweet_alert.foot')
     <script type="text/javascript">
-        $('#user_status').click(function() {
+        $('#status').click(function() {
             if ($(this).is(':checked')) {
                 $(this).attr("checked", true)
                 $(this).val(this.checked ? 1 : 0);
@@ -522,6 +522,7 @@
             $('#status').val(_this.find('.db_status').val());
             var status = $('#status').val();
             if (status == 1) {
+                $('#status').prop('checked', true);
                 $('#status').prop('checked', true);
             } else {
                 $('#status').prop('checked', false);
@@ -723,6 +724,7 @@
                                         "email": email,
                                         "password": password,
                                         "r_id": r_id,
+                                        "status": status,
                                     },
                                     success: function(response) {
                                         Swal.fire(

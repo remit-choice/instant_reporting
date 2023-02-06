@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class ProfileController extends Controller
 {
     public function __construct()
     {
@@ -13,12 +14,10 @@ class DashboardController extends Controller
             return $next($request);
         });
     }
-    public function admin_dashboard(Request $request)
+    public function index()
     {
-        if ($request->session()->has('full_name')) {
-            return view('admin.dashboard.index');
-        } else {
-            return redirect('/');
-        }
+        $users = User::get();
+        $roles = User::get();
+        return view('admin.setting.user.profile.index', ['users' => $users, 'roles' => $roles]);
     }
 }

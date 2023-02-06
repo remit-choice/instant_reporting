@@ -37,7 +37,7 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in</p>
-                <form action="{{ route('admin') }}" method="post">
+                <form action="{{ route('admin.login') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
                         <div class="input-group-append">

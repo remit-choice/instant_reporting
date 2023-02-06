@@ -24,7 +24,7 @@
         $.ajax({
           type: "POST",
           dataType: "json",
-          url: "{{ route('admin.modules_groups.edit') }}",
+          url: "{{ route('admin.module.group.edit') }}",
           data: {
             sort: sort,
           },

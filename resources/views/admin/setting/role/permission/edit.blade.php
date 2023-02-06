@@ -94,6 +94,7 @@
                         <table class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <thead id="head" class="checoboxes">
                                 <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Modules</th>
+                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">All</th>
                                 <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">View</th>
                                 <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Add</th>
                                 <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Edit</th>
@@ -181,28 +182,47 @@
                                                         <input type="hidden" name="r_id" id="R_id"
                                                             value="{{ $module->permissions['r_id'] }}">
                                                         <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
-                                                            <input type="checkbox" class="check row_check">
+                                                        <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="0">
                                                         {{ $module->name }}
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" name="view[{{ $counter }}]" class="check row_child_check"
-                                                            value="{{ $module->permissions['view'] }}"
-                                                            @if($module->permissions['view'] == 1) {{ 'checked' }} @endif>
+                                                        <input type="checkbox" class="check row_check" value="0">
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" name="add[{{ $counter }}]" class="check row_child_check"
-                                                            value="{{ $module->permissions['add'] }}"
-                                                            @if($module->permissions['add'] == 1) {{ 'checked' }} @endif>
+                                                        @if ($module->permissions['view']==null && $module->permissions['view']!="0")
+                                                            
+                                                        @else
+                                                            <input type="checkbox" name="view[{{ $counter }}]" class="check row_child_check"
+                                                                value="{{ $module->permissions['view'] }}"
+                                                                @if($module->permissions['view'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
+                                                    </td>
+                                                    <td> 
+                                                        @if ($module->permissions['add']==null && $module->permissions['add']!="0")
+                                                            
+                                                        @else
+                                                            <input type="checkbox" name="add[{{ $counter }}]" class="check row_child_check"
+                                                                value="{{ $module->permissions['add'] }}"
+                                                                @if($module->permissions['add'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" name="edit[{{ $counter }}]" class="check row_child_check"
-                                                            value="{{ $module->permissions['edit'] }}"
-                                                            @if($module->permissions['edit'] == 1) {{ 'checked' }} @endif>
+                                                        @if ($module->permissions['edit']==null && $module->permissions['edit']!="0")
+                                                            
+                                                        @else
+                                                            <input type="checkbox" name="edit[{{ $counter }}]" class="check row_child_check"
+                                                                value="{{ $module->permissions['edit'] }}"
+                                                                @if($module->permissions['edit'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
                                                     </td>
                                                     <td>
-                                                        <input type="checkbox" name="delete[{{ $counter }}]" class="check row_child_check"
-                                                            value="{{ $module->permissions['delete'] }}"
-                                                            @if($module->permissions['delete'] == 1) {{ 'checked' }} @endif>
+                                                        @if ($module->permissions['delete']==null && $module->permissions['delete']!="0")
+                                                            
+                                                        @else
+                                                            <input type="checkbox" name="delete[{{ $counter }}]" class="check row_child_check"
+                                                                value="{{ $module->permissions['delete'] }}"
+                                                                @if($module->permissions['delete'] == 1) {{ 'checked' }} @endif>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @php
@@ -301,34 +321,61 @@
                         $(this).val(this.checked ? 1 : 0);
                     }
                 });
-            });
-            $(document).on('change', '#selectall', function() {
-                if ($(this).prop('checked')) {
-                    $('.check').prop('checked', true)
-                    $('input:checkbox').attr('checked', true);
-                    $('.check').val(this.checked ? 1 : 0);
-                } else {
-                    $('.check').prop('checked', false);
-                    $('input:checkbox').attr('checked', false);
-                    $('.check').val(this.checked ? 1 : 0);
-                }
-            });
-            $(document).on('change', '.row_check', function() {
+                $('#selectall').change(function() {
+                    if ($(this).prop('checked')) {
+                        // $('.check').prop('checked', true);
+                        $('.check').attr('checked', true);
+                        $('.check').val(this.checked ? 1 : 0);
+                    } else {
+                        // $('.check').prop('checked', false);
+                        $('.check').attr('checked', false);
+                        $('.check').val(this.checked ? 1 : 0);
+                    }
+                });
+                $('.row_check').change(function() {
                 var _this = $(this).parents('tr');
                  if ($(this).is(':checked')) {
                     $(this).attr("checked", true)
                     $(this).val(this.checked ? 1 : 0);
-                    $(_this.find('.row_child_check')).prop('checked', true);
+                    // $(_this.find('.row_child_check')).prop('checked', true);
                     $(_this.find('.row_child_check')).attr('checked', true);
                     $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
                 } else {
                     $(this).attr('checked', false);
                     $(this).val(this.checked ? 1 : 0);
-                    $(_this.find('.row_child_check')).prop('checked', false);
+                    // $(_this.find('.row_child_check')).prop('checked', false);
                     $(_this.find('.row_child_check')).attr('checked', false);
                     $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
             }
             });
+            });
+            // $(document).on('change', '#selectall', function() {
+            //     if ($(this).prop('checked')) {
+            //         $('.check').prop('checked', true)
+            //         $('input:checkbox').attr('checked', true);
+            //         $('.check').val(this.checked ? 1 : 0);
+            //     } else {
+            //         $('.check').prop('checked', false);
+            //         $('input:checkbox').attr('checked', false);
+            //         $('.check').val(this.checked ? 1 : 0);
+            //     }
+            // });
+            // $(document).on('change', '.row_check', function() {
+            //     var _this = $(this).parents('tr');
+            //      if ($(this).is(':checked')) {
+            //         $(this).attr("checked", true)
+            //         $(this).val(this.checked ? 1 : 0);
+            //         $(_this.find('.row_child_check')).prop('checked', true);
+            //         $(_this.find('.row_child_check')).attr('checked', true);
+            //         $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
+            //     } else {
+            //         $(this).attr('checked', false);
+            //         $(this).val(this.checked ? 1 : 0);
+            //         $(_this.find('.row_child_check')).prop('checked', false);
+            //         $(_this.find('.row_child_check')).attr('checked', false);
+            //         $(_this.find('.row_child_check')).val(this.checked ? 1 : 0);
+            // }
+            // });
     </script>
     @endsection
 </body>

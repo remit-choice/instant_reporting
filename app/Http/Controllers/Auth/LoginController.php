@@ -3,14 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\UserController;
 use App\Models\User;
-use App\Models\Attandence;
-use App\Models\Employee;
-use App\Models\ModuleGroup;
 use App\Models\ModulesGroup;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
@@ -56,10 +50,10 @@ class LoginController extends Controller
                     $email_cookie =  Cookie::make('emailcookie', $email, time() + 86400);
                     $password_cookie = Cookie::make('passwordcookie', $password, time() + 86400);
 
-                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
+                    return redirect()->route('admin.dashboard.index')->with('module_groups', $module_groups)->withCookie($email_cookie)->withCookie($password_cookie);
                 } else {
                     $this->admin_login_sessions($request);
-                    return redirect()->route('admin.dashboard')->with('module_groups', $module_groups);
+                    return redirect()->route('admin.dashboard.index')->with('module_groups', $module_groups);
                 }
             }
         } else {
@@ -74,6 +68,7 @@ class LoginController extends Controller
         $email = $user->email;
         $r_id = $user->r_id;
         $u_id = $user->id;
+        $designation = $user->designation;
         User::where('email', $email)
             ->update(
                 [
@@ -88,6 +83,7 @@ class LoginController extends Controller
         $request->session()->put('email',  $email);
         $request->session()->put('r_id',  $r_id);
         $request->session()->put('u_id',  $u_id);
+        $request->session()->put('designation',  $designation);
         $request->session()->put('session_time',  time());
         $request->session()->put('status',  $selectStatus->status);
     }

@@ -13,7 +13,7 @@ class DashboardController extends Controller
             return $next($request);
         });
     }
-    public function admin_dashboard(Request $request)
+    public function index(Request $request)
     {
         if ($request->session()->has('full_name')) {
             return view('admin.dashboard.index');

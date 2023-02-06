@@ -92,7 +92,7 @@
                                 <div class="card-header row">
                                     <h3 class="card-title col-lg-6 col-md-6 col-sm-6 col-xs-6">Transactions List</h3>
                                     <div class="dates col-lg-6 col-md-6 col-sm-6 col-xs-6 d-flex justify-content-end">
-                                        <form action="{{ route('admin.upload_data.transactions') }}" method="post">
+                                        <form action="{{ route('admin.upload_data.transactions.index') }}" method="post">
                                             @csrf
                                             @if (request()->input('date_from'))
                                             <input type="date" name="date_from" id="" class="p-1"

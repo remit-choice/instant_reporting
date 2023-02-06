@@ -34,24 +34,24 @@
 <body class="hold-transition sidebar-mini layout-fixed">
     @extends('layouts.admin.master')
     @section('content')
-        <div class="wrapper">
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0">Modules Groups</h1>
-                            </div><!-- /.col -->
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Modules Groups</li>
-                                </ol>
-                            </div><!-- /.col -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                {{-- <ul class="nav nav-pills text-center"> --}}
+    <div class="wrapper">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0">Modules Groups</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Modules Groups</li>
+                            </ol>
+                        </div><!-- /.col -->
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            {{-- <ul class="nav nav-pills text-center"> --}}
                                 <div id="success" class="alert alert-default-success alert-dismissible fade show"
                                     role="alert" style="display: none">
                                     <strong class="">{{ session('success') }}</strong>
@@ -66,7 +66,7 @@
                                         Add Module Group
                                     </a>
                                     <!-- Modal -->
-                                    <form action="{{ route('admin.modules_groups.create') }}" method="POST">
+                                    <form action="{{ route('admin.module.group.create') }}" method="POST">
                                         @csrf
                                         <div class="modal fade" id="module_group_create">
                                             <div class="modal-dialog">
@@ -103,37 +103,6 @@
                                                                 id="create_module_group_icon" class="form-control">
                                                         </div>
                                                         <div class="form-group">
-                                                            <label for="module_group_icon"
-                                                                class="text-capitalize">sort</label>
-                                                            {{-- <select name="create_module_group_sort" class="form-control"
-                                                                id="create_module_group_sort">
-                                                                <option value="" selected hidden disabled>Select
-                                                                </option>
-                                                                @if (!$modules_groups->isEmpty())
-                                                                    <option value="1">
-                                                                        At the begining
-                                                                    </option>
-                                                                    <optgroup label="After">
-                                                                        @php
-                                                                            $count = 2;
-                                                                        @endphp
-                                                                        @foreach ($modules_groups as $module_group)
-                                                                            <option value="{{ $count }}">
-                                                                                {{ $module_group->name }}
-                                                                            </option>
-                                                                            @php
-                                                                                $count++;
-                                                                            @endphp
-                                                                        @endforeach
-                                                                    </optgroup>
-                                                                @else
-                                                                @endif
-                                                            </select> --}}
-                                                            <input type="number" name="" class="form-control"
-                                                                id="create_module_group_sort">
-
-                                                        </div>
-                                                        <div class="form-group">
                                                             <label for="module_group_status" class="text-capitalize">
                                                                 <input type="checkbox"
                                                                     name="create_module_group_status me-2"
@@ -157,125 +126,122 @@
                                     </form>
                                 </div>
 
-                                {{-- </ul> --}}
-                            </div>
-                        </div><!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content-header -->
-
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <!-- Small boxes (Stat box) -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Modules Groups List</h3>
-
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body datatable_data">
-                                        <table id="example2" class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Icon</th>
-                                                    <th>Sort</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="role_data" id="tablecontents">
-                                                @php
-                                                    $counter = 1;
-                                                @endphp
-                                                @foreach ($modules_groups as $module_group)
-                                                    <tr data-widget="expandable-table" aria-expanded="false"
-                                                        class="row1" data-id="{{ $module_group->id }}">
-                                                        <td>{{ $counter++ }}<input type="hidden"
-                                                                name="db_module_group_id" class="db_module_group_id"
-                                                                value="{{ $module_group->id }}">
-                                                        </td>
-                                                        <td>{{ $module_group->name }}<input type="hidden"
-                                                                name="db_module_group_name" class="db_module_group_name"
-                                                                value="{{ $module_group->name }}"></td>
-                                                        <td>{{ $module_group->icon }}<input type="hidden"
-                                                                name="db_module_group_icon" class="db_module_group_icon"
-                                                                value="{{ $module_group->icon }}"></td>
-                                                        <td>{{ $module_group->sort }} <input type="hidden"
-                                                                name="db_module_group_sort" class="db_module_group_sort"
-                                                                value="{{ $module_group->sort }}"></td>
-                                                        <td>
-                                                            @if ($module_group->status == '1')
-                                                                <span class="badge badge-success">Active</span>
-                                                            @else
-                                                                <span class="badge badge-danger">InActive</span>
-                                                            @endif
-                                                            <input type="hidden" name="db_module_group_status"
-                                                                class="db_module_group_status"
-                                                                value="{{ $module_group->status }}">
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-secondary dropdown-toggle"
-                                                                    type="button" id="dropdownMenuButton"
-                                                                    data-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false">
-                                                                    Action
-                                                                </button>
-                                                                <div class="dropdown-menu edit_module_group"
-                                                                    aria-labelledby="dropdownMenuButton">
-                                                                    <a class="dropdown-item" type="button"
-                                                                        href="#" data-toggle="modal"
-                                                                        data-target="#module_group_update">
-                                                                        Edit</a>
-                                                                    <li>
-                                                                        <form
-                                                                            action="{{ route('admin.modules_groups.delete') }}"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            <input type="hidden" name="id"
-                                                                                class="id"
-                                                                                value="{{ $module_group->id }}">
-                                                                            <button class="dropdown-item delete"
-                                                                                type="submit">
-                                                                                Delete
-                                                                            </button>
-                                                                        </form>
-                                                                    </li>
-                                                                </div>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
-
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Icon</th>
-                                                    <th>Sort</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
-                            </div>
+                                {{--
+                            </ul> --}}
                         </div>
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </section>
-                <!-- /.content -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
             </div>
+            <!-- /.content-header -->
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <!-- Small boxes (Stat box) -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Modules Groups List</h3>
+
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body datatable_data">
+                                    <table id="example2" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Icon</th>
+                                                <th>Sort</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="role_data" id="tablecontents">
+                                            @php
+                                            $counter = 1;
+                                            @endphp
+                                            @foreach ($modules_groups as $module_group)
+                                            <tr data-widget="expandable-table" aria-expanded="false" class="row1"
+                                                data-id="{{ $module_group->id }}">
+                                                <td>{{ $counter++ }}<input type="hidden" name="db_module_group_id"
+                                                        class="db_module_group_id" value="{{ $module_group->id }}">
+                                                </td>
+                                                <td>{{ $module_group->name }}<input type="hidden"
+                                                        name="db_module_group_name" class="db_module_group_name"
+                                                        value="{{ $module_group->name }}"></td>
+                                                <td>{{ $module_group->icon }}<input type="hidden"
+                                                        name="db_module_group_icon" class="db_module_group_icon"
+                                                        value="{{ $module_group->icon }}"></td>
+                                                <td>{{ $module_group->sort }} <input type="hidden"
+                                                        name="db_module_group_sort" class="db_module_group_sort"
+                                                        value="{{ $module_group->sort }}"></td>
+                                                <td>
+                                                    @if ($module_group->status == '1')
+                                                    <span class="badge badge-success">Active</span>
+                                                    @else
+                                                    <span class="badge badge-danger">InActive</span>
+                                                    @endif
+                                                    <input type="hidden" name="db_module_group_status"
+                                                        class="db_module_group_status"
+                                                        value="{{ $module_group->status }}">
+                                                </td>
+                                                <td>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                            id="dropdownMenuButton" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <div class="dropdown-menu edit_module_group"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            <a class="dropdown-item" type="button" href="#"
+                                                                data-toggle="modal" data-target="#module_group_update">
+                                                                Edit</a>
+                                                            <li>
+                                                                <form action="{{ route('admin.module.group.delete') }}"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id" class="id"
+                                                                        value="{{ $module_group->id }}">
+                                                                    <button class="dropdown-item delete" type="submit">
+                                                                        Delete
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Icon</th>
+                                                <th>Sort</th>
+                                                <th>Status</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
         </div>
+    </div>
+    <form action="" method="post" id="module_group_update_form">
+        @csrf
         <div class="modal fade" id="module_group_update">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -285,79 +251,50 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="" method="post">
-                        @csrf
-                        <div class="modal-body">
-                            <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
-                                role="alert" style="display: none">
-                                <span class="text_fails"></span>
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="form-group">
-                                <label for="module_group_name" class="text-capitalize">Name</label>
-                                <input type="hidden" name="module_group_id" id="module_group_id" value="">
-                                <input type="text" name="module_group_name" id="module_group_name"
-                                    class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="module_group_icon" class="text-capitalize">Icon</label>
-                                <input type="text" name="module_group_icon" id="module_group_icon"
-                                    class="form-control">
-                            </div>
-                            <div class="form-group">
-                                <label for="module_group_icon" class="text-capitalize">sort</label>
-                                <input type="number" name="" class="form-control" id="module_group_sort">
-                                {{-- <select name="module_group_sort" class="form-control" id="module_group_sort"> --}}
 
-                                {{-- @if (!$modules_groups->isEmpty())
-                                        <option value="1">At the begining</option>
-                                        <optgroup label="After">
-                                            @php
-                                                $count = 2;
-                                            @endphp
-                                            @foreach ($modules_groups as $module_group)
-                                                <option value="{{ $count }}">
-                                                    {{ $module_group->name }}
-                                                </option>
-                                                @php
-                                                    $count++;
-                                                @endphp
-                                            @endforeach
-                                        </optgroup>
-                                    @else
-                                        <option value="1">
-                                            Start
-                                        </option>
-                                    @endif --}}
-                                {{-- </select> --}}
-                            </div>
-                            <div class="form-group">
-                                <label for="module_group_status" class="text-capitalize">
-                                    <input type="checkbox" name="module_group_status me-2"
-                                        id="module_group_status" value="0">Status</label>
-                            </div>
+                    <div class="modal-body">
+                        <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
+                            role="alert" style="display: none">
+                            <span class="text_fails"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                            <button type="submit" class="border px-2 btn update"
-                                style="background-color: #091E3E;color: white">Update</button>
+                        <div class="form-group">
+                            <label for="module_group_name" class="text-capitalize">Name</label>
+                            <input type="hidden" name="module_group_id" id="module_group_id" value="">
+                            <input type="text" name="module_group_name" id="module_group_name" class="form-control">
                         </div>
-                    </form>
+                        <div class="form-group">
+                            <label for="module_group_icon" class="text-capitalize">Icon</label>
+                            <input type="text" name="module_group_icon" id="module_group_icon" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="module_group_status" class="text-capitalize">
+                                <input type="checkbox" name="module_group_status me-2" id="module_group_status"
+                                    value="0">Status</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="border px-2 btn update"
+                            style="background-color: #091E3E;color: white">Update</button>
+                    </div>
+
                 </div>
                 <!-- /.modal-content -->
             </div>
             <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal -->
-        @Include('layouts.links.admin.foot')
-        @Include('layouts.links.datatable.foot')
-        @Include('layouts.links.sweet_alert.foot')
-        @Include('layouts.links.toastr.foot')
+    </form>
+    <!-- /.modal -->
+    @Include('layouts.links.admin.foot')
+    @Include('layouts.links.datatable.foot')
+    @Include('layouts.links.sweet_alert.foot')
+    @Include('layouts.links.toastr.foot')
 
-        <script type="text/javascript">
-                $('#module_group_status').click(function() {
+    <script type="text/javascript">
+        $('#module_group_status').click(function() {
                     if ($(this).is(':checked')) {
                         $(this).attr("checked", true)
                         $(this).val(this.checked ? 1 : 0);
@@ -402,11 +339,9 @@
                     var icon = $('#create_module_group_icon').val();
                     var status = $('#create_module_group_status').val();
                     var sort = $('#create_module_group_sort').val();
-
                     console.log(name);
                     console.log(icon);
                     console.log(status);
-                    console.log(sort);
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -415,7 +350,7 @@
 
                     $.ajax({
                         type: "post",
-                        url: "{{ route('admin.modules_groups.create') }}",
+                        url: "{{ route('admin.module.group.create') }}",
                         data: {
                             "name": name,
                             "icon": icon,
@@ -423,27 +358,17 @@
                             "sort": sort
                         },
                         success: function(response) {
-                            if (response == '1') {
-                                $('#module_group_create').modal('hide');
-                                $('#success').show();
-                                $('#success strong').html("Inserted Successfully");
-                                window.setInterval(function() {
+                                Swal.fire(
+                                    'Done!',
+                                    'Inserted Successfully!',
+                                    'success'
+                                ).then((result) => {
                                     location.reload();
-                                }, 2000);
-                            } else {
-                                if (response == 'false') {
-                                    $('#failes').show();
-                                    $('#failes .text_fails').html(
-                                        "Sort is Reserved,Firstly Unreserved Current!");
-                                    window.setInterval(function() {
-                                        $('#failes').slideUp('slow');
-                                    }, 5000);
-                                }
+                                });
+                            },
+                            error: (error) => {
+                                console.log(JSON.stringify(error));
                             }
-                        },
-                        error: (error) => {
-                            console.log(JSON.stringify(error));
-                        }
                     });
                 });
                 $('.update').click(function(e) {
@@ -458,58 +383,46 @@
                     console.log(name);
                     console.log(icon);
                     console.log(status);
-                    console.log(sort);
-
                     $.ajaxSetup({
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    swal({
-                            title: "Are you sure?",
-                            text: "Once Update, you will not be able to recover this imaginary rate!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                            if (willDelete) {
-                                $.ajax({
-                                    type: "post",
-                                    url: "{{ route('admin.modules_groups.edit') }}",
-                                    data: {
-                                        "id": id,
-                                        "name": name,
-                                        "icon": icon,
-                                        "status": status,
-                                        "sort": sort
-                                    },
-                                    success: function(response) {
-                                        if (response == '1') {
-                                            swal("Data Successfully Updated.!", {
-                                                icon: "success",
-                                            }).then((result) => {
-                                                location.reload();
-                                            });
-                                        } else {
-                                            if (response == 'false') {
-                                                $('#update_failes').show();
-                                                $('#update_failes .text_fails').html(
-                                                    "Sort is Reserved,Firstly Unreserved Current!"
-                                                );
-                                                window.setInterval(function() {
-                                                    $('#update_failes').slideUp('slow');
-                                                }, 5000);
-                                            }
-                                        }
-                                    },
-                                    error: (error) => {
-                                        console.log(JSON.stringify(error));
-                                    }
-                                });
-                            }
-                        });
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        icon: 'warning',
+                        confirmButtonColor: '#e64942',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: `No`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "post",
+                                url: "{{ route('admin.module.group.edit') }}",
+                                data: {
+                                    "id": id,
+                                    "name": name,
+                                    "icon": icon,
+                                    "status": status,
+                                    "sort": sort
+                                },
+                                success: function(response) {
+                                    Swal.fire(
+                                        'Updated!',
+                                        'Data Successfully Updated.!',
+                                        'success'
+                                    ).then((result) => {
+                                        location.reload();
+                                    });
+                                },
 
+                                error: (error) => {
+                                    console.log(JSON.stringify(error));
+                                }
+                            });
+                        }
+                    });
                 });
                 $('.delete').click(function(e) {
                     e.preventDefault();
@@ -521,56 +434,46 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    swal({
-                            title: "Are you sure?",
-                            text: "Once deleted, you will not be able to recover this imaginary file!",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                        .then((willDelete) => {
-                            if (willDelete) {
-                                $.ajax({
-                                    type: "post",
-                                    url: "{{ route('admin.modules_groups.delete') }}",
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Once Deleted, you will not be able to recover this record!",
+                        icon: 'warning',
+                        confirmButtonColor: '#e64942',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: `No`,
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "post",
+                                    url: "{{ route('admin.module.group.delete') }}",
                                     data: {
                                         "id": id,
                                     },
                                     success: function(response) {
-                                        $('#success').html(
-                                            "Deleted Successfully");
-                                        $('#success').css('color', 'red');
-                                        $('#success').show();
-                                        swal("Data successfully Deleted.!", {
-                                            icon: "success",
-                                        }).then((result) => {
-                                            $('#success').html(
-                                                "Deleted Successfully");
-                                            $('#success').css('color', 'red');
-                                            $('#success').show();
-                                            $(el).closest('tr').css(
-                                                'background', 'tomato');
-                                            $(el).closest('tr').fadeOut(800,
-                                                function() {
-                                                    $(this).remove();
-                                                    $('#success')
-                                                        .slideUp(
-                                                            'slow');
-                                                    $('#success')
-                                                        .empty();
-                                                });
-                                        });
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Data Successfully Updated.!',
+                                        'success'
+                                    ).then((result) => {
+                                        $(el).closest('tr').css(
+                                            'background', 'tomato');
+                                        $(el).closest('tr').fadeOut(800,
+                                            function() {
+                                                $(this).remove();
+                                            });
+                                    });
 
-                                    },
-                                    error: (error) => {
-                                        console.log(JSON.stringify(error));
-                                    }
+                                },
+                                error: (error) => {
+                                    console.log(JSON.stringify(error));
+                                }
                                 });
                             }
                         });
                 });
             });
-        </script>
+    </script>
     @endsection
     {{-- @Include('layouts.links.modals.foot') --}}
 </body>

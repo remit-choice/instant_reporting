@@ -40,10 +40,7 @@ class RolesController extends Controller
             );
             $name = $request->name;
             $status = $request->status;
-            Role::insert([
-                'name' => $name,
-                'status' => $status,
-            ]);
+            Role::insert(['name' => $name, 'status' => $status]);
         } else {
             return back();
         }

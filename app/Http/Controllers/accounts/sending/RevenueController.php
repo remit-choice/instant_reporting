@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\accounts;
+namespace App\Http\Controllers\accounts\sending;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\UserController;
@@ -9,9 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
+
 // use Illuminate\Support\Facades\Request;
 
-class TransactionsController extends Controller
+class RevenueController extends Controller
 {
     public function __construct()
     {
@@ -20,19 +21,20 @@ class TransactionsController extends Controller
             return $next($request);
         });
     }
-    public function sending_index(Request $request)
+    public function index(Request $request)
     {
         if (FacadesRequest::isMethod('get')) {
-            return view('accounts.transactions.sending_side_revenue.index');
+            return view('accounts.transactions.sending.revenue.index');
+        } elseif (FacadesRequest::isMethod('post')) {
+            return $this->filter($request);
         } else {
         }
     }
-    public function sending_filter(Request $request)
+    public function filter($request)
     {
         if (FacadesRequest::isMethod('post')) {
             $date_from = '';
             $date_to = '';
-            // dd($request->toArray());
             $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
             $vol_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(payin_amt-admin_charges),(payin_amt/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)-admin_charges))) AS vol_in_gbp');
             $fx_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) AS fx_in_gbp');
@@ -41,8 +43,6 @@ class TransactionsController extends Controller
             $fx_loss = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))+SUM(IF(payin_ccy="GBP",(admin_charges),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) )) AS fx_loss');
             $total_revenue_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) +
             SUM(IF(agent_name_main="SSRL",((admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))-(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))))  AS total_revenue_in_gbp');
-
-
             if (!empty($request->search_filter) && empty($request->date_from) && empty($request->date_to)) {
                 $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['status', '=', 'Paid']])->groupBy('customer_country')->orderBY('customer_country')->get();
                 return view('accounts.transactions.sending_side_revenue.index', ['transactions' => $transactions]);
@@ -74,61 +74,6 @@ class TransactionsController extends Controller
                     }
                 }
                 return redirect()->back();
-            }
-        }
-    }
-    public function receiving_index(Request $request)
-    {
-        if (FacadesRequest::isMethod('get')) {
-            return view('accounts.transactions.receiving_side_revenue.index');
-        } else {
-        }
-    }
-    public function receiving_filter(Request $request)
-    {
-        if (FacadesRequest::isMethod('post')) {
-            $date_from = '';
-            $date_to = '';
-            // dd($request->toArray());
-            $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
-            $vol_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(payin_amt-admin_charges),(payin_amt/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)-admin_charges))) AS vol_in_gbp');
-            $fx_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) AS fx_in_gbp');
-            $charges_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(admin_charges),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)))) AS charges_in_gbp');
-            $net_admin_charges_in_gbp = DB::raw('SUM(IF(agent_name_main="SSRL",((admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))-(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))))  AS net_admin_charges_in_gbp');
-            $fx_loss = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))+SUM(IF(payin_ccy="GBP",(admin_charges),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) )) AS fx_loss');
-            $total_revenue_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) +
-            SUM(IF(agent_name_main="SSRL",((admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))-(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))))  AS total_revenue_in_gbp');
-
-            if (!empty($request->search_filter) && empty($request->date_from) && empty($request->date_to)) {
-                $transactions = TransactionsData::select('beneficiary_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['beneficiary_country', '!=', ''], ['status', '=', 'Paid']])->groupBy('beneficiary_country')->orderBY('beneficiary_country')->get();
-                return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
-            } elseif (empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $transactions = TransactionsData::where([['beneficiary_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', "Paid"]])->orderBY('beneficiary_country')->get();
-                return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
-            } elseif (!empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $transactions = TransactionsData::select('beneficiary_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['beneficiary_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', "Paid"]])->groupBy('beneficiary_country')->orderBY('beneficiary_country')->get();
-                return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
-            } elseif (empty($request->search_filter) && !empty($request->date_from) && !empty($request->date_to)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $date_to = date('d/m/Y', strtotime($request->date_to));
-                $transactions = TransactionsData::where([['beneficiary_country', '!=', ''], ['status', '=', "Paid"]])->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->orderBY('beneficiary_country')->get();
-                return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
-            } elseif (!empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
-                $date_from = date('d/m/Y', strtotime($request->date_from));
-                $date_to = date('d/m/Y', strtotime($request->date_to));
-                $transactions = TransactionsData::select('beneficiary_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['beneficiary_country', '!=', ''], ['status', '=', "Paid"]])->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->groupBy('beneficiary_country')->orderBY('beneficiary_country')->get();
-                return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
-            } else {
-                if (empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
-                    return redirect()->back()->with('failed', "From Date Mandatory");
-                } else {
-                    if (!empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
-                        return redirect()->back()->with('failed', "From Date Mandatory");
-                    }
-                    return redirect()->back();
-                }
             }
         }
     }

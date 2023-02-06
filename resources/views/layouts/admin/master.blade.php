@@ -133,8 +133,8 @@
                     <i class="fas fa-sign-out-alt"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
-                    <a href="http://"><button type="submit" class="dropdown-item"><i class="fas fa-user mr-2"></i> Profile </button></a>
-                    <form action="/logout" method="post">
+                    <a href="{{route('admin.profile.index')}}"><button type="submit" class="dropdown-item"><i class="fas fa-user mr-2"></i> Profile </button></a>
+                    <form action="{{route('logout')}}" method="post">
                         @csrf
                         <button type="submit" class="dropdown-item">
                             <i class="fas fa-sign-out-alt mr-2"></i> Logout
@@ -218,8 +218,9 @@
                                                         <li class="nav-item menu-open">
                                                             @php
                                                                 $route_url = URL($modules_url->url);
+                                                                $url = parse_url($route_url, PHP_URL_PATH);
                                                             @endphp
-                                                            <a href="{{ $route_url }}"
+                                                            <a href="{{ $url }}"
                                                                 class="nav-link @if ($modules_url->url == $REQUEST_URI) {{ 'active' }} @endif">
                                                                 <i class="{{ $module->icon }} nav-icon"></i>
                                                                 <p style="word-wrap: break-word;white-space: nowrap;">
@@ -250,7 +251,7 @@
 
   <!-- /.content-wrapper -->
   <footer class="main-footer text-center">
-      <strong>&copy;Copyright 2022 <a href="{{route('admin.dashboard')}}">@include('layouts.links.admin.title')</a>.</strong>
+      <strong>&copy;Copyright 2022 <a href="{{route('admin.dashboard.index')}}">@include('layouts.links.admin.title')</a>.</strong>
       All rights reserved.
   </footer>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Models\ModulesGroup;
+use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,6 +25,8 @@ class Routing
             $current_time = time();
             $inactive = 3600;
             if ($current_time - $session_time > $inactive) {
+                $r_id = Session::get('r_id');
+                User::where('r_id', $r_id)->update(['status' => 0]);
                 $request->session()->flush();
                 return redirect('/admin');
             } else {
@@ -45,7 +48,7 @@ class Routing
                     // dd(
                     //     $module_groups->toArray()
                     // );
-                    $response = response('', 404);
+                    $response = response(view('layouts.errors.404'), 404);
                     foreach ($module_groups as $module_group) {
                         foreach ($module_group->modules as $module) {
                             if ((!empty($module->permissions)) && (!empty($module->modules_urls))) {
@@ -59,7 +62,7 @@ class Routing
                                     }
                                 }
                             } else {
-                                $response = response('', 404);
+                                $response = response(view('layouts.errors.404'), 404);
                             }
                         }
                     }
