@@ -22,6 +22,6 @@ class BuyerPaymentMethod extends Model
     }
     public function currencies()
     {
-        return $this->hasOne(Currency::class, 'id', 'c_id');
+        return $this->hasOne(Currency::class, 'id', 'c_id')->with('rates');
     }
 }

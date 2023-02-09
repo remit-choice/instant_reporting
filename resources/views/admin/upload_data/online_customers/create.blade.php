@@ -89,13 +89,13 @@
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file" name="online_customer_file" class="custom-file-input"
-                                                id="exampleInputFile">
+                                                id="exampleInputFile" accept=".csv">
                                             <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                         </div>
                                     </div>
                                     <button type="submit" class="btn mb-3"
                                         style="background-color: #091E3E;color: white">Upload</button>
-                                    <a href="{{ route('admin.upload_data.online_customers') }}" class="btn mb-3"
+                                    <a href="{{ route('admin.upload_data.online_customers.index') }}" class="btn mb-3"
                                         style="background-color: #091E3E;color: white">Back</a>
                                 </div>
                             </form>
@@ -115,6 +115,10 @@
     @endsection
     @Include('layouts.links.admin.foot')
     @Include('layouts.links.datatable.foot')
+    <script>
+        $(function () {
+        bsCustomFileInput.init();
+        });
+    </script>
 </body>
-
 </html>

@@ -105,7 +105,7 @@
                                                 
                                             </div> --}}
                                         </form>
-                                    </div>
+                                </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
                                     <table id="example1" class="table table-bordered table-striped">
@@ -115,12 +115,13 @@
                                                 <th class="text-capitalize">Paid Date</th>
                                                 <th class="text-capitalize">Customer Country</th>
                                                 <th class="text-capitalize">Volumn in GBP</th>
-                                                <th class="text-capitalize">Bank Name</th>
+                                                <th class="text-capitalize">Buyer Name</th>
                                                 <th class="text-capitalize">Payout CCY</th>
                                                 <th class="text-capitalize">Payout Amount</th>
                                                 <th class="text-capitalize">Payment Method</th>
                                                 <th class="text-capitalize">Payment Currency</th>
                                                 <th class="text-capitalize">Charges</th>
+                                                <th class="text-capitalize">Charges In GBP</th>
                                                 <th class="text-capitalize">Transact Count</th>
                                                 <th class="text-capitalize">Deal Type</th>
                                             </tr>
@@ -134,6 +135,7 @@
                                                     $count_of_tr_no = 0;
                                                     $vol_in_gbp_show = 0;
                                                     $charges_show = 0;
+                                                    $charges_in_gbp_show = 0;
                                                     $amount = 0;
                                                 @endphp
                                                 @foreach ($transactions as $transaction)
@@ -143,7 +145,7 @@
                                                         $rates = function ($query) {
                                                             $query->where('status', 1);
                                                         };
-                                                        $currencies_rates = App\Models\Currency::where('currency', $transaction->payin_ccy)
+                                                        $currencies_rates = App\Models\Currency::where('currency', 'GBP')
                                                             ->ordoesntHave('rates')
                                                             ->whereHas('rates', $rates)
                                                             ->with('rates', $rates)
@@ -158,11 +160,7 @@
                                                             }
                                                         }
                                                         //volume in gbp
-                                                        if ($transaction->payin_ccy == 'GBP') {
-                                                            $vol_in_gbp = $transaction->payin_amt - $transaction->admin_charges;
-                                                        } elseif ($transaction->payin_ccy != 'GBP' && $rate != 0) {
-                                                            $vol_in_gbp = $transaction->payin_amt / $rate - $transaction->admin_charges;
-                                                        }                                                       
+                                                        $vol_in_gbp = $transaction->payin_amt - $transaction->admin_charges;                                  
                                                     @endphp
                                                 <tr>
                                                     <td>{{ $counter++ }}</td>
@@ -176,24 +174,94 @@
                                                         @endphp
                                                         @endif
                                                     </td>
-                                                    <td>{{ $transaction->bank_name }}</td>
+                                                    <td>{{ $transaction->buyer_name }}</td>
                                                     <td>{{ $transaction->payout_ccy }}</td>
                                                     <td>{{ $transaction->amount }}</td>
                                                     <td>{{ $transaction->payment_method }}</td>
+                                                    @php
+                                                        $array = [];
+                                                        $counting = 1;
+                                                    @endphp         
                                                     @foreach ($buyer_charges as $buyer_charge)
                                                         @foreach ($buyer_charge->buyer_payment_methods as $buyer_payment_method)
                                                             @php
                                                                 $payment_methods_name = $buyer_payment_method['payment_methods']->name;
                                                                 $currency = json_decode($buyer_payment_method->currencies);
                                                             @endphp
-                                                            @if ($transaction->payment_method==$payment_methods_name)      
-                                                                <td>{{ $currency->iso3 }}</td>
-                                                                <td>
+                                                            @if ($transaction->payment_method==$payment_methods_name)    
+                                                            @php
+                                                                $array[] = $payment_methods_name;
+                                                            @endphp  
+                                                                <td>{{ $currency->currency }}</td>
                                                                     @php
-                                                                        $charges_show += $buyer_payment_method->rate;
-                                                                    @endphp                                                          
-                                                                    {{ $buyer_payment_method->rate }}
-                                                                </td>
+                                                                        $charges_in_gbp = 0;
+                                                                        $buyer_payment_method_rate = 0;
+                                                                    @endphp
+                                                                    @if ($buyer_charge->type==1)
+                                                                        @php
+                                                                        $rate = 0;
+                                                                        $rates = function ($query) {
+                                                                            $query->where('status', 1);
+                                                                        };
+                                                                        // For GBP Start
+                                                                        $currencies_rates = App\Models\Currency::where('currency', $transaction->payout_ccy)
+                                                                            ->ordoesntHave('rates')
+                                                                            ->whereHas('rates', $rates)
+                                                                            ->with('rates', $rates)
+                                                                            ->get();
+                                                                        foreach ($currencies_rates as $currency_rate) {
+                                                                            if (!empty($currency_rate->rates)) {
+                                                                                foreach ($currency_rate->rates as $rate) {
+                                                                                    $rate = $rate->rate;
+                                                                                    // dd($rate);
+                                                                                }
+                                                                            } else {
+                                                                                $rate = 0;
+                                                                            }
+                                                                        }
+                                                                        // dd($buyer_payment_method->rate);
+                                                                        // For GBP End *****************/
+                                                                            $charges_in_gbp = $transaction->amount *  $buyer_payment_method->rate/100;
+                                                                            if($rate>=1){
+                                                                                $charges_in_gbp = $charges_in_gbp / $rate;
+                                                                            }else{
+                                                                                $charges_in_gbp = $charges_in_gbp * $rate;
+                                                                            }
+
+                                                                            $charges_in_gbp_show +=  $charges_in_gbp;
+                                                                        // For Dealing Currency Start
+                                                                        if (!empty($currency->rates)) {
+                                                                            foreach ($currency->rates as $buyer_rate) {
+                                                                                if($buyer_rate->rate>=1){
+                                                                                    $buyer_payment_method_rate = $charges_in_gbp/$buyer_rate->rate;
+                                                                                }else{
+                                                                                    $buyer_payment_method_rate = $charges_in_gbp*$buyer_rate->rate;
+                                                                                }
+                                                                                $charges_show += $buyer_payment_method_rate;
+                                                                            }
+                                                                        } 
+                                                                        else 
+                                                                        {
+                                                                            $buyer_payment_method_rate = 0;
+                                                                        }
+                                                                        // For Dealing Currency End *****************/
+                                                                        @endphp        
+                                                                    @elseif ($buyer_charge->type==2)
+                                                                        @php
+                                                                            $charges_show += $buyer_payment_method->rate;
+                                                                            $buyer_payment_method_rate = $buyer_payment_method->rate;
+                                                                        @endphp        
+                                                                    @endif
+                                                                <td>{{ number_format(floor($buyer_payment_method_rate*100)/100, 2) }}</td>
+                                                                <td>{{ number_format(floor($charges_in_gbp*100)/100, 2) }}</td>
+                                                            @endif
+                                                            @if (!in_array($transaction->payment_method,$array) && $counting == 1) 
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                @php
+                                                                    $counting++;
+                                                                @endphp
                                                             @endif
                                                         @endforeach
                                                     @endforeach
@@ -214,6 +282,9 @@
                                                     $amount += $transaction->amount;
                                                 @endphp
                                                 @endforeach
+                                                @php
+                                                    // dd($array);
+                                                @endphp
                                                 <tr>
                                                     <td><strong>Total</strong></td>
                                                     <td></td>
@@ -221,10 +292,11 @@
                                                     <td>{{ number_format(floor($vol_in_gbp_show*100)/100, 2) }}</td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>{{ $amount }}</td>
+                                                    <td>{{ number_format(floor($amount*100)/100, 2) }}</td>
                                                     <td></td>
                                                     <td></td>
-                                                    <td>{{ $charges_show }}</td>
+                                                    <td>{{ number_format(floor($charges_show*100)/100, 2) }}</td>
+                                                    <td>{{ number_format(floor($charges_in_gbp_show*100)/100, 2) }}</td>
                                                     <td>{{ $count_of_tr_no }}</td>
                                                     <td></td>
                                                 </tr>
@@ -236,12 +308,13 @@
                                                 <th class="text-capitalize">Paid Date</th>
                                                 <th class="text-capitalize">Customer Country</th>
                                                 <th class="text-capitalize">Volumn in GBP</th>
-                                                <th class="text-capitalize">Bank Name</th>
+                                                <th class="text-capitalize">Buyer Name</th>
                                                 <th class="text-capitalize">Payout CCY</th>
                                                 <th class="text-capitalize">Payout Amount</th>
                                                 <th class="text-capitalize">Payment Method</th>
                                                 <th class="text-capitalize">Payment Currency</th>
                                                 <th class="text-capitalize">Charges</th>
+                                                <th class="text-capitalize">Charges In GBP</th>
                                                 <th class="text-capitalize">Transact Count</th>
                                                 <th class="text-capitalize">Deal Type</th>
                                             </tr>

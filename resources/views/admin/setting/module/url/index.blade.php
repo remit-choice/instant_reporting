@@ -78,59 +78,91 @@
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <form action="" method="post">
-                                                        @csrf
-                                                        <div class="modal-body">
-                                                            <div class="form-group">
-                                                                <label for="module_name"
-                                                                    class="text-capitalize">URL</label>
-                                                                <div class="input-group">
-                                                                    <input type="hidden" name="create_module_id"
-                                                                        id="create_module_id"
-                                                                        value="{{ Session::get('m_id') }}">
-                                                                    <input type="hidden" name="create_module_url_id"
-                                                                        id="create_module_url_id" value="">
-                                                                    <input type="text" name="create_module_url_name"
-                                                                        id="create_module_url_name"
-                                                                        class="form-control">
-                                                                </div>
-                                                                <span class="invalid-feedback"
-                                                                    id="create_module_url_name_error">
-                                                                </span>
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label for="create_mode"
+                                                                class="text-capitalize">Mode</label>
+                                                            <div class="input-group">
+                                                                <select id="create_mode" data-live-search="true"
+                                                                    title="Select"
+                                                                    class="selectpicker show-tick form-control"
+                                                                    name="create_mode">
+                                                                    <option value="" selected hidden disabled>Select
+                                                                    </option>
+                                                                     @php
+                                                                            $array = [];
+                                                                    @endphp
+                                                                    @foreach ($modules_urls as $modules_url)
+                                                                        @php
+                                                                            $array[] = $modules_url->mode;
+                                                                        @endphp
+                                                                    @endforeach
+                                                                        @if (!in_array('1',$array))
+                                                                            <option value="1">View</option>
+                                                                        @endif
+                                                                        @if (!in_array('2',$array))
+                                                                            <option value="2">Create</option>
+                                                                        @endif
+                                                                        @if (!in_array('3',$array))
+                                                                            <option value="3">Edit</option>
+                                                                        @endif
+                                                                        @if (!in_array('4',$array))
+                                                                            <option value="4">Delete</option>
+                                                                        @endif
+                                                                </select>
                                                             </div>
-                                                            <div class="form-group">
-                                                                <label for="create_type"
-                                                                    class="text-capitalize">Type</label>
-                                                                <div class="input-group">
-                                                                    <select id="create_type" data-live-search="true"
-                                                                        title="Select"
-                                                                        class="selectpicker show-tick form-control"
-                                                                        name="create_type">
-                                                                        <option value="" selected hidden disabled>Select
-                                                                        </option>
-                                                                        <option value="0">SideBar</option>
-                                                                        <option value="1">Inside Page</option>
-                                                                    </select>
-                                                                </div>
-                                                                <span class="invalid-feedback" id="create_type_error">
-                                                                </span>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label for="module_status" class="text-capitalize">
-                                                                    <input type="checkbox"
-                                                                        name="create_module_url_status me-2"
-                                                                        id="create_module_url_status"
-                                                                        value="0">Status</label>
-                                                            </div>
+                                                            <span class="invalid-feedback" id="create_mode_error">
+                                                            </span>
                                                         </div>
-                                                        <div class="modal-footer justify-content-between">
-                                                            <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">Close</button>
-                                                            <button type="submit" class="border px-2 btn create"
-                                                                style="background-color: #091E3E;color: white"
-                                                                id="add_module_btn">Save</button>
+                                                        <div class="form-group">
+                                                            <label for="module_name"
+                                                                class="text-capitalize">URL</label>
+                                                            <div class="input-group">
+                                                                <input type="hidden" name="create_module_id"
+                                                                    id="create_module_id"
+                                                                    value="{{ Session::get('m_id') }}">
+                                                                <input type="hidden" name="create_module_url_id"
+                                                                    id="create_module_url_id" value="">
+                                                                <input type="text" name="create_module_url_name"
+                                                                    id="create_module_url_name"
+                                                                    class="form-control">
+                                                            </div>
+                                                            <span class="invalid-feedback"
+                                                                id="create_module_url_name_error">
+                                                            </span>
                                                         </div>
-                                                    </form>
+                                                        <div class="form-group">
+                                                            <label for="create_type"
+                                                                class="text-capitalize">Type</label>
+                                                            <div class="input-group">
+                                                                <select id="create_type" data-live-search="true"
+                                                                    title="Select"
+                                                                    class="selectpicker show-tick form-control"
+                                                                    name="create_type">
+                                                                    <option value="" selected hidden disabled>Select
+                                                                    </option>
+                                                                    <option value="0">SideBar</option>
+                                                                    <option value="1">Inside Page</option>
+                                                                </select>
+                                                            </div>
+                                                            <span class="invalid-feedback" id="create_type_error">
+                                                            </span>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="module_status" class="text-capitalize">
+                                                                <input type="checkbox"
+                                                                    name="create_module_url_status me-2"
+                                                                    id="create_module_url_status"
+                                                                    value="0">Status</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default"
+                                                            data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="border px-2 btn create"
+                                                            style="background-color: #091E3E;color: white"
+                                                            id="add_module_btn">Save</button>
+                                                    </div>
                                                 </div>
                                                 <!-- /.modal-content -->
                                             </div>
@@ -165,6 +197,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Module Name</th>
+                                                <th>Mode Name</th>
                                                 <th>Route Name</th>
                                                 <th>URL</th>
                                                 <th>Type</th>
@@ -187,6 +220,21 @@
                                                     {{ $modules_url->modules['name'] }}
                                                     <input type="hidden" name="db_module_name" class="db_module_name"
                                                         value="{{ $modules_url->modules['name'] }}">
+                                                </td>
+                                                <td>
+                                                    @if ($modules_url->mode == 1)
+                                                        <span class="badge badge-secondary p-2"><i class="fa fa-eye" aria-hidden="true"></i>&nbsp; View</span>
+                                                    @elseif ($modules_url->mode == 2)
+                                                        <span class="badge badge-secondary p-2"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;  Add</span>
+                                                    @elseif ($modules_url->mode == 3)
+                                                        <span class="badge badge-secondary p-2"><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;  Edit</span>
+                                                    @elseif ($modules_url->mode == 4)
+                                                        <span class="badge badge-secondary p-2"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;  Delete</span>
+                                                    @elseif ($modules_url->mode == 5)
+                                                        <span class="badge badge-secondary p-2"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;  Filter</span>
+                                                    @endif
+                                                    <input type="hidden" name="db_mode" class="db_mode"
+                                                        value="{{ $modules_url->mode }}">
                                                 </td>
                                                 <td>
                                                     {{ $modules_url->name }}
@@ -220,34 +268,40 @@
                                                         class="db_module_url_status" value="{{ $modules_url->status }}">
                                                 </td>
                                                 <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                            id="dropdownMenuButton" data-toggle="dropdown"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                            Action
-                                                        </button>
-                                                        <div class="dropdown-menu edit_module_url"
-                                                            aria-labelledby="dropdownMenuButton">
-                                                            <li>
-                                                                <a class="dropdown-item" type="button" href="#"
-                                                                    data-toggle="modal"
-                                                                    data-target="#module_url_update">
-                                                                    Edit</a>
-                                                            </li>
-                                                            <li>
-                                                                <form
-                                                                    action="/admin/setting/module/{{ $modules_url->id }}/url/delete"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id" class="id"
-                                                                        value="{{ $modules_url->id }}">
-                                                                    <button class="dropdown-item delete" type="submit">
-                                                                        Delete
-                                                                    </button>
-                                                                </form>
-                                                            </li>
+                                                    @if ($edit == 1 || $delete == 1)
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                                id="dropdownMenuButton" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </button>
+                                                            <div class="dropdown-menu edit_module_url"
+                                                                aria-labelledby="dropdownMenuButton">
+                                                                @if ($edit == 1)
+                                                                    <li>
+                                                                        <a class="dropdown-item" type="button" href="#"
+                                                                            data-toggle="modal"
+                                                                            data-target="#module_url_update">
+                                                                            Edit</a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($delete == 1)
+                                                                    <li>
+                                                                        <form
+                                                                            action="/admin/setting/module/{{ $modules_url->id }}/url/delete"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id" class="id"
+                                                                                value="{{ $modules_url->id }}">
+                                                                            <button class="dropdown-item delete" type="submit">
+                                                                                Delete
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                @endif
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach
@@ -256,6 +310,7 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Module Name</th>
+                                                <th>Mode Name</th>
                                                 <th>Route Name</th>
                                                 <th>URL</th>
                                                 <th>Type</th>
@@ -288,6 +343,23 @@
                 <form action="" method="post" id="module_url_update_form">
                     @csrf
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="module_mode"
+                                class="text-capitalize">Mode</label>
+                            <div class="input-group">
+                                <select id="module_mode" data-live-search="true"
+                                    title="Select"
+                                    class="selectpicker show-tick form-control"
+                                    name="module_mode">
+                                        <option value="1">View</option>
+                                        <option value="2">Create</option>
+                                        <option value="3">Edit</option>
+                                        <option value="4">Delete</option>
+                                </select>
+                            </div>
+                            <span class="invalid-feedback" id="module_mode_error">
+                            </span>
+                        </div>
                         <div class="form-group">
                             <label for="module_url_id" class="text-capitalize">URL</label>
                             <div class="input-group">
@@ -338,6 +410,42 @@
     @Include('layouts.links.sweet_alert.foot')
 
     <script type="text/javascript">
+        $('#module_url_status').click(function() {
+            if ($(this).is(':checked')) {
+                $(this).attr("checked", true)
+                $(this).val(this.checked ? 1 : 0);
+            } else {
+                $(this).attr('checked', false);
+                $(this).val(this.checked ? 1 : 0);
+            }
+        });
+        $('#create_module_url_status').click(function() {
+            if ($(this).is(':checked')) {
+                $(this).attr("checked", true)
+                $(this).val(this.checked ? 1 : 0);
+            } else {
+                $(this).attr('checked', false);
+                $(this).val(this.checked ? 1 : 0);
+            }
+        });
+        $('.edit_module_url').on('click', function() {
+            var _this = $(this).parents('tr');
+            $('#module_id').val(_this.find('.db_module_id').val());
+            $('#module_name').val(_this.find('.db_module_name').val());
+            $('#module_url_id').val(_this.find('.db_module_url_id').val());
+            $('#module_url').val(_this.find('.db_module_url').val());
+            $('#module_url_status').val(_this.find('.db_module_url_status').val());
+            $('#edit_module_type').text(_this.find('.db_module_type_name').val());
+            $('#edit_module_type').val(_this.find('.db_module_type').val());
+            $('#module_mode').val(_this.find('.db_mode').val());
+
+            var status = $('#module_url_status').val();
+            if (status == 1) {
+                $('#module_url_status').prop('checked', true);
+            } else {
+                $('#module_url_status').prop('checked', false);
+            }
+        });
         $(function() {
             var Toast = Swal.mixin({
                 toast: true,
@@ -345,60 +453,25 @@
                 showConfirmButton: false,
                 timer: 3000
             });
-                $('#module_url_status').click(function() {
-                    if ($(this).is(':checked')) {
-                        $(this).attr("checked", true)
-                        $(this).val(this.checked ? 1 : 0);
-                    } else {
-                        $(this).attr('checked', false);
-                        $(this).val(this.checked ? 1 : 0);
+            $('.create').click(function(e) {
+                e.preventDefault();
+                var url = $('#create_module_url_name').val();
+                var m_id = $('#create_module_id').val();
+                var status = $('#create_module_url_status').val();
+                var type = $('#create_type').val();
+                var mode = $('#create_mode').val();
+                var urls = "{{ route('admin.module.url.create', 'id') }}";
+                urls = urls.replace('id', m_id);
+                console.log(url);
+                console.log(m_id);
+                console.log(status);
+                console.log(type);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
                 });
-                $('#create_module_url_status').click(function() {
-                    if ($(this).is(':checked')) {
-                        $(this).attr("checked", true)
-                        $(this).val(this.checked ? 1 : 0);
-                    } else {
-                        $(this).attr('checked', false);
-                        $(this).val(this.checked ? 1 : 0);
-                    }
-                });
-            $('.edit_module_url').on('click', function() {
-                var _this = $(this).parents('tr');
-                $('#module_id').val(_this.find('.db_module_id').val());
-                $('#module_name').val(_this.find('.db_module_name').val());
-                $('#module_url_id').val(_this.find('.db_module_url_id').val());
-                $('#module_url').val(_this.find('.db_module_url').val());
-                $('#module_url_status').val(_this.find('.db_module_url_status').val());
-                $('#edit_module_type').text(_this.find('.db_module_type_name').val());
-                $('#edit_module_type').val(_this.find('.db_module_type').val());
-
-
-                var status = $('#module_url_status').val();
-                if (status == 1) {
-                    $('#module_url_status').prop('checked', true);
-                } else {
-                    $('#module_url_status').prop('checked', false);
-                }
-            });
-                $('.create').click(function(e) {
-                    e.preventDefault();
-                    var url = $('#create_module_url_name').val();
-                    var m_id = $('#create_module_id').val();
-                    var status = $('#create_module_url_status').val();
-                    var type = $('#create_type').val();
-                    var urls = "{{ route('admin.module.url.create', 'id') }}";
-                    urls = urls.replace('id', m_id);
-                    console.log(url);
-                    console.log(m_id);
-                    console.log(status);
-                    console.log(type);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    if (url != '' && type != '') {
+                if (url != '' && type != '') {
                     $.ajax({
                         type: "post",
                         url: urls,
@@ -406,6 +479,7 @@
                             "url": url,
                             "m_id": m_id,
                             "type": type,
+                            "mode": mode,
                             "status": status,
                         },
                         success: function(response) {
@@ -441,106 +515,106 @@
                         }, 4000);
                     }
                 }
-                });
-                $('.update').click(function(e) {
-                    e.preventDefault();
-                    var m_id = $('#module_id').val();
-                    var id = $('#module_url_id').val();
-                    var url = $('#module_url').val();
-                    var status = $('#module_url_status').val();
-                    var type = $('#module_type').val();
+            });
+            $('.update').click(function(e) {
+                e.preventDefault();
+                var m_id = $('#module_id').val();
+                var id = $('#module_url_id').val();
+                var url = $('#module_url').val();
+                var status = $('#module_url_status').val();
+                var type = $('#module_type').val();
+                var mode = $('#module_mode').val();
 
-
-
-                    var urls = "{{ route('admin.module.url.edit', 'id') }}";
-                    urls = urls.replace('id', m_id);
-                    console.log(id);
-                    console.log(m_id);
-                    console.log(url);
-                    console.log(urls);
-                    console.log(type);
-                    console.log(status);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
-                    if (url != '' && type != '') {
-                        Swal.fire({
-                        title: 'Are you sure?',
-                        icon: 'warning',
-                        confirmButtonColor: '#e64942',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                        cancelButtonText: `No`,
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                                $.ajax({
-                                    type: "post",
-                                    url: urls,
-                                    data: {
-                                        "id": id,
-                                        "m_id": m_id,
-                                        "url": url,
-                                        "type": type,
-                                        "status": status,
-                                    },
-                                    success: function(response) {
-                                        Swal.fire(
-                                        'Updated!',
-                                        'Data Successfully Updated.!',
-                                        'success'
-                                    ).then((result) => {
-                                        location.reload();
-                                    });
-                                    },
-
-                                    error: (error) => {
-                                        console.log(JSON.stringify(error));
-                                    }
-                                });
-                            }
-                        });
-                    } else {
-                    if (url == '') {
-                        $('#module_url_error').show();
-                        $('#module_url_error').html(
-                            "Required!");
-                        window.setInterval(function() {
-                            $('#module_url_error').slideUp('slow');
-                            $('#module_url_error').empty();
-                        }, 4000);
+                var urls = "{{ route('admin.module.url.edit', 'id') }}";
+                urls = urls.replace('id', m_id);
+                console.log(id);
+                console.log(m_id);
+                console.log(url);
+                console.log(urls);
+                console.log(type);
+                console.log(status);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     }
-                    if (type == null) {
-                        $('#module_type_error').show();
-                        $('#module_type_error').html(
-                            "Required!");
-                        window.setInterval(function() {
-                            $('#module_type_error').slideUp('slow');
-                            $('#module_type_error').empty();
-                        }, 4000);
-                    }
-                }   
-
                 });
-                $('.delete').click(function(e) {
-                    e.preventDefault();
-                    var el = this;
-                    var id = $(this).closest("tr").find('.id').val();
-                    console.log(id);
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
+                if (url != '' && type != '') {
                     Swal.fire({
                     title: 'Are you sure?',
-                    text: "Once Deleted, you will not be able to recover this record!!",
                     icon: 'warning',
                     confirmButtonColor: '#e64942',
                     showCancelButton: true,
                     confirmButtonText: 'Yes',
                     cancelButtonText: `No`,
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                            $.ajax({
+                                type: "post",
+                                url: urls,
+                                data: {
+                                    "id": id,
+                                    "m_id": m_id,
+                                    "url": url,
+                                    "type": type,
+                                    "mode": mode,
+                                    "status": status,
+                                },
+                                success: function(response) {
+                                    Swal.fire(
+                                    'Updated!',
+                                    'Data Successfully Updated.!',
+                                    'success'
+                                ).then((result) => {
+                                    location.reload();
+                                });
+                                },
+
+                                error: (error) => {
+                                    console.log(JSON.stringify(error));
+                                }
+                            });
+                        }
+                    });
+                } else {
+                if (url == '') {
+                    $('#module_url_error').show();
+                    $('#module_url_error').html(
+                        "Required!");
+                    window.setInterval(function() {
+                        $('#module_url_error').slideUp('slow');
+                        $('#module_url_error').empty();
+                    }, 4000);
+                }
+                if (type == null) {
+                    $('#module_type_error').show();
+                    $('#module_type_error').html(
+                        "Required!");
+                    window.setInterval(function() {
+                        $('#module_type_error').slideUp('slow');
+                        $('#module_type_error').empty();
+                    }, 4000);
+                }
+                }   
+
+            });
+            $('.delete').click(function(e) {
+                e.preventDefault();
+                var el = this;
+                var id = $(this).closest("tr").find('.id').val();
+                console.log(id);
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "Once Deleted, you will not be able to recover this record!!",
+                icon: 'warning',
+                confirmButtonColor: '#e64942',
+                showCancelButton: true,
+                confirmButtonText: 'Yes',
+                cancelButtonText: `No`,
                 }).then((result) => {
                     if (result.isConfirmed) {
                                 $.ajax({
@@ -570,9 +644,62 @@
                                     }
                                 });
                             }
-                        });
                 });
             });
+            $('#module_mode').change(function() {
+                    var m_id = $('#module_id').val();
+                    var module_mode = $(this).val();
+                    var urls = "{{ route('admin.module.url.edit', 'id') }}";
+                    urls = urls.replace('id', m_id);
+                    console.log(m_id);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        }
+                    });
+                    if (m_id) {
+                            $.ajax({
+                                type: "get",
+                                url: urls,
+                                data: {
+                                    "m_id": m_id,
+                                    "module_mode": module_mode,
+                                },
+                                success: function(response) {
+                                    if (response == "OK") {
+                                        $('#module_mode_error').html(
+                                            '<span class="text-success">Mode is Available</span>'
+                                        );
+                                        $('.update').attr('disabled', false);
+                                        setTimeout(function() {
+                                            $('#module_mode_error').fadeIn('slow');
+                                        }, 1000);
+                                        setTimeout(function() {
+                                            $('#module_mode_error').fadeOut('slow');
+                                        }, 5000);
+                                    } else {
+                                        $('#module_mode_error').html(
+                                            '<span class="text-danger">Mode Already Exist</span>'
+                                        );
+                                        $('.update').attr('disabled', true);
+                                        setTimeout(function() {
+                                            $('#module_mode_error').fadeIn('slow');
+                                        }, 1000);
+                                        setTimeout(function() {
+                                            $('#module_mode_error').fadeOut('slow');
+                                        }, 5000);
+                                    }
+                                },
+
+                                error: (error) => {
+                                    console.log(JSON.stringify(error));
+                                }
+                            });
+                    } else {
+                        $('.update').attr('disabled', true);
+                    }
+            });
+        });
     </script>
     @endsection
     {{-- @Include('layouts.links.modals.foot') --}}

@@ -89,7 +89,7 @@
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file" name="transaction_file" class="custom-file-input"
-                                                id="exampleInputFile" accept=".csv">
+                                                id="exampleInputFile">
                                             <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                         </div>
                                     </div>

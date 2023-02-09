@@ -123,7 +123,13 @@
                                                         <input type="hidden" name="r_id" id="R_id"
                                                             value="{{ $module->permissions['r_id'] }}">
                                                         <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
-                                                        <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="0">
+                                                        <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="@if($module->permissions['view']!=null||$module->permissions['add'] != null||$module->permissions['edit'] != null||$module->permissions['delete'] != null){{1}}@endif"   
+                                                                        @if ($module->permissions['view'] != null ||
+                                                                        $module->permissions['add'] != null ||
+                                                                        $module->permissions['edit'] != null ||
+                                                                        $module->permissions['delete'] != null) 
+                                                                        {{'checked'}}
+                                                                        @endif>
                                                         {{ $module->name }}
                                                     </td>
                                                     <td>

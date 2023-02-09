@@ -61,11 +61,12 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
                                     <!-- Button trigger modal -->
-
-                                    <a type="button" href="#" data-toggle="modal" data-target="#module_create"
-                                        class="border px-2 btn" style="background-color: #091E3E;color: white">
-                                        Add Module
-                                    </a>
+                                    @if ($create == 1)
+                                        <a type="button" href="#" data-toggle="modal" data-target="#module_create"
+                                            class="border px-2 btn" style="background-color: #091E3E;color: white">
+                                            Add Module
+                                        </a>
+                                    @endif
                                     <!-- Modal -->
                                     <form action="{{ route('admin.module.create') }}" method="POST"
                                         id="module_create_form">
@@ -289,51 +290,58 @@
                                                                                     value="{{ $module->status }}">
                                                                             </td>
                                                                             <td>
-                                                                                <div class="dropdown">
-                                                                                    <button
-                                                                                        class="btn btn-secondary dropdown-toggle"
-                                                                                        type="button"
-                                                                                        id="dropdownMenuButton"
-                                                                                        data-toggle="dropdown"
-                                                                                        aria-haspopup="true"
-                                                                                        aria-expanded="false">
-                                                                                        Action
-                                                                                    </button>
-                                                                                    <div class="dropdown-menu edit_module"
-                                                                                        aria-labelledby="dropdownMenuButton">
-                                                                                        <li>
-                                                                                            <a class="dropdown-item"
-                                                                                                type="button"
-                                                                                                href="#"
-                                                                                                data-toggle="modal"
-                                                                                                data-target="#module_update">
-                                                                                                Edit</a>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <form
-                                                                                                action="{{ route('admin.module.delete') }}"
-                                                                                                method="POST">
-                                                                                                @csrf
-                                                                                                <input type="hidden"
-                                                                                                    name="id"
-                                                                                                    class="id"
-                                                                                                    value="{{ $module->id }}">
-                                                                                                <button
-                                                                                                    class="dropdown-item delete"
-                                                                                                    type="submit">
-                                                                                                    Delete
-                                                                                                </button>
-                                                                                            </form>
-                                                                                        </li>
-                                                                                        <li>
-                                                                                            <a href="{{ route('admin.module.url.index', [$module->id]) }}"
-                                                                                                class="dropdown-item
-                                                                            edit_module">
-                                                                                                Create URL
-                                                                                            </a>
-                                                                                        </li>
+                                                                                @if ($edit == 1 || $delete == 1 || $permissions_view == 1)
+                                                                                    <div class="dropdown">
+                                                                                        <button
+                                                                                            class="btn btn-secondary dropdown-toggle"
+                                                                                            type="button"
+                                                                                            id="dropdownMenuButton"
+                                                                                            data-toggle="dropdown"
+                                                                                            aria-haspopup="true"
+                                                                                            aria-expanded="false">
+                                                                                            Action
+                                                                                        </button>
+                                                                                        <div class="dropdown-menu edit_module"
+                                                                                            aria-labelledby="dropdownMenuButton">
+                                                                                            @if ($edit == 1)
+                                                                                                <li>
+                                                                                                    <a class="dropdown-item"
+                                                                                                        type="button"
+                                                                                                        href="#"
+                                                                                                        data-toggle="modal"
+                                                                                                        data-target="#module_update">
+                                                                                                        Edit</a>
+                                                                                                </li>
+                                                                                            @endif
+                                                                                            @if ($delete == 1)
+                                                                                                <li>
+                                                                                                    <form
+                                                                                                        action="{{ route('admin.module.delete') }}"
+                                                                                                        method="POST">
+                                                                                                        @csrf
+                                                                                                        <input type="hidden"
+                                                                                                            name="id"
+                                                                                                            class="id"
+                                                                                                            value="{{ $module->id }}">
+                                                                                                        <button
+                                                                                                            class="dropdown-item delete"
+                                                                                                            type="submit">
+                                                                                                            Delete
+                                                                                                        </button>
+                                                                                                    </form>
+                                                                                                </li>
+                                                                                            @endif
+                                                                                            @if ($permissions_view == 1)
+                                                                                                <li>
+                                                                                                    <a href="{{ route('admin.module.url.index', [$module->id]) }}"
+                                                                                                        class="dropdown-item edit_module">
+                                                                                                        Modules URL
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                            @endif
+                                                                                        </div>
                                                                                     </div>
-                                                                                </div>
+                                                                                @endif
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach

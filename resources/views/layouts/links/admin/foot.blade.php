@@ -33,3 +33,4 @@
     {{-- <script src="{{ asset('assets/dist/js/demo.js') }}"></script> --}}
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
     {{-- <script src="{{ asset('assets/dist/js/pages/dashboard.js') }}"></script> --}}
+    <script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>

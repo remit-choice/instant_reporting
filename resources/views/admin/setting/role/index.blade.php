@@ -61,10 +61,12 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
                                     <!-- Button trigger modal -->
-                                    <a type="button" href="#" data-toggle="modal" data-target="#role_create"
-                                        class="border px-2 btn" style="background-color: #091E3E;color: white">
-                                        Add Role
-                                    </a>
+                                    @if ($create == 1)
+                                        <a type="button" href="#" data-toggle="modal" data-target="#role_create"
+                                            class="border px-2 btn" style="background-color: #091E3E;color: white">
+                                            Add Role
+                                        </a>
+                                    @endif
                                     <!-- Modal -->
                                     <form action="{{ route('admin.role.create') }}" method="POST">
                                         @csrf
@@ -166,45 +168,52 @@
                                                         value="{{ $role->status }}">
                                                 </td>
                                                 <td>
-                                                    <div class="dropdown">
-                                                        <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                            id="dropdownMenuButton" data-toggle="dropdown"
-                                                            aria-haspopup="true" aria-expanded="false">
-                                                            Action
-                                                        </button>
-                                                        <div class="dropdown-menu edit_role"
-                                                            aria-labelledby="dropdownMenuButton">
-                                                            <li>
-                                                                <a class="dropdown-item" type="button" href="#"
-                                                                    data-toggle="modal" data-target="#role_update">
-                                                                    Edit</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ route('admin.role.permission.create', ['id' => $role->id]) }}"
-                                                                    class="dropdown-item">Create
-                                                                    Permissions
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="{{ route('admin.role.permission.edit', ['id' => $role->id]) }}"
-                                                                    class="dropdown-item">Change
-                                                                    Module
-                                                                    Permissions
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <form action="{{ route('admin.role.delete') }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    <input type="hidden" name="id" class="id"
-                                                                        value="{{ $role->id }}">
-                                                                    <button class="dropdown-item delete" type="submit">
-                                                                        Delete
-                                                                    </button>
-                                                                </form>
-                                                            </li>
+                                                    @if ($edit == 1 || $permissions_create==1 || $permissions_edit==1 || $delete==1)
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                                id="dropdownMenuButton" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </button>
+                                                            <div class="dropdown-menu edit_role"
+                                                                aria-labelledby="dropdownMenuButton">
+                                                                @if ($edit == 1)
+                                                                    <li>
+                                                                        <a class="dropdown-item" type="button" href="#"
+                                                                            data-toggle="modal" data-target="#role_update">
+                                                                            Edit</a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($permissions_create==1)
+                                                                    <li>
+                                                                        <a href="{{ route('admin.role.permission.create', ['id' => $role->id]) }}"
+                                                                            class="dropdown-item">Create Permissions
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($permissions_edit==1)
+                                                                    <li>
+                                                                        <a href="{{ route('admin.role.permission.edit', ['id' => $role->id]) }}"
+                                                                            class="dropdown-item">Change Module Permissions
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($delete == 1)
+                                                                    <li>
+                                                                        <form action="{{ route('admin.role.delete') }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id" class="id"
+                                                                                value="{{ $role->id }}">
+                                                                            <button class="dropdown-item delete" type="submit">
+                                                                                Delete
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                @endif
+                                                            </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach

@@ -61,10 +61,12 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
                                     <!-- Button trigger modal -->
-                                    <a type="button" href="#" data-toggle="modal" data-target="#module_group_create"
-                                        class="border px-2 btn" style="background-color: #091E3E;color: white">
-                                        Add Module Group
-                                    </a>
+                                    @if ($create == 1)
+                                        <a type="button" href="#" data-toggle="modal" data-target="#module_group_create"
+                                            class="border px-2 btn" style="background-color: #091E3E;color: white">
+                                            Add Module Group
+                                        </a>
+                                    @endif
                                     <!-- Modal -->
                                     <form action="{{ route('admin.module.group.create') }}" method="POST">
                                         @csrf
@@ -188,6 +190,7 @@
                                                                 value="{{ $module_group->status }}">
                                                         </td>
                                                         <td>
+                                                            @if ($edit == 1 || $delete==1)
                                                             <div class="dropdown">
                                                                 <button class="btn btn-secondary dropdown-toggle"
                                                                     type="button" id="dropdownMenuButton"
@@ -197,26 +200,33 @@
                                                                 </button>
                                                                 <div class="dropdown-menu edit_module_group"
                                                                     aria-labelledby="dropdownMenuButton">
-                                                                    <a class="dropdown-item" type="button"
-                                                                        href="#" data-toggle="modal"
-                                                                        data-target="#module_group_update">
-                                                                        Edit</a>
-                                                                    <li>
-                                                                        <form
-                                                                            action="{{ route('admin.module.group.delete') }}"
-                                                                            method="POST">
-                                                                            @csrf
-                                                                            <input type="hidden" name="id"
-                                                                                class="id"
-                                                                                value="{{ $module_group->id }}">
-                                                                            <button class="dropdown-item delete"
-                                                                                type="submit">
-                                                                                Delete
-                                                                            </button>
-                                                                        </form>
-                                                                    </li>
+                                                                    @if ($edit == 1)
+                                                                        <li>
+                                                                            <a class="dropdown-item" type="button"
+                                                                                href="#" data-toggle="modal"
+                                                                                data-target="#module_group_update">
+                                                                                Edit</a>
+                                                                        </li>
+                                                                    @endif
+                                                                    @if ($delete==1)
+                                                                        <li>
+                                                                            <form
+                                                                                action="{{ route('admin.module.group.delete') }}"
+                                                                                method="POST">
+                                                                                @csrf
+                                                                                <input type="hidden" name="id"
+                                                                                    class="id"
+                                                                                    value="{{ $module_group->id }}">
+                                                                                <button class="dropdown-item delete"
+                                                                                    type="submit">
+                                                                                    Delete
+                                                                                </button>
+                                                                            </form>
+                                                                        </li>
+                                                                    @endif
                                                                 </div>
                                                             </div>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach

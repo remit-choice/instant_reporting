@@ -16,7 +16,7 @@ class PermissionController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            app(UserController::class)->main();
+            (new UserController)->main();
             return $next($request);
         });
     }

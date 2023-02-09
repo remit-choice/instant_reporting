@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Module;
 use App\Models\ModulesGroup;
 use App\Models\ModulesUrl;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -14,7 +15,7 @@ class ModuleUrlController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            app(UserController::class)->main();
+            (new UserController)->main();
             return $next($request);
         });
     }
@@ -58,12 +59,14 @@ class ModuleUrlController extends Controller
             $m_id = $request->m_id;
             $status = $request->status;
             $type = $request->type;
+            $mode = $request->mode;
             ModulesUrl::insert([
                 'm_id' => $m_id,
                 'url' => $url,
                 'name' => $name,
                 'status' => $status,
                 'type' => $type,
+                'mode' => $mode,
             ]);
         } else {
             return back();
@@ -81,6 +84,14 @@ class ModuleUrlController extends Controller
                 } else {
                     return "OK";
                 }
+            } elseif ($request->module_mode) {
+                $m_id = $request->m_id;
+                $module_mode = $request->module_mode;
+                $modules = ModulesUrl::where([['m_id', '=', $m_id], ['mode', '=', $module_mode]])->count();
+                if (!empty($modules) && $modules > 0) {
+                } else {
+                    return "OK";
+                }
             } else {
                 return back();
             }
@@ -90,18 +101,17 @@ class ModuleUrlController extends Controller
             $url = parse_url($url, PHP_URL_PATH);
             $url  = str_replace("id", "{id}", $url);
             $url  = str_replace("/instantreporting", "", $url);
-
-
             // dd($id);
-
             $name = $request->url;
             $m_id = $request->m_id;
             $status = $request->status;
             $type = $request->type;
+            $mode = $request->mode;
             ModulesUrl::where('id', $id)->update([
                 'url' => $url,
                 'name' => $name,
                 'type' => $type,
+                'mode' => $mode,
                 'status' => $status,
             ]);
             $request->session()->pull('m_id');
@@ -113,6 +123,27 @@ class ModuleUrlController extends Controller
     public function delete(Request $request)
     {
         $id = $request->id;
+        $modules = ModulesUrl::where('id', $id)->select('m_id', 'mode')->first();
+        $permisions = Permission::where('m_id', $modules->m_id)->get();
+        if (!empty($permisions)) {
+            if ($modules->mode == 1) {
+                Permission::where('m_id', $modules->m_id)->update([
+                    'view' => NULL
+                ]);
+            } elseif ($modules->mode == 2) {
+                Permission::where('m_id', $modules->m_id)->update([
+                    'add' => NULL
+                ]);
+            } elseif ($modules->mode == 3) {
+                Permission::where('m_id', $modules->m_id)->update([
+                    'edit' => NULL
+                ]);
+            } elseif ($modules->mode == 4) {
+                Permission::where('m_id', $modules->m_id)->update([
+                    'delete' => NULL
+                ]);
+            }
+        }
         ModulesUrl::where('id', $id)->delete();
     }
 }

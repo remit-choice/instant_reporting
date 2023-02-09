@@ -9,17 +9,19 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Illuminate\Support\Facades\View;
+use App\Http\Controllers\UserController;
 
 class RolesController extends Controller
 {
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            app(UserController::class)->main();
+            (new UserController)->main();
             return $next($request);
         });
     }
-    public function roles_list()
+    public function roles_list(Request $request)
     {
         $roles = Role::get();
         return view('admin.setting.role.index', ['roles' => $roles]);

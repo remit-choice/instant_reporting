@@ -73,6 +73,9 @@
                                             </div>
                                             <input type="hidden" name="create_currency_id" id="create_currency_id"
                                                 value="">
+                                            <input type="hidden" name="create_currency" id="create_currency"
+                                                value="">
+                                                
                                             <div class="form-group row">
                                                 <div class="col-6">
                                                     <label for="create_currency_min_rate" class="text-capitalize">min
@@ -142,11 +145,14 @@
                                         </div>
                                         <div class="col-3">
                                         </div>
-                                        <form action="{{ route('admin.currencies.rates.filter') }}" method="post"
+                                        <form action="{{ route('admin.currencies.rates.index') }}" method="post"
                                             class="col-3 float-right d-flex flex-row">
                                             @csrf
-                                            <input type="date" name="date" id="filter_date" class="form-control mr-2"
-                                                value="@php if (session()->has('dated')){echo session()->get('dated'); }else{echo \Carbon\Carbon::now()->format('Y-m-d');} @endphp">
+                                            @if (request()->input('date'))
+                                                <input type="date" name="date" class="form-control" value="{{ request()->input('date', old('date')) }}" style="width: 100%">
+                                            @else
+                                                <input type="date" name="date" class="form-control" value="@php echo \Carbon\Carbon::now()->format('Y-m-d'); @endphp" style="width: 100%">
+                                            @endif
                                             <button type="submit" name="filter" class="btn mb-2"
                                                 style="background-color: #091E3E;color: white">Submit</button>
                                         </form>
@@ -282,7 +288,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <form action="{{ route('admin.currencies.rates.update') }}" method="post" autocomplete="off">
+                    <form action="{{ route('admin.currencies.rates.edit') }}" method="post" autocomplete="off">
                         @csrf
                         <div class="modal-body">
                             <div id="update_failes" class="alert alert-default-danger alert-dismissible fade show"
@@ -333,14 +339,7 @@
         @Include('layouts.links.datatable.foot')
         @Include('layouts.links.sweet_alert.foot')
         <script type="text/javascript">
-            $(function() {
-	var Toast = Swal.mixin({
-		toast: true,
-		position: 'top-end',
-		showConfirmButton: false,
-		timer: 3000
-	});
-	$('.create_currency').on('click', function() {
+        	$('.create_currency').on('click', function() {
 		var _this = $(this).parents('tr');
 		$('#create_currency_min_rate').val(_this.find('.db_currency_min_rate').val());
 		$('#create_currency_max_rate').val(_this.find('.db_currency_max_rate').val());
@@ -349,6 +348,7 @@
 		$('#create_currency_iso').val(_this.find('.db_currency_iso').val());
 		$('#create_currency_iso3').val(_this.find('.db_currency_iso3').val());
 		$('#create_currency').val(_this.find('.db_currency').val());
+        console.log($('#create_currency').val());
 	});
 	$('.edit_currency').on('click', function() {
 		var _this = $(this).parents('tr');
@@ -361,13 +361,21 @@
 		$('#currency_iso3').val(_this.find('.db_currency_iso3').val());
 		$('#currency').val(_this.find('.db_currency').val());
 	});
+            $(function() {
+	var Toast = Swal.mixin({
+		toast: true,
+		position: 'top-end',
+		showConfirmButton: false,
+		timer: 3000
+	});
+
 	$('.create').click(function(e) {
 		e.preventDefault();
 		var c_id = $('#create_currency_id').val();
 		var min_rate = $('#create_currency_min_rate').val();
 		var max_rate = $('#create_currency_max_rate').val();
 		var rate = $('#create_currency_rate').val();
-		var date = $('#filter_date').val();
+		var date = $('#date').val();
 		var iso = $('#create_currency_iso').val();
 		var iso3 = $('#create_currency_iso3').val();
 		var currency = $('#create_currency').val();
@@ -466,7 +474,7 @@
 		var min_rate = $('#currency_min_rate').val();
 		var max_rate = $('#currency_max_rate').val();
 		var rate = $('#currency_rate').val();
-		var date = $('#filter_date').val();
+		var date = $('#date').val();
 		var iso = $('#currency_iso').val();
 		var iso3 = $('#currency_iso3').val();
 		var currency = $('#currency').val();
@@ -495,7 +503,7 @@
 				if (result.isConfirmed) {
 					$.ajax({
 							type: "post",
-							url: "{{ route('admin.currencies.rates.update') }}",
+							url: "{{ route('admin.currencies.rates.edit') }}",
 							data: {
 								"id": id,
 								"c_id": c_id,

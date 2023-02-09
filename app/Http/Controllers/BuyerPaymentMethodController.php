@@ -14,7 +14,7 @@ class BuyerPaymentMethodController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            app(UserController::class)->main();
+            (new UserController)->main();
             return $next($request);
         });
     }
@@ -74,7 +74,11 @@ class BuyerPaymentMethodController extends Controller
             ]);
         }
     }
-    public function update(Request $request)
+    public function edit(Request $request)
+    {
+        return $this->update($request);
+    }
+    public function update($request)
     {
         $request->validate(
             [

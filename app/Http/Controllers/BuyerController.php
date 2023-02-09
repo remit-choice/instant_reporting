@@ -15,7 +15,7 @@ class BuyerController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            app(UserController::class)->main();
+            (new UserController)->main();
             return $next($request);
         });
     }
@@ -48,7 +48,11 @@ class BuyerController extends Controller
             'status' => $status
         ]);
     }
-    public function update(Request $request)
+    public function edit(Request $request)
+    {
+        return $this->update($request);
+    }
+    public function update($request)
     {
         $request->validate(
             [
@@ -96,14 +100,16 @@ class BuyerController extends Controller
         } elseif (FacadesRequest::isMethod('post')) {
             $date_from = date('d/m/Y', strtotime($request->date_from));
             $date_to = date('d/m/Y', strtotime($request->date_to));
+            // dd($date_from);
+            // dd($date_to);
             if (!empty($request->date_from) && empty($request->date_to)) {
-                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'bank_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where([['paid_date', $date_from], ['bank_name', $buyer_name->name]])->get();
+                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'buyer_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where([['paid_date', $date_from], ['buyer_name', $buyer_name->name]])->get();
                 // dd($transactions->toArray());
             } elseif (empty($request->date_from) && !empty($request->date_to)) {
-                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'bank_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where([['paid_date', $date_to], ['bank_name', $buyer_name->name]])->get();
+                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'buyer_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where([['paid_date', $date_to], ['buyer_name', $buyer_name->name]])->get();
                 // dd($transactions->toArray());
             } elseif (!empty($request->date_from) && !empty($request->date_to)) {
-                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'bank_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where('bank_name', $buyer_name->name)->whereBetween('paid_date', [$date_from, $date_to])->get();
+                $transactions = TransactionsData::select('paid_date', 'customer_country', 'payment_method', 'payin_ccy', 'payin_amt', 'buyer_name', 'payout_ccy', 'amount', 'admin_charges', 'payment_method')->where('buyer_name', $buyer_name->name)->whereBetween('paid_date', [$date_from, $date_to])->get();
                 // dd($transactions->toArray());
                 // dd($transactions);
             } else {

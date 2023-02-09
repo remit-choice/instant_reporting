@@ -410,7 +410,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.currencies.update') }}" method="post">
+                <form action="{{ route('admin.currencies.edit') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

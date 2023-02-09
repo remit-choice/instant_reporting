@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ModulesUrl extends Model
 {
-    protected $fillable = ['id', 'm_id', 'url', 'name', 'status', 'type'];
+    protected $fillable = ['id', 'm_id', 'url', 'mode', 'name', 'status', 'type'];
     protected $table = 'modules_urls';
 
     public function modules()

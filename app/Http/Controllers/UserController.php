@@ -30,8 +30,18 @@ class UserController extends Controller
             ->with('modules.permissions', $modules)
             ->orderBy("sort")
             ->get();
-        // dd($module_groups->toArray());
-        View::share(['module_groups' => $module_groups]);
+        foreach ($module_groups as $module_group) {
+            foreach ($module_group->modules as $module) {
+                if (!empty($module->permissions) && $module->name == 'Permissions') {
+                    $permissions_create = $module->permissions['add'];
+                    $permissions_edit = $module->permissions['edit'];
+                }
+                if (!empty($module->permissions) && $module->name == 'Modules URL') {
+                    $permissions_view = $module->permissions['view'];
+                }
+            }
+        }
+        View::share(['module_groups' => $module_groups, 'permissions_view' => $permissions_view, 'permissions_create' => $permissions_create, 'permissions_edit' => $permissions_edit]);
     }
     public function index()
     {

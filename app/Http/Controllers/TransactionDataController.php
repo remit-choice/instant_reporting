@@ -12,7 +12,7 @@ class TransactionDataController extends Controller
     public function __construct()
     {
         $this->middleware(function ($request, $next) {
-            app(UserController::class)->main();
+            (new UserController)->main();
             return $next($request);
         });
     }
@@ -54,6 +54,7 @@ class TransactionDataController extends Controller
             return view('admin.upload_data.transactions.create');
         } elseif (FacadesRequest::isMethod('post')) {
             if ($request->file('transaction_file')) {
+                // ini_set('max_execution_time', 180);
                 $file = $request->file('transaction_file');
                 $extension = $file->getClientOriginalExtension();
                 // $filename = time() . '.' . $extension;
@@ -143,9 +144,9 @@ class TransactionDataController extends Controller
                                 'subagent_rate' => $emapData[65],
                                 'codice_fiscale' => $emapData[66],
                                 'beneficiary_cnic' => $emapData[67],
-                                'bene_branch_name' => $emapData[68],
-                                'bene_branch_code' => $emapData[69],
-                                'bene_bank_name' => $emapData[70],
+                                'receiver_branch_name' => $emapData[68],
+                                'receiver_branch_code' => $emapData[69],
+                                'buyer_name' => $emapData[70],
                                 'total_transaction' => $emapData[71],
                                 'total_amount' => $emapData[72],
                                 'relationship' => $emapData[73],

@@ -63,10 +63,12 @@
                                 </div>
                                 <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
                                     <!-- Button trigger modal -->
-                                    <a type="button" href="#" data-toggle="modal" data-target="#user_create"
-                                        class="border px-2 btn create_user" style="background-color: #091E3E;color: white">
-                                        Add User
-                                    </a>
+                                    @if ($create == 1)
+                                        <a type="button" href="#" data-toggle="modal" data-target="#user_create"
+                                            class="border px-2 btn create_user" style="background-color: #091E3E;color: white">
+                                            Add User
+                                        </a>
+                                    @endif
                                     <!-- Modal -->
                                     <form action="{{ route('admin.user.create') }}" method="POST">
                                         @csrf
@@ -274,32 +276,38 @@
                                                         <input type="hidden" name="db_status" class="db_status"
                                                             value="{{ $user->status }}"></td>
                                                     <td>
-                                                        <div class="dropdown">
-                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                id="dropdownMenuButton" data-toggle="dropdown"
-                                                                aria-haspopup="true" aria-expanded="false">
-                                                                Action
-                                                            </button>
-                                                            <div class="dropdown-menu edit_user"
-                                                                aria-labelledby="dropdownMenuButton">
-                                                                <li>
-                                                                    <a class="dropdown-item" type="button" href="#"
-                                                                        data-toggle="modal" data-target="#user_update">
-                                                                        Edit</a>
-                                                                </li>
-                                                                <li>
-                                                                    <form action="{{ route('admin.user.delete') }}"
-                                                                        method="POST">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id" class="id"
-                                                                            value="{{ $user->id }}">
-                                                                        <button class="dropdown-item delete" type="submit">
-                                                                            Delete
-                                                                        </button>
-                                                                    </form>
-                                                                </li>
+                                                        @if ($edit == 1 || $delete == 1)
+                                                            <div class="dropdown">
+                                                                <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                                    id="dropdownMenuButton" data-toggle="dropdown"
+                                                                    aria-haspopup="true" aria-expanded="false">
+                                                                    Action
+                                                                </button>
+                                                                <div class="dropdown-menu edit_user"
+                                                                    aria-labelledby="dropdownMenuButton">
+                                                                    @if ($edit == 1)
+                                                                        <li>
+                                                                            <a class="dropdown-item" type="button" href="#"
+                                                                                data-toggle="modal" data-target="#user_update">
+                                                                                Edit</a>
+                                                                        </li>
+                                                                    @endif
+                                                                    @if ($delete == 1)
+                                                                        <li>
+                                                                            <form action="{{ route('admin.user.delete') }}"
+                                                                                method="POST">
+                                                                                @csrf
+                                                                                <input type="hidden" name="id" class="id"
+                                                                                    value="{{ $user->id }}">
+                                                                                <button class="dropdown-item delete" type="submit">
+                                                                                    Delete
+                                                                                </button>
+                                                                            </form>
+                                                                        </li>
+                                                                    @endif
+                                                                </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                             @endforeach

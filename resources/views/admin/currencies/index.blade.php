@@ -160,7 +160,7 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <form action="{{ route('admin.currencies.update') }}" method="post">
+                <form action="{{ route('admin.currencies.edit') }}" method="post">
                     @csrf
                     <div class="modal-body">
                         <div id="failes" class="alert alert-default-danger alert-dismissible fade show" role="alert"
@@ -246,7 +246,7 @@
                         if (result.isConfirmed) {
                                 $.ajax({
                                     type: "post",
-                                    url: "{{ route('admin.currencies.update') }}",
+                                    url: "{{ route('admin.currencies.edit') }}",
                                     data: {
                                         "id": id,
                                         "min_rate": min_rate,

@@ -8,6 +8,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 
 class Routing
 {
@@ -35,34 +36,44 @@ class Routing
                     $REQUEST_URI = '/' . Route::current(['id'])->uri();
                     $modules_urls = function ($query) use ($REQUEST_URI) {
                         $query->where('url', $REQUEST_URI);
+                        $query->orderBy('id', 'ASC');
+                        $query->where('status', '1');
                     };
                     // dd($REQUEST_URI);
-
-                    $permissions = function ($query) {
-                        $query->where('r_id', Session::get('r_id'));
+                    $r_id = Session::get('r_id');
+                    $permissions = function ($query) use ($r_id) {
+                        $query->where('r_id', $r_id);
+                        $query->orderBy('id', 'ASC');
                     };
-                    $module_groups = ModulesGroup::with('modules')->whereHas('modules.permissions', $permissions)->whereHas('modules.modules_urls', $modules_urls)
+                    $ordeing = function ($query) {
+                        $query->orderBy('id', 'ASC');
+                        $query->where('status', '1');
+                    };
+                    $module_groups = ModulesGroup::whereHas('modules', $ordeing)->whereHas('modules.permissions', $permissions)->whereHas('modules.modules_urls', $modules_urls)
+                        ->with('modules', $ordeing)
                         ->with('modules.permissions', $permissions)
                         ->with('modules.modules_urls', $modules_urls)
                         ->get();
                     // dd(
                     //     $module_groups->toArray()
                     // );
-                    $response = response(view('layouts.errors.404'), 404);
+                    $response = response(view('errors.404'), 404);
                     foreach ($module_groups as $module_group) {
                         foreach ($module_group->modules as $module) {
-                            if ((!empty($module->permissions)) && (!empty($module->modules_urls))) {
+                            if (!empty($module->modules_urls)) {
                                 foreach ($module->modules_urls as $modules_url) {
-                                    if (
-                                        ($module->id == $module->permissions['m_id']) &&  ($module->status == 1) && ($module->permissions['view'] == 1) && ($modules_url->url == $REQUEST_URI)
-                                    ) {
-
-
+                                    if (!empty($module->permissions) && $module->id == $module->permissions['m_id'] && $module->permissions['view'] == 1 && $modules_url->url == $REQUEST_URI) {
+                                        $create = $module->permissions['add'];
+                                        $edit = $module->permissions['edit'];
+                                        $delete = $module->permissions['delete'];
+                                        View::share(['create' => $create, 'edit' => $edit, 'delete' => $delete]);
                                         $response = $next($request);
+                                    } else {
+                                        $response;
                                     }
                                 }
                             } else {
-                                $response = response(view('layouts.errors.404'), 404);
+                                $response;
                             }
                         }
                     }
@@ -75,7 +86,7 @@ class Routing
                 }
             }
         } else {
-            return redirect('/admin');
+            return redirect()->route('admin.login');
         }
     }
 }

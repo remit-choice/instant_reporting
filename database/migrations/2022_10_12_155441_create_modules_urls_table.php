@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('m_id')->index('m_id')->nullable();
             $table->string('name');
             $table->string('url');
+            $table->integer('mode')->nullable();
             $table->string('status')->nullable();
             $table->string('type')->nullable();
             $table->timestamps();

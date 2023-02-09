@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\BuyerController;
 use App\Http\Controllers\BuyerPaymentMethodController;
 use App\Http\Controllers\CurrenciesController;
+use App\Http\Controllers\CurrenciesRateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ModuleGroupsController;
 use App\Http\Controllers\ModulesController;
@@ -65,25 +66,23 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
         Route::prefix('currencies')->name('currencies.')->group(function () {
             Route::get('/', [CurrenciesController::class, 'index'])->name('index');
-            Route::post('/edit', [CurrenciesController::class, 'update'])->name('update');
-            // Route::post('/tests', [CurrenciesController::class, 'index'])->name('currencies.tests');
+            Route::post('/edit', [CurrenciesController::class, 'edit'])->name('edit');
             Route::prefix('rates')->name('rates.')->group(function () {
-                Route::get('/', [CurrenciesController::class, 'rate_index'])->name('index');
-                Route::post('/create', [CurrenciesController::class, 'rate_create'])->name('create');
-                Route::post('/edit', [CurrenciesController::class, 'rate_update'])->name('update');
-                Route::post('/filter', [CurrenciesController::class, 'rate_filter'])->name('filter');
+                Route::match(['get', 'post'], '/', [CurrenciesRateController::class, 'index'])->name('index');
+                Route::post('/create', [CurrenciesRateController::class, 'create'])->name('create');
+                Route::post('/edit', [CurrenciesRateController::class, 'edit'])->name('edit');
             });
         });
         Route::prefix('buyer')->name('buyer.')->group(function () {
             Route::get('/', [BuyerController::class, 'index'])->name('index');
             Route::post('/create', [BuyerController::class, 'create'])->name('create');
-            Route::post('/update', [BuyerController::class, 'update'])->name('update');
+            Route::post('/edit', [BuyerController::class, 'edit'])->name('edit');
             Route::post('/delete', [BuyerController::class, 'delete'])->name('delete');
 
             Route::prefix('/{id}/pay_method')->name('pay_method.')->group(function () {
                 Route::get('/', [BuyerPaymentMethodController::class, 'index'])->name('index');
                 Route::post('/create', [BuyerPaymentMethodController::class, 'create'])->name('create');
-                Route::post('/update', [BuyerPaymentMethodController::class, 'update'])->name('update');
+                Route::post('/edit', [BuyerPaymentMethodController::class, 'edit'])->name('edit');
                 Route::post('/delete', [BuyerPaymentMethodController::class, 'delete'])->name('delete');
             });
             Route::prefix('/{id}/report')->name('report.')->group(function () {
@@ -118,11 +117,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 Route::match(['get', 'post'], '/create', [ModulesController::class, 'create'])->name('create');
                 Route::match(['get', 'post'], '/edit', [ModulesController::class, 'edit'])->name('edit');
                 Route::post('/delete', [ModulesController::class, 'delete'])->name('delete');
-                // Route::prefix('test')->group(function () {
-                //     Route::get('/', [ModulesController::class, 'admin_module_test_list'])->name('test.index');
-                //     Route::match(['get', 'post'], '/edit', [ModulesController::class, 'edit_admin_test_module'])->name('test.edit');
-                // });
-
                 Route::prefix('/{id}/url')->name('url.')->group(function () {
                     Route::get('/', [ModuleUrlController::class, 'index'])->name('index');
                     Route::match(['get', 'post'], '/create', [ModuleUrlController::class, 'create'])->name('create');

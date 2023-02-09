@@ -89,8 +89,20 @@
                                                                     <input type="hidden" name="buyer_id" value="{{ $id }}">
                                                                     <select class="form-control" name="payment_methods[]" required>
                                                                         <option selected hidden disabled>SELECT</option>
-                                                                        @foreach ($payment_methods as $payment_method)                                                                             
+                                                                        @php
+                                                                            $p_m_id = [];
+                                                                        @endphp
+                                                                        @foreach ($payment_methods as $payment_method)
+                                                                            @foreach ($buyers as $buyer)
+                                                                                @foreach ($buyer->buyer_payment_methods as $buyer_payment_method)
+                                                                                    @php
+                                                                                        $p_m_id[] = $buyer_payment_method->p_m_id;
+                                                                                    @endphp
+                                                                                @endforeach
+                                                                            @endforeach
+                                                                            @if (!in_array($payment_method->id,$p_m_id))                                                                                        
                                                                                 <option value="{{ $payment_method->id }}">{{ $payment_method->name }}</option>     
+                                                                            @endif
                                                                         @endforeach
                                                                     </select>
                                                                     <span class="invalid-feedback" id="create_buyer_name_error">
@@ -250,7 +262,7 @@
             <!-- /.content -->
         </div>
     </div>
-    <form action="{{route('admin.buyer.pay_method.edit',['id'=>$id])}}" method="POST" id="buyer_pay_method_update_form">
+    <form action="{{route('admin.buyer.pay_method.update',['id'=>$id])}}" method="POST" id="buyer_pay_method_update_form">
         @csrf
         <div class="modal fade" id="buyer_pay_method_update">
             <div class="modal-dialog">
@@ -341,7 +353,7 @@
         });
         $('.append_button').on('click', function() {
             var _this = $(this).parents('label').parents('div').parents('div');
-            $('.currency_row').append('<div class="row"><div class="form-group col-12"><label for="buyer_name" class="text-capitalize d-flex justify-content-between">Name<i class="fas fa-minus rounded-pill bg-danger p-1 minus_button" role="button"></i></label><div class="input-group"><input type="hidden" name="create_buyer_id" id="create_buyer_id" value=""><select class="form-control" name="payment_methods[]" required><option selected hidden disabled>SELECT</option>@foreach ($payment_methods as $payment_method)<option value="{{ $payment_method->id }}">{{ $payment_method->name }}</option>@endforeach</select></div><span class="invalid-feedback" id="create_buyer_name_error"></span></div><div class="form-group col-12"><label for="buyer_name" class="text-capitalize d-flex justify-content-between">Country</label><input type="hidden" name="buyer_id" value="{{ $id }}"><select class="form-control" name="countries[]" required><option selected hidden disabled>SELECT</option>@foreach ($currencies as $currency)<option value="{{ $currency->name }}">{{ $currency->name }}</option>@endforeach</select><span class="invalid-feedback" id="create_buyer_name_error"></span></div><div class="form-group col-6"><label for="buyer_name" class="text-capitalize">Currency</label><select class="form-control" name="currencies[]" required><option selected hidden disabled>SELECT</option>@foreach ($currencies as $currency)<option value="{{ $currency->id }}">{{ $currency->name }} | {{ $currency->iso3 }}</option>@endforeach</select><span class="invalid-feedback" id="create_buyer_name_error"></span></div><div class="form-group col-6"><label for="buyer_name" class="text-capitalize">Rate</label><input type="number" name="rates[]" step="any" id="" class="form-control" required><span class="invalid-feedback" id="create_buyer_name_error"></span></div></div>')
+            $('.currency_row').append('<div class="row"><div class="form-group col-12"><label for="buyer_name" class="text-capitalize d-flex justify-content-between">Name<i class="fas fa-minus rounded-pill bg-danger p-1 minus_button" role="button"></i></label><div class="input-group"><input type="hidden" name="create_buyer_id" id="create_buyer_id" value=""><select class="form-control" name="payment_methods[]" required><option selected hidden disabled>SELECT</option>@foreach ($payment_methods as $payment_method)<option value="{{ $payment_method->id }}">{{ $payment_method->name }}</option>@endforeach</select></div><span class="invalid-feedback" id="create_buyer_name_error"></span></div><div class="form-group col-12"><label for="buyer_name" class="text-capitalize d-flex justify-content-between">Country</label><input type="hidden" name="buyer_id" value="{{ $id }}"><select class="form-control" name="countries[]" required><option selected hidden disabled>SELECT</option>@foreach ($currencies as $currency)<option value="{{ $currency->name }}">{{ $currency->name }}</option>@endforeach</select><span class="invalid-feedback" id="create_buyer_name_error"></span></div><div class="form-group col-6"><label for="buyer_name" class="text-capitalize">Currency</label><select class="form-control" name="currencies[]" required><option selected hidden disabled>SELECT</option>@foreach ($currencies as $currency)<option value="{{ $currency->id }}">{{ $currency->name }} | {{ $currency->iso3 }}</option>@endforeach</select><span class="invalid-feedback" id="create_buyer_name_error"></span></div><div class="form-group col-6"><label for="buyer_name" class="text-capitalize">Rate</label><input type="number" name="rates[]" id="" class="form-control" required><span class="invalid-feedback" id="create_buyer_name_error"></span></div></div>')
         });
         $('body').on('click', '.minus_button', function() {
             var _this = $(this).closest('.row').remove();
