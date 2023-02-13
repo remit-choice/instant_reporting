@@ -218,7 +218,7 @@ class PermissionController extends Controller
                     }
                     $permision_count = Permission::where([['r_id', $r_id], ['m_id', $m_id[$m_id_kays[$i]]]])->count();
                     if ($permision_count <= 0) {
-                        Permission::insert([
+                        Permission::create([
                             'r_id' =>  $r_id,
                             'm_id' => $m_id[$m_id_kays[$i]],
                             'view' => $view[$m_id_kays[$i]],

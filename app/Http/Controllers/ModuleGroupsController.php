@@ -58,7 +58,7 @@ class ModuleGroupsController extends Controller
             $icon = $request->icon;
             $status = $request->status;
 
-            ModulesGroup::insert([
+            ModulesGroup::create([
                 'name' => $name,
                 'icon' => $icon,
                 'status' => $status

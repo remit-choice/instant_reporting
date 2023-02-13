@@ -46,18 +46,22 @@
             //     tableList.push(table);
             // });
         });
-        $("#example2").DataTable({
+        
+    });
+    $("#example2").DataTable({
+            "deferRender": true,
+            "aaData": null,
             "paging": true,
             "autoWidth": false,
             "searching": true,
             "responsive": true,
+            "destroy": true,
             "order": [[0, 'asc']],
             "aLengthMenu": [
                 [10, 25, 50, -1],
                 [10, 25, 50, "All"]
             ],
         });
-    });
     // $('#example1 tfoot th').each(function () {
     //     var title = $(this).text();
     //     $(this).html('<input type="text" placeholder="Search ' + title + '" />');

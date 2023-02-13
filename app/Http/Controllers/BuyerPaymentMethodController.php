@@ -64,7 +64,7 @@ class BuyerPaymentMethodController extends Controller
         // dd($payment_methods_count);
 
         for ($i = 0; $i < $payment_methods_count; $i++) {
-            BuyerPaymentMethod::insert([
+            BuyerPaymentMethod::create([
                 'b_id' => $buyer_id,
                 'p_m_id' => $payment_methods[$i],
                 'country' => $countries[$i],

@@ -45,25 +45,20 @@ class RevenueController extends Controller
 
         if (!empty($request->search_filter) && empty($request->date_from) && empty($request->date_to)) {
             $transactions = TransactionsData::select('beneficiary_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['beneficiary_country', '!=', ''], ['status', '=', 'Paid']])->groupBy('beneficiary_country')->orderBY('beneficiary_country')->get();
-            return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
         } elseif (empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
             $date_from = date('d/m/Y', strtotime($request->date_from));
             $transactions = TransactionsData::where([['beneficiary_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', "Paid"]])->orderBY('beneficiary_country')->get();
-            return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
         } elseif (!empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
             $date_from = date('d/m/Y', strtotime($request->date_from));
             $transactions = TransactionsData::select('beneficiary_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['beneficiary_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', "Paid"]])->groupBy('beneficiary_country')->orderBY('beneficiary_country')->get();
-            return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
         } elseif (empty($request->search_filter) && !empty($request->date_from) && !empty($request->date_to)) {
             $date_from = date('d/m/Y', strtotime($request->date_from));
             $date_to = date('d/m/Y', strtotime($request->date_to));
             $transactions = TransactionsData::where([['beneficiary_country', '!=', ''], ['status', '=', "Paid"]])->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->orderBY('beneficiary_country')->get();
-            return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
         } elseif (!empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
             $date_from = date('d/m/Y', strtotime($request->date_from));
             $date_to = date('d/m/Y', strtotime($request->date_to));
             $transactions = TransactionsData::select('beneficiary_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['beneficiary_country', '!=', ''], ['status', '=', "Paid"]])->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->groupBy('beneficiary_country')->orderBY('beneficiary_country')->get();
-            return view('accounts.transactions.receiving_side_revenue.index', ['transactions' => $transactions]);
         } else {
             if (empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
                 return redirect()->back()->with('failed', "From Date Mandatory");
@@ -74,6 +69,7 @@ class RevenueController extends Controller
                 return redirect()->back();
             }
         }
+        return view('accounts.transactions.receiving.revenue.index', ['transactions' => $transactions]);
     }
 }
 

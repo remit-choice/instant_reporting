@@ -19,8 +19,7 @@ class OnlineCustomersController extends Controller
     public function index(Request $request)
     {
         if (FacadesRequest::isMethod('get')) {
-            $online_customers =  OnlineCustomer::get();
-            return view('admin.upload_data.online_customers.index', ['online_customers' => $online_customers]);
+            return view('admin.upload_data.online_customers.index');
         } elseif (FacadesRequest::isMethod('post')) {
             return $this->filter($request);
         } else {
@@ -70,7 +69,7 @@ class OnlineCustomersController extends Controller
                     while (($emapData = fgetcsv($files, 10000, ",")) !== FALSE) {
                         $emapData = str_replace(",", " ", $emapData);
                         if ($i > 0) {
-                            OnlineCustomer::insert([
+                            OnlineCustomer::create([
                                 'customer_id' => $emapData[0],
                                 'customer_name' => $emapData[1],
                                 'full_address_with_postcode' => $emapData[2],

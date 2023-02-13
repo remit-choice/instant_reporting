@@ -30,6 +30,12 @@ class UserController extends Controller
             ->with('modules.permissions', $modules)
             ->orderBy("sort")
             ->get();
+        $permissions_view = '';
+        $permissions_create = '';
+        $permissions_edit = '';
+        $permissions_delete = '';
+        $permissions_buyer_report_view = '';
+
         foreach ($module_groups as $module_group) {
             foreach ($module_group->modules as $module) {
                 if (!empty($module->permissions) && $module->name == 'Permissions') {
@@ -38,17 +44,30 @@ class UserController extends Controller
                 }
                 if (!empty($module->permissions) && $module->name == 'Modules URL') {
                     $permissions_view = $module->permissions['view'];
+                    $permissions_create = $module->permissions['add'];
+                    $permissions_edit = $module->permissions['edit'];
+                    $permissions_delete = $module->permissions['delete'];
+                }
+                if (!empty($module->permissions) && $module->name == 'Payment Method') {
+                    $permissions_view = $module->permissions['view'];
+                    $permissions_create = $module->permissions['add'];
+                    $permissions_edit = $module->permissions['edit'];
+                    $permissions_delete = $module->permissions['delete'];
+                }
+                if (!empty($module->permissions) && $module->name == 'Buyers') {
+                    $permissions_buyer_report_view = $module->permissions['view'];
                 }
             }
         }
-        View::share(['module_groups' => $module_groups, 'permissions_view' => $permissions_view, 'permissions_create' => $permissions_create, 'permissions_edit' => $permissions_edit]);
+        View::share(['module_groups' => $module_groups, 'permissions_view' => $permissions_view, 'permissions_create' => $permissions_create, 'permissions_edit' => $permissions_edit, 'permissions_delete' => $permissions_delete, 'permissions_buyer_report_view' => $permissions_buyer_report_view]);
     }
     public function index()
     {
         $users =  User::with('roles')->get();
         $roles =  Role::get();
         // dd($users->toArray());
-        return View::make('admin.setting.user.index', ['users' => $users, 'roles' => $roles]);
+        // return View::make('admin.setting.user.index', ['users' => $users, 'roles' => $roles]);
+        return view('admin.setting.user.index', ['users' => $users, 'roles' => $roles]);
     }
     public function show()
     {
@@ -91,7 +110,7 @@ class UserController extends Controller
             if ($users_count > 0) {
                 return back()->with('failed', "email already Exist");
             } else {
-                User::insert([
+                User::create([
                     'r_id' => $r_id,
                     'full_name' => $full_name,
                     'user_name' => $user_name,
@@ -101,6 +120,10 @@ class UserController extends Controller
                     'status' => $designation,
                 ]);
             }
+            $users =  User::with('roles')->get();
+            $roles =  Role::get();
+            // dd($users->toArray());
+            return view('admin.setting.user.index', ['users' => $users, 'roles' => $roles]);
         } else {
         }
     }

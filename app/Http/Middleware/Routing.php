@@ -66,7 +66,8 @@ class Routing
                                         $create = $module->permissions['add'];
                                         $edit = $module->permissions['edit'];
                                         $delete = $module->permissions['delete'];
-                                        View::share(['create' => $create, 'edit' => $edit, 'delete' => $delete]);
+                                        $module_name = $module->name;
+                                        View::share(['create' => $create, 'edit' => $edit, 'delete' => $delete, 'module_name' => $module_name]);
                                         $response = $next($request);
                                     } else {
                                         $response;

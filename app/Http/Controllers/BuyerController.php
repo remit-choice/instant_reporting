@@ -41,8 +41,7 @@ class BuyerController extends Controller
         $name = $request->name;
         $type = $request->type;
         $status = $request->status;
-
-        Buyer::insert([
+        Buyer::create([
             'name' => $name,
             'type' => $type,
             'status' => $status

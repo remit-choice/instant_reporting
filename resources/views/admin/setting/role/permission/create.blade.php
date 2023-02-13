@@ -1,251 +1,185 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>@Include('layouts.links.admin.title') | Modules Permissions</title>
-    <style>
-        .flex-wrap {
-            float: right !important;
-        }
-
-        .cur-role>td {
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
-        }
-
-        .dropdown-menu {
-            min-width: 0 !important;
-            padding: 0.375rem 0.75rem !important;
-        }
-    </style>
-    @Include('layouts.favicon')
-    @Include('layouts.links.admin.head')
-    <link rel="stylesheet" href="{{ asset('assets/dist/css/roles_permissions.css') }}" type="text/css">
-
-</head>
-
-<body class="hold-transition sidebar-mini layout-fixed">
     @extends('layouts.admin.master')
     @section('content')
-    <div class="wrapper">
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Modules Permisions</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Modules Permisions</li>
-                            </ol>
-                        </div><!-- /.col -->
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/roles_permissions.css') }}" type="text/css">
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid px-4">
+            <div class="d-flex justify-content-center border p-1 mb-4">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <ul class="nav nav-pills text-center">
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            {{-- <ul class="nav nav-pills text-center"> --}}
-                                <div id="success" class="alert alert-default-success alert-dismissible fade show"
-                                    role="alert" style="display: none">
-                                    <strong class="">{{ session('success') }}</strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
+                            <li class="nav-item">
+                                <div class="nav-link" aria-current="page"
+                                    style="background-color: #091E3E;color: white">
+                                    @foreach ($roles as $role)
+                                    {{ $role->name }}
+                                    @endforeach
+                                    {{$module_name}} <span class="badge ms-2"
+                                        style="background-color: #091E3E;"></span>
                                 </div>
-                                {{--
-                            </ul> --}}
+                            </li>
+                            <input type="checkbox" id="selectall" class="select-all" />
+                            All {{$module_name}}<br />
                         </div>
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+                    </ul>
+                </div>
             </div>
-            <!-- /.content-header -->
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <table class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <thead id="head" class="checoboxes">
+                        <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Modules</th>
+                        <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">All</th>
+                        <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">View</th>
+                        <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Add</th>
+                        <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Edit</th>
+                        <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Delete</th>
 
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid px-4">
-                    <div class="d-flex justify-content-center border p-1 mb-4">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <ul class="nav nav-pills text-center">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <li class="nav-item">
-                                        <div class="nav-link" aria-current="page"
-                                            style="background-color: #091E3E;color: white">
-                                            @foreach ($roles as $role)
-                                            {{ $role->name }}
-                                            @endforeach
-                                            Permissions <span class="badge ms-2"
-                                                style="background-color: #091E3E;"></span>
-                                        </div>
-                                    </li>
-                                    <input type="checkbox" id="selectall" class="select-all" />
-                                    All Permissions<br />
-                                </div>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <table class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <thead id="head" class="checoboxes">
-                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Modules</th>
-                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">All</th>
-                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">View</th>
-                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Add</th>
-                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Edit</th>
-                                <th class="col-lg-2 col-md-2 col-sm-12 col-xs-12">Delete</th>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $counter = 0;
+                            ?>
+                        <form
+                            action="{{ route('admin.role.permission.create', ['id' => Session::get('roll_id')]) }}"
+                            method="POST">
+                            @csrf
 
-                            </thead>
-                            <tbody>
-                                <?php
-                                    $counter = 0;
-                                    ?>
-                                <form
-                                    action="{{ route('admin.role.permission.create', ['id' => Session::get('roll_id')]) }}"
-                                    method="POST">
-                                    @csrf
-
-                                    @foreach ($modules_groups as $modules_group)
-                                        @php
-                                        $count = 1;
-                                        @endphp
-                                        @foreach ($modules_group->modules as $module)
-                                            @if (!empty($module->permissions))
-                                                @if ($module->permissions['view'] == null ||
-                                                    $module->permissions['add'] == null ||
-                                                    $module->permissions['edit'] == null ||
-                                                    $module->permissions['delete'] == null || 
-                                                    $module->permissions['view'] != null ||
-                                                    $module->permissions['add'] != null ||
-                                                    $module->permissions['edit'] != null ||
-                                                    $module->permissions['delete'] != null)
-                                                    @if ($count == 1)
-                                                        <tr class="checoboxes">
-                                                            <td class="border-none">
-                                                                {{ $modules_group->name }}
-                                                            </td>
-                                                        </tr>
-                                                    @endif
-                                            
-                                                    <tr class="checoboxes">
-                                                        <td class="d-flex justify-content-between text-left px-4">
-                                                            <input type="hidden" name="r_id" id="R_id"
-                                                                value="{{ $module->permissions['r_id'] }}">
-                                                            <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
-                                                            <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="@if($module->permissions['view']!=null||$module->permissions['add'] != null||$module->permissions['edit'] != null||$module->permissions['delete'] != null){{1}}@endif"   
-                                                                        @if ($module->permissions['view'] != null ||
-                                                                        $module->permissions['add'] != null ||
-                                                                        $module->permissions['edit'] != null ||
-                                                                        $module->permissions['delete'] != null) 
-                                                                        {{'checked'}}
-                                                                        @endif
-                                                                        >
-                                                            {{ $module->name }}
-                                                        </td>
-                                                        <td>
-                                                            <input type="checkbox" class="check row_check" value="0">
-                                                        </td>
-                                                        <td>
-                                                            @if ($module->permissions['view'] !="0" || ($module->permissions['view'] == NULL && $module->permissions['view'] == 1)) 
-                                                                <input type="checkbox" class="checks check row_child_check" name="view[{{ $counter }}]"
-                                                                    value="{{ $module->permissions['view'] }}"
-                                                                    @if($module->permissions['view'] == 1) {{ 'checked' }} @endif
-                                                                >
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if ($module->permissions['add']!="0" || ($module->permissions['add'] == NULL && $module->permissions['add'] == 1)) 
-                                                                <input type="checkbox" class="checks check row_child_check" name="add[{{ $counter }}]"
-                                                                    value="{{ $module->permissions['add'] }}"
-                                                                    @if($module->permissions['add'] == 1) {{ 'checked' }} @endif
-                                                                >
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if ($module->permissions['edit']!="0" || ($module->permissions['edit'] == NULL && $module->permissions['edit'] == 1))
-                                                                <input type="checkbox" class="checks check row_child_check" name="edit[{{ $counter }}]"
-                                                                    value="{{ $module->permissions['edit'] }}"
-                                                                    @if($module->permissions['edit'] == 1) {{ 'checked' }} @endif
-                                                                >
-                                                            @endif
-                                                        </td>
-                                                        <td>
-                                                            @if ($module->permissions['delete']!="0" || ($module->permissions['delete'] == NULL && $module->permissions['delete'] == 1)) 
-                                                                <input type="checkbox" class="checks check row_child_check" name="delete[{{ $counter }}]"
-                                                                    value="{{ $module->permissions['delete'] }}"
-                                                                    @if($module->permissions['delete'] == 1) {{ 'checked' }} @endif
-                                                                >
-                                                            @endif
-                                                        </td>
-                                                    </tr>
-                                                @endif
-                                            @else
-                                                @if ($count == 1)
-                                                    <tr class="checoboxes">
-                                                        <td class="border-none">
-                                                            {{ $modules_group->name }}
-                                                        </td>
-                                                    </tr>
-                                                @endif
+                            @foreach ($modules_groups as $modules_group)
+                                @php
+                                $count = 1;
+                                @endphp
+                                @foreach ($modules_group->modules as $module)
+                                    @if (!empty($module->permissions))
+                                        @if ($module->permissions['view'] == null ||
+                                            $module->permissions['add'] == null ||
+                                            $module->permissions['edit'] == null ||
+                                            $module->permissions['delete'] == null || 
+                                            $module->permissions['view'] != null ||
+                                            $module->permissions['add'] != null ||
+                                            $module->permissions['edit'] != null ||
+                                            $module->permissions['delete'] != null)
+                                            @if ($count == 1)
                                                 <tr class="checoboxes">
-                                                    <td class="d-flex justify-content-between text-left px-4">
-                                                        <input type="hidden" name="r_id" id="R_id"
-                                                            value="{{ Session::get('roll_id') }}">
-                                                        <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
-                                                        <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="0">
-
-                                                        {{ $module->name }}
-                                                    </td>
-                                                    <td>
-                                                        <input type="checkbox" class="check row_check" value="0">
-                                                    </td>
-                                                    <td>
-                                                        <input type="checkbox" name="view[{{ $counter }}]" class="check row_child_check" value="0">
-                                                    </td>
-                                                    <td>
-                                                        <input type="checkbox" name="add[{{ $counter }}]" class="check row_child_check" value="0">
-                                                    </td>
-                                                    <td>
-                                                        <input type="checkbox" name="edit[{{ $counter }}]" class="check row_child_check" value="0">
-                                                    </td>
-                                                    <td>
-                                                        <input type="checkbox" name="delete[{{ $counter }}]" class="check row_child_check"
-                                                            value="0">
+                                                    <td class="border-none">
+                                                        {{ $modules_group->name }}
                                                     </td>
                                                 </tr>
                                             @endif
-                                            @php
-                                            $counter = $counter + 1;
-                                            $count++;
-                                            @endphp
-                                        @endforeach
-                                    @endforeach
-                                    <div class="d-flex justify-content-between">
-                                        <a href="{{route('admin.role.index')}}" class="btn float-end my-4"
-                                            style="background-color: #091E3E;color: white">Back</a>
-                                        <button type="submit" id="Save" class="btn float-end my-4"
-                                            style="background-color: #091E3E;color: white">
-                                            Save changes
-                                        </button>
-                                    </div>
+                                    
+                                            <tr class="checoboxes">
+                                                <td class="d-flex justify-content-between text-left px-4">
+                                                    <input type="hidden" name="r_id" id="R_id"
+                                                        value="{{ $module->permissions['r_id'] }}">
+                                                    <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
+                                                    <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="@if($module->permissions['view']!=null||$module->permissions['add'] != null||$module->permissions['edit'] != null||$module->permissions['delete'] != null){{1}}@endif"   
+                                                                @if ($module->permissions['view'] != null ||
+                                                                $module->permissions['add'] != null ||
+                                                                $module->permissions['edit'] != null ||
+                                                                $module->permissions['delete'] != null) 
+                                                                {{'checked'}}
+                                                                @endif
+                                                                >
+                                                    {{ $module->name }}
+                                                </td>
+                                                <td>
+                                                    <input type="checkbox" class="check row_check" value="0">
+                                                </td>
+                                                <td>
+                                                    @if ($module->permissions['view'] !="0" || ($module->permissions['view'] == NULL && $module->permissions['view'] == 1)) 
+                                                        <input type="checkbox" class="checks check row_child_check" name="view[{{ $counter }}]"
+                                                            value="{{ $module->permissions['view'] }}"
+                                                            @if($module->permissions['view'] == 1) {{ 'checked' }} @endif
+                                                        >
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($module->permissions['add']!="0" || ($module->permissions['add'] == NULL && $module->permissions['add'] == 1)) 
+                                                        <input type="checkbox" class="checks check row_child_check" name="add[{{ $counter }}]"
+                                                            value="{{ $module->permissions['add'] }}"
+                                                            @if($module->permissions['add'] == 1) {{ 'checked' }} @endif
+                                                        >
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($module->permissions['edit']!="0" || ($module->permissions['edit'] == NULL && $module->permissions['edit'] == 1))
+                                                        <input type="checkbox" class="checks check row_child_check" name="edit[{{ $counter }}]"
+                                                            value="{{ $module->permissions['edit'] }}"
+                                                            @if($module->permissions['edit'] == 1) {{ 'checked' }} @endif
+                                                        >
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if ($module->permissions['delete']!="0" || ($module->permissions['delete'] == NULL && $module->permissions['delete'] == 1)) 
+                                                        <input type="checkbox" class="checks check row_child_check" name="delete[{{ $counter }}]"
+                                                            value="{{ $module->permissions['delete'] }}"
+                                                            @if($module->permissions['delete'] == 1) {{ 'checked' }} @endif
+                                                        >
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    @else
+                                        @if ($count == 1)
+                                            <tr class="checoboxes">
+                                                <td class="border-none">
+                                                    {{ $modules_group->name }}
+                                                </td>
+                                            </tr>
+                                        @endif
+                                        <tr class="checoboxes">
+                                            <td class="d-flex justify-content-between text-left px-4">
+                                                <input type="hidden" name="r_id" id="R_id"
+                                                    value="{{ Session::get('roll_id') }}">
+                                                <input type="hidden" name="m_id[]" class="M_Id" value="{{ $module->id }}">
+                                                <input type="checkbox" name="m_ids[{{ $counter }}]" class="check" value="0">
 
-                                </form>
+                                                {{ $module->name }}
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" class="check row_check" value="0">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="view[{{ $counter }}]" class="check row_child_check" value="0">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="add[{{ $counter }}]" class="check row_child_check" value="0">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="edit[{{ $counter }}]" class="check row_child_check" value="0">
+                                            </td>
+                                            <td>
+                                                <input type="checkbox" name="delete[{{ $counter }}]" class="check row_child_check"
+                                                    value="0">
+                                            </td>
+                                        </tr>
+                                    @endif
+                                    @php
+                                    $counter = $counter + 1;
+                                    $count++;
+                                    @endphp
+                                @endforeach
+                            @endforeach
+                            <div class="d-flex justify-content-between">
+                                <a href="{{route('admin.role.index')}}" class="btn float-end my-4"
+                                    style="background-color: #091E3E;color: white">Back</a>
+                                <button type="submit" id="Save" class="btn float-end my-4"
+                                    style="background-color: #091E3E;color: white">
+                                    Save changes
+                                </button>
+                            </div>
 
-                            </tbody>
-                        </table>
+                        </form>
+
+                    </tbody>
+                </table>
 
 
-                    </div>
-                </div>
-            </section>
-            <!-- /.content -->
+            </div>
         </div>
-    </div>
+    </section>
+    <!-- /.content -->
     @Include('layouts.links.admin.foot')
     <script type="text/javascript">
             $(function() {
@@ -315,7 +249,3 @@
             // });
     </script>
     @endsection
-    {{-- @Include('layouts.links.modals.foot') --}}
-</body>
-
-</html>

@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('r_id')->nullable();
+            $table->unsignedBigInteger('r_id')->index('r_id')->nullable();
+            $table->foreign('r_id')->references('id')->on('roles')->onDelete('cascade');
             $table->string('full_name');
             $table->string('user_name');
             $table->string('email')->unique();
@@ -25,7 +26,6 @@ return new class extends Migration
             $table->integer('status');
             $table->string('designation')->nullable();
             $table->timestamps();
-            $table->foreign('r_id')->references('id')->on('roles')->onDelete('cascade');
         });
     }
 

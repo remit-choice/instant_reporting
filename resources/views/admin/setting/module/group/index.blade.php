@@ -1,267 +1,199 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>@Include('layouts.links.admin.title') | Modules Groups</title>
-    <style>
-        .flex-wrap {
-            float: right !important;
-        }
-
-        .cur-role>td {
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
-        }
-
-        .dropdown-menu {
-            min-width: 0 !important;
-            padding: 0.375rem 0.75rem !important;
-        }
-    </style>
-    @Include('layouts.favicon')
-    @Include('layouts.links.admin.head')
-    @Include('layouts.links.datatable.head')
-    @Include('layouts.links.toastr.head')
-</head>
-
-<body class="hold-transition sidebar-mini layout-fixed">
     @extends('layouts.admin.master')
     @section('content')
-        <div class="wrapper">
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1 class="m-0">Modules Groups</h1>
-                            </div><!-- /.col -->
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">Modules Groups</li>
-                                </ol>
-                            </div><!-- /.col -->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                {{-- <ul class="nav nav-pills text-center"> --}}
-                                <div id="success" class="alert alert-default-success alert-dismissible fade show"
-                                    role="alert" style="display: none">
-                                    <strong class="">{{ session('success') }}</strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
-                                    <!-- Button trigger modal -->
-                                    @if ($create == 1)
-                                        <a type="button" href="#" data-toggle="modal" data-target="#module_group_create"
-                                            class="border px-2 btn" style="background-color: #091E3E;color: white">
-                                            Add Module Group
-                                        </a>
-                                    @endif
-                                    <!-- Modal -->
-                                    <form action="{{ route('admin.module.group.create') }}" method="POST">
-                                        @csrf
-                                        <div class="modal fade" id="module_group_create">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Module Group</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div id="failes"
-                                                            class="alert alert-default-danger alert-dismissible fade show"
-                                                            role="alert" style="display: none">
-                                                            <span class="text_fails"></span>
-                                                            <button type="button" class="close" data-dismiss="alert"
-                                                                aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="module_group_name"
-                                                                class="text-capitalize">Name</label>
-                                                            <input type="hidden" name="create_module_group_id"
-                                                                id="create_module_group_id" value="">
-                                                            <input type="text" name="create_module_group_name"
-                                                                id="create_module_group_name" class="form-control">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="module_group_icon"
-                                                                class="text-capitalize">Icon</label>
-                                                            <input type="text" name="create_module_group_icon"
-                                                                id="create_module_group_icon" class="form-control">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="module_group_status" class="text-capitalize">
-                                                                <input type="checkbox"
-                                                                    name="create_module_group_status me-2"
-                                                                    id="create_module_group_status"
-                                                                    value="0">Status</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="border px-2 btn create"
-                                                            style="background-color: #091E3E;color: white">Save</button>
-
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <!-- /.modal -->
-                                    </form>
-                                </div>
-
-                                {{-- </ul> --}}
+    @Include('layouts.links.datatable.head')
+    @Include('layouts.links.toastr.head')
+        @section('content_1')
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
+                <!-- Button trigger modal -->
+                @if ($create == 1)
+                    <a type="button" href="#" data-toggle="modal" data-target="#create_modal"
+                        class="border px-3 btn" style="background-color: #091E3E;color: white">
+                        Add
+                    </a>
+                @endif
+            </div>
+        @endsection
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">{{$module_name}} List</h3>
                             </div>
-                        </div><!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </div>
-                <!-- /.content-header -->
-
-                <!-- Main content -->
-                <section class="content">
-                    <div class="container-fluid">
-                        <!-- Small boxes (Stat box) -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Modules Groups List</h3>
-
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body datatable_data">
-                                        <table id="example2" class="table table-bordered table-striped">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Icon</th>
-                                                    <th>Sort</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody class="role_data" id="tablecontents">
-                                                @php
-                                                    $counter = 1;
-                                                @endphp
-                                                @foreach ($modules_groups as $module_group)
-                                                    <tr data-widget="expandable-table" aria-expanded="false"
-                                                        class="row1" data-id="{{ $module_group->id }}">
-                                                        <td>{{ $counter++ }}<input type="hidden"
-                                                                name="db_module_group_id" class="db_module_group_id"
-                                                                value="{{ $module_group->id }}">
-                                                        </td>
-                                                        <td>{{ $module_group->name }}<input type="hidden"
-                                                                name="db_module_group_name" class="db_module_group_name"
-                                                                value="{{ $module_group->name }}"></td>
-                                                        <td>{{ $module_group->icon }}<input type="hidden"
-                                                                name="db_module_group_icon" class="db_module_group_icon"
-                                                                value="{{ $module_group->icon }}"></td>
-                                                        <td>{{ $module_group->sort }} <input type="hidden"
-                                                                name="db_module_group_sort" class="db_module_group_sort"
-                                                                value="{{ $module_group->sort }}"></td>
-                                                        <td>
-                                                            @if ($module_group->status == '1')
-                                                                <span class="badge badge-success">Active</span>
-                                                            @else
-                                                                <span class="badge badge-danger">InActive</span>
+                            <div class="card-body datatable_data">
+                                <table id="example2" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Icon</th>
+                                            <th>Sort</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="role_data" id="tablecontents">
+                                        @php
+                                            $counter = 1;
+                                        @endphp
+                                        @foreach ($modules_groups as $module_group)
+                                            <tr data-widget="expandable-table" aria-expanded="false"
+                                                class="row1" data-id="{{ $module_group->id }}">
+                                                <td>{{ $counter++ }}<input type="hidden"
+                                                        name="db_module_group_id" class="db_module_group_id"
+                                                        value="{{ $module_group->id }}">
+                                                </td>
+                                                <td>{{ $module_group->name }}<input type="hidden"
+                                                        name="db_module_group_name" class="db_module_group_name"
+                                                        value="{{ $module_group->name }}"></td>
+                                                <td>{{ $module_group->icon }}<input type="hidden"
+                                                        name="db_module_group_icon" class="db_module_group_icon"
+                                                        value="{{ $module_group->icon }}"></td>
+                                                <td>{{ $module_group->sort }} <input type="hidden"
+                                                        name="db_module_group_sort" class="db_module_group_sort"
+                                                        value="{{ $module_group->sort }}"></td>
+                                                <td>
+                                                    @if ($module_group->status == '1')
+                                                        <span class="badge badge-success">Active</span>
+                                                    @else
+                                                        <span class="badge badge-danger">InActive</span>
+                                                    @endif
+                                                    <input type="hidden" name="db_module_group_status"
+                                                        class="db_module_group_status"
+                                                        value="{{ $module_group->status }}">
+                                                </td>
+                                                <td>
+                                                    @if ($edit == 1 || $delete==1)
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-secondary dropdown-toggle"
+                                                            type="button" id="dropdownMenuButton"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                            Action
+                                                        </button>
+                                                        <div class="dropdown-menu edit_module_group"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                            @if ($edit == 1)
+                                                                <li>
+                                                                    <a class="dropdown-item" type="button"
+                                                                        href="#" data-toggle="modal"
+                                                                        data-target="#edit_modal">
+                                                                        Edit</a>
+                                                                </li>
                                                             @endif
-                                                            <input type="hidden" name="db_module_group_status"
-                                                                class="db_module_group_status"
-                                                                value="{{ $module_group->status }}">
-                                                        </td>
-                                                        <td>
-                                                            @if ($edit == 1 || $delete==1)
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-secondary dropdown-toggle"
-                                                                    type="button" id="dropdownMenuButton"
-                                                                    data-toggle="dropdown" aria-haspopup="true"
-                                                                    aria-expanded="false">
-                                                                    Action
-                                                                </button>
-                                                                <div class="dropdown-menu edit_module_group"
-                                                                    aria-labelledby="dropdownMenuButton">
-                                                                    @if ($edit == 1)
-                                                                        <li>
-                                                                            <a class="dropdown-item" type="button"
-                                                                                href="#" data-toggle="modal"
-                                                                                data-target="#module_group_update">
-                                                                                Edit</a>
-                                                                        </li>
-                                                                    @endif
-                                                                    @if ($delete==1)
-                                                                        <li>
-                                                                            <form
-                                                                                action="{{ route('admin.module.group.delete') }}"
-                                                                                method="POST">
-                                                                                @csrf
-                                                                                <input type="hidden" name="id"
-                                                                                    class="id"
-                                                                                    value="{{ $module_group->id }}">
-                                                                                <button class="dropdown-item delete"
-                                                                                    type="submit">
-                                                                                    Delete
-                                                                                </button>
-                                                                            </form>
-                                                                        </li>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
+                                                            @if ($delete==1)
+                                                                <li>
+                                                                    <form
+                                                                        action="{{ route('admin.module.group.delete') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="id"
+                                                                            class="id"
+                                                                            value="{{ $module_group->id }}">
+                                                                        <button class="dropdown-item delete"
+                                                                            type="submit">
+                                                                            Delete
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
                                                             @endif
-                                                        </td>
-                                                    </tr>
-                                                @endforeach
+                                                        </div>
+                                                    </div>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
 
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Name</th>
-                                                    <th>Icon</th>
-                                                    <th>Sort</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-                                <!-- /.card -->
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Name</th>
+                                            <th>Icon</th>
+                                            <th>Sort</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
-                        <!-- /.row -->
-                    </div><!-- /.container-fluid -->
-                </section>
-                <!-- /.content -->
-            </div>
-        </div>
-        <form action="" method="post" id="module_group_update_form">
+                            <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+        {{-- Create Modal Start --}}
+        <form action="{{ route('admin.module.group.create') }}" method="POST" id="create_modal_form">
             @csrf
-            <div class="modal fade" id="module_group_update">
+            <div class="modal fade" id="create_modal">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h4 class="modal-title">Module Group</h4>
+                            <h4 class="modal-title">{{$module_name}}</h4>
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="failes"
+                                class="alert alert-default-danger alert-dismissible fade show"
+                                role="alert" style="display: none">
+                                <span class="text_fails"></span>
+                                <button type="button" class="close" data-dismiss="alert"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_group_name"
+                                    class="text-capitalize">Name</label>
+                                <input type="hidden" name="create_module_group_id"
+                                    id="create_module_group_id" value="">
+                                <input type="text" name="create_module_group_name"
+                                    id="create_module_group_name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label for="module_group_icon"
+                                    class="text-capitalize">Icon</label>
+                                <input type="text" name="create_module_group_icon"
+                                    id="create_module_group_icon" class="form-control">
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input create_module_group_status" type="checkbox" id="create_module_group_status" checked value="1">
+                                <label for="create_module_group_status" class="custom-control-label">Status</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default"
+                                data-dismiss="modal">Close</button>
+                            <button type="submit" class="border px-2 btn create"
+                                style="background-color: #091E3E;color: white">Save</button>
+
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+        </form>
+         {{-- Create Modal End --}}
+        {{-- Edit Modal Start --}}
+        <form action="" method="post" id="edit_modal_form">
+            @csrf
+            <div class="modal fade" id="edit_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{$module_name}}</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -286,10 +218,9 @@
                                     <input type="text" name="module_group_icon" id="module_group_icon"
                                         class="form-control">
                                 </div>
-                                <div class="form-group">
-                                    <label for="module_group_status" class="text-capitalize">
-                                        <input type="checkbox" name="module_group_status me-2"
-                                            id="module_group_status" value="0">Status</label>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input module_group_status" type="checkbox" id="module_group_status" value="0">
+                                    <label for="module_group_status" class="custom-control-label">Status</label>
                                 </div>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -304,13 +235,12 @@
                 <!-- /.modal-dialog -->
             </div>
         </form>
-        <!-- /.modal -->
-        @Include('layouts.links.admin.foot')
-        @Include('layouts.links.datatable.foot')
-        @Include('layouts.links.sweet_alert.foot')
-        @Include('layouts.links.toastr.foot')
-
-        <script type="text/javascript">
+        {{-- Edit Modal End --}}
+    @Include('layouts.links.admin.foot')
+    @Include('layouts.links.datatable.foot')
+    @Include('layouts.links.sweet_alert.foot')
+    @Include('layouts.links.toastr.foot')
+    <script type="text/javascript">
                 $('#module_group_status').click(function() {
                     if ($(this).is(':checked')) {
                         $(this).attr("checked", true)
@@ -491,8 +421,4 @@
                 });
             });
         </script>
-    @endsection
-    {{-- @Include('layouts.links.modals.foot') --}}
-</body>
-
-</html>
+ @endsection

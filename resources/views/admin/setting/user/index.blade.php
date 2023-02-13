@@ -1,356 +1,292 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>@Include('layouts.links.admin.title') | Users</title>
-    <style>
-        .flex-wrap {
-            float: right !important;
-        }
-
-        .cur-role>td {
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
-        }
-
-        .dropdown-menu {
-            min-width: 0 !important;
-            padding: 0.375rem 0.75rem !important;
-        }
-    </style>
-    @Include('layouts.favicon')
-    @Include('layouts.links.admin.head')
+    @extends('layouts.admin.master')
+    @section('content')
     @Include('layouts.links.datatable.head')
     @Include('layouts.links.toastr.head')
     <link rel="stylesheet" href="{{ asset('assets/dist/css/alt/login.css') }}">
-    <script src="{{ asset('assets/dist/js/pages/login.js')}}"></script>
 
-</head>
-<body class="hold-transition sidebar-mini layout-fixed">
-    @extends('layouts.admin.master')
-    @section('content')
-    <div class="wrapper">
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Users</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Users</li>
-                            </ol>
-                        </div><!-- /.col -->
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            {{-- <ul class="nav nav-pills text-center"> --}}
-                                <div id="success" class="alert alert-default-success alert-dismissible fade show"
-                                    role="alert" style="display: none">
-                                    <strong class="">{{ session('success') }}</strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
-                                    <!-- Button trigger modal -->
-                                    @if ($create == 1)
-                                        <a type="button" href="#" data-toggle="modal" data-target="#user_create"
-                                            class="border px-2 btn create_user" style="background-color: #091E3E;color: white">
-                                            Add User
-                                        </a>
-                                    @endif
-                                    <!-- Modal -->
-                                    <form action="{{ route('admin.user.create') }}" method="POST">
-                                        @csrf
-                                        <div class="modal fade" id="user_create">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">User</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-user"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="text" name="create_full_name"
-                                                                    id="create_full_name" class="form-control" placeholder="Full Name">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_full_name_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-user"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="text" name="create_user_name"
-                                                                    id="create_user_name" class="form-control" placeholder="User Name">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_user_name_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-level-up-alt"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="text" name="create_designation"
-                                                                    id="create_designation" class="form-control" placeholder="Designation">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_designation_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group">
-                                                                 <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-envelope"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="email" name="create_email"
-                                                                    id="create_email" class="form-control" placeholder="Email">
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_email_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="input-group mb-3">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-lock"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="password" name="create_password" class="form-control" id="create_password"
-                                                                    placeholder="Password">
-                                                                <div class="input-group-append" onclick="Create_Password()">
-                                                                    <div class="input-group-text">
-                                                                        <span class="me-2 d-flex">
-                                                                            <i id="create_Show" class="far fa-eye"></i>
-                                                                            <i id="create_Hide" class="fas fa-eye-slash"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                                @error('create_password')
-                                                                    <div class="invalid-feedback order-last" id="password_msg">
-                                                                        {{ $message }}
-                                                                    </div>
-                                                                @enderror
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_password_error">
-                                                            </span>
-                                                        </div>                                                  
-                                                        <div class="form-group">
-                                                           <div class="input-group mb-3">
-                                                                <div class="input-group-append">
-                                                                    <div class="input-group-text">
-                                                                        <span class="fas fa-lock"></span>
-                                                                    </div>
-                                                                </div>
-                                                                <input type="password" name="retyp_password" class="form-control" id="create_retype_password"
-                                                                    placeholder="Password" placeholder="Retype Password">
-                                                                <div class="input-group-append" onclick="Create_Retype_Password()">
-                                                                    <div class="input-group-text">
-                                                                        <span class="me-2 d-flex">
-                                                                            <i id="create_retype_Show" class="far fa-eye"></i>
-                                                                            <i id="create_retype_Hide" class="fas fa-eye-slash"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_retype_password_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="role" class="text-capitalize">Role</label>
-                                                            <div class="input-group">
-                                                                <select name="create_role" id="create_role" class="form-control">
-                                                                    <option value="" selected disabled hidden>SELECT</option>
-                                                                    @foreach ($roles as $role)
-                                                                        <option value="{{$role->id}}">{{$role->name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_role_error">
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="border px-2 btn create"
-                                                            style="background-color: #091E3E;color: white">Save</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <!-- /.modal -->
-                                    </form>
-                                </div>
-
-                                {{--
-                            </ul> --}}
-                        </div>
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+        <script src="{{ asset('assets/dist/js/pages/login.js')}}"></script>
+        @section('content_1')
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
+                <!-- Button trigger modal -->
+                @if ($create == 1)
+                    <a type="button" href="#" data-toggle="modal" data-target="#create_modal"
+                        class="border px-3 btn" style="background-color: #091E3E;color: white">
+                        Add
+                    </a>
+                @endif
             </div>
-            <!-- /.content-header -->
+        @endsection
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Small boxes (Stat box) -->
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">User List</h3>
 
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid">
-                    <!-- Small boxes (Stat box) -->
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h3 class="card-title">User List</h3>
-
-                                </div>
-                                <!-- /.card-header -->
-                                <div class="card-body datatable_data">
-                                    <table id="example2" class="table table-bordered table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Full Name</th>
-                                                <th>User Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Designation</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="role_data">
-                                            @php
-                                            $counter = 1;
-                                            @endphp
-                                            @foreach ($users as $user)
-                                                <tr>
-                                                    <td>{{ $counter++ }}<input type="hidden" name="db_user_id"
-                                                            class="db_user_id" value="{{ $user->id }}"> </td>
-                                                    <td>{{ $user->full_name }}<input type="hidden" name="db_full_name"
-                                                            class="db_full_name" value="{{ $user->full_name }}"></td>
-                                                    <td>{{ $user->user_name }}<input type="hidden" name="db_user_name"
-                                                            class="db_user_name" value="{{ $user->user_name }}"></td>
-                                                    <td>{{ $user->email }}<input type="hidden" name="db_email"
-                                                            class="db_email" value="{{ $user->email }}"><input type="hidden" name="db_password"
-                                                            class="db_password" value="{{ $user->password }}"></td>
-                                                    <td>{{ $user->roles['name'] }}
-                                                        <input type="hidden" name="db_role_id"
-                                                            class="db_role_id" value="{{ $user->roles['id'] }}">
-                                                        <input type="hidden" name="db_role_name"
-                                                            class="db_role_name" value="{{ $user->roles['name'] }}"></td>
-                                                    <td>{{ $user->designation }}<input type="hidden" name="db_designation"
-                                                            class="db_designation" value="{{ $user->designation }}"></td>
-                                                    <td>
-                                                        @if ($user->status == '1')
-                                                        <span class="badge badge-success">Active</span>
-                                                        @else
-                                                        <span class="badge badge-danger">InActive</span>
-                                                        @endif
-                                                        <input type="hidden" name="db_status" class="db_status"
-                                                            value="{{ $user->status }}"></td>
-                                                    <td>
-                                                        @if ($edit == 1 || $delete == 1)
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-secondary dropdown-toggle" type="button"
-                                                                    id="dropdownMenuButton" data-toggle="dropdown"
-                                                                    aria-haspopup="true" aria-expanded="false">
-                                                                    Action
-                                                                </button>
-                                                                <div class="dropdown-menu edit_user"
-                                                                    aria-labelledby="dropdownMenuButton">
-                                                                    @if ($edit == 1)
-                                                                        <li>
-                                                                            <a class="dropdown-item" type="button" href="#"
-                                                                                data-toggle="modal" data-target="#user_update">
-                                                                                Edit</a>
-                                                                        </li>
-                                                                    @endif
-                                                                    @if ($delete == 1)
-                                                                        <li>
-                                                                            <form action="{{ route('admin.user.delete') }}"
-                                                                                method="POST">
-                                                                                @csrf
-                                                                                <input type="hidden" name="id" class="id"
-                                                                                    value="{{ $user->id }}">
-                                                                                <button class="dropdown-item delete" type="submit">
-                                                                                    Delete
-                                                                                </button>
-                                                                            </form>
-                                                                        </li>
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>Full Name</th>
-                                                <th>User Name</th>
-                                                <th>Email</th>
-                                                <th>Role</th>
-                                                <th>Designation</th>
-                                                <th>Status</th>
-                                                <th>Action</th>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                            <!-- /.card-header -->
+                            <div class="card-body datatable_data">
+                                <table id="example2" class="table table-bordered table-striped">
+                                    <thead id="t_head">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Full Name</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Designation</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="role_data" id="t_body">
+                                        @php
+                                        $counter = 1;
+                                        @endphp
+                                        @foreach ($users as $user)
+                                            <tr>
+                                                <td>{{ $counter++ }}<input type="hidden" name="db_user_id"
+                                                        class="db_user_id" value="{{ $user->id }}"> </td>
+                                                <td>{{ $user->full_name }}<input type="hidden" name="db_full_name"
+                                                        class="db_full_name" value="{{ $user->full_name }}"></td>
+                                                <td>{{ $user->user_name }}<input type="hidden" name="db_user_name"
+                                                        class="db_user_name" value="{{ $user->user_name }}"></td>
+                                                <td>{{ $user->email }}<input type="hidden" name="db_email"
+                                                        class="db_email" value="{{ $user->email }}"><input type="hidden" name="db_password"
+                                                        class="db_password" value="{{ $user->password }}"></td>
+                                                <td>{{ $user->roles['name'] }}
+                                                    <input type="hidden" name="db_role_id"
+                                                        class="db_role_id" value="{{ $user->roles['id'] }}">
+                                                    <input type="hidden" name="db_role_name"
+                                                        class="db_role_name" value="{{ $user->roles['name'] }}"></td>
+                                                <td>{{ $user->designation }}<input type="hidden" name="db_designation"
+                                                        class="db_designation" value="{{ $user->designation }}"></td>
+                                                <td>
+                                                    @if ($user->status == '1')
+                                                    <span class="badge badge-success">Active</span>
+                                                    @else
+                                                    <span class="badge badge-danger">InActive</span>
+                                                    @endif
+                                                    <input type="hidden" name="db_status" class="db_status"
+                                                        value="{{ $user->status }}"></td>
+                                                <td>
+                                                    @if ($edit == 1 || $delete == 1)
+                                                        <div class="dropdown">
+                                                            <button class="btn btn-secondary dropdown-toggle" type="button"
+                                                                id="dropdownMenuButton" data-toggle="dropdown"
+                                                                aria-haspopup="true" aria-expanded="false">
+                                                                Action
+                                                            </button>
+                                                            <div class="dropdown-menu edit_user"
+                                                                aria-labelledby="dropdownMenuButton">
+                                                                @if ($edit == 1)
+                                                                    <li>
+                                                                        <a class="dropdown-item" type="button" href="#"
+                                                                            data-toggle="modal" data-target="#edit_modal">
+                                                                            Edit</a>
+                                                                    </li>
+                                                                @endif
+                                                                @if ($delete == 1)
+                                                                    <li>
+                                                                        <form action="{{ route('admin.user.delete') }}"
+                                                                            method="POST">
+                                                                            @csrf
+                                                                            <input type="hidden" name="id" class="id"
+                                                                                value="{{ $user->id }}">
+                                                                            <button class="dropdown-item delete" type="submit">
+                                                                                Delete
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot id="t_foot">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Full Name</th>
+                                            <th>User Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Designation</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    </div>
+                </div>
+                <!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    {{-- Add Modal Start --}}
+    <form action="{{ route('admin.user.create') }}" method="POST" id="create_modal_form">
+        @csrf
+        <div class="modal fade" id="create_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{$module_name}}</h4>
+                        <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                                <input type="text" name="create_full_name"
+                                    id="create_full_name" class="form-control" placeholder="Full Name">
+                            </div>
+                            <span class="invalid-feedback" id="create_full_name_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-user"></span>
+                                    </div>
+                                </div>
+                                <input type="text" name="create_user_name"
+                                    id="create_user_name" class="form-control" placeholder="User Name">
+                            </div>
+                            <span class="invalid-feedback" id="create_user_name_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-level-up-alt"></span>
+                                    </div>
+                                </div>
+                                <input type="text" name="create_designation"
+                                    id="create_designation" class="form-control" placeholder="Designation">
+                            </div>
+                            <span class="invalid-feedback" id="create_designation_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                    <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-envelope"></span>
+                                    </div>
+                                </div>
+                                <input type="email" name="create_email"
+                                    id="create_email" class="form-control" placeholder="Email">
+                            </div>
+                            <span class="invalid-feedback" id="create_email_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                                <input type="password" name="create_password" class="form-control" id="create_password"
+                                    placeholder="Password">
+                                <div class="input-group-append" onclick="Create_Password()">
+                                    <div class="input-group-text">
+                                        <span class="me-2 d-flex">
+                                            <i id="create_Show" class="far fa-eye"></i>
+                                            <i id="create_Hide" class="fas fa-eye-slash"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                                @error('create_password')
+                                    <div class="invalid-feedback order-last" id="password_msg">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                            <span class="invalid-feedback" id="create_password_error">
+                            </span>
+                        </div>                                                  
+                        <div class="form-group">
+                            <div class="input-group mb-3">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
+                                <input type="password" name="retyp_password" class="form-control" id="create_retype_password"
+                                    placeholder="Password" placeholder="Retype Password">
+                                <div class="input-group-append" onclick="Create_Retype_Password()">
+                                    <div class="input-group-text">
+                                        <span class="me-2 d-flex">
+                                            <i id="create_retype_Show" class="far fa-eye"></i>
+                                            <i id="create_retype_Hide" class="fas fa-eye-slash"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="invalid-feedback" id="create_retype_password_error">
+                            </span>
+                        </div>
+                        <div class="form-group">
+                            <label for="role" class="text-capitalize">Role</label>
+                            <div class="input-group">
+                                <select name="create_role" id="create_role" class="form-control">
+                                    <option value="" selected disabled hidden>SELECT</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{$role->id}}">{{$role->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span class="invalid-feedback" id="create_role_error">
+                            </span>
                         </div>
                     </div>
-                    <!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </section>
-            <!-- /.content -->
-        </div>
-    </div>
-    <div class="modal fade" id="user_update">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">User</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-default"
+                            data-dismiss="modal">Close</button>
+                        <button type="submit" class="border px-2 btn create"
+                            style="background-color: #091E3E;color: white">Save</button>
+                    </div>
                 </div>
-                <form action="" method="post">
-                    @csrf
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </form>
+    {{-- Add Modal End --}}
+    {{-- Edit Modal Start --}}
+    <form action="{{ route('admin.user.edit') }}" method="post" id="edit_modal_form">
+        @csrf
+        <div class="modal fade" id="edit_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">{{$module_name}}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
-                         <div class="form-group">
+                        <div class="form-group">
                             <div class="input-group">
                                 <div class="input-group-append">
                                     <div class="input-group-text">
@@ -468,14 +404,9 @@
                             <span class="invalid-feedback" id="role_error">
                             </span>
                         </div>
-                        <div class="form-group">
-                            <label for="status" class="text-capitalize">
-                                <div class="input-group">
-                                    <input type="checkbox"
-                                        name="status me-2"
-                                        id="status" value="">Status
-                                </div>
-                            </label>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input status" type="checkbox" id="status" value="0">
+                            <label for="status" class="custom-control-label">Status</label>
                         </div>
                         <div class="modal-footer justify-content-between">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -483,13 +414,13 @@
                                 style="background-color: #091E3E;color: white">Update</button>
                         </div>
                     </div>
-                </form>
+                </div>
+                <!-- /.modal-content -->
             </div>
-            <!-- /.modal-content -->
+            <!-- /.modal-dialog -->
         </div>
-        <!-- /.modal-dialog -->
-    </div>
-
+    </form>
+    {{-- Edit Modal End --}}
     @Include('layouts.links.admin.foot')
     @Include('layouts.links.datatable.foot')
     @Include('layouts.links.sweet_alert.foot')
@@ -577,6 +508,7 @@
                             "password": password,
                             "r_id": r_id,
                         },
+                        cache: false,
                         success: function(response) {
                             Swal.fire(
                                 'Done!',
@@ -590,6 +522,7 @@
                             console.log(JSON.stringify(error));
                         }
                     });
+                    
                 }else {
                     if(full_name == ''){
                         $('#create_full_name_error').show();
@@ -874,8 +807,4 @@
             });
         });
     </script>
-
     @endsection
-</body>
-
-</html>

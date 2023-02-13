@@ -60,7 +60,7 @@ class ModuleUrlController extends Controller
             $status = $request->status;
             $type = $request->type;
             $mode = $request->mode;
-            ModulesUrl::insert([
+            ModulesUrl::create([
                 'm_id' => $m_id,
                 'url' => $url,
                 'name' => $name,

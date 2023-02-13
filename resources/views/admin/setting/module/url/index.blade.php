@@ -1,186 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="" />
-    <meta name="author" content="" />
-    <title>@Include('layouts.links.admin.title') | Modules URL</title>
-    <style>
-        .flex-wrap {
-            float: right !important;
-        }
-
-        .cur-role>td {
-            padding: 0 !important;
-            margin: 0 !important;
-            border: none !important;
-        }
-
-        .dropdown-menu {
-            min-width: 0 !important;
-            padding: 0.375rem 0.75rem !important;
-        }
-    </style>
-    @Include('layouts.favicon')
-    @Include('layouts.links.admin.head')
+@extends('layouts.admin.master')
+@section('content')
     @Include('layouts.links.datatable.head')
     @Include('layouts.links.toastr.head')
-</head>
-
-<body class="hold-transition sidebar-mini layout-fixed">
-    @extends('layouts.admin.master')
-    @section('content')
-    <div class="wrapper">
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
-                            <h1 class="m-0">Modules URL</h1>
-                        </div><!-- /.col -->
-                        <div class="col-sm-6">
-                            <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">Modules URL</li>
-                            </ol>
-                        </div><!-- /.col -->
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            {{-- <ul class="nav nav-pills text-center"> --}}
-                                <div id="success" class="alert alert-default-success alert-dismissible fade show"
-                                    role="alert" style="display: none">
-                                    <strong class=""></strong>
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
-                                    <!-- Button trigger modal -->
-                                    <a type="button" href="#" data-toggle="modal" data-target="#module_url_create"
-                                        class="border px-2 btn" style="background-color: #091E3E;color: white">
-                                        Add Module URL
-                                    </a>
-                                    <!-- Modal -->
-                                    <form action="" method="POST" id="module_url_create_form">
-                                        @csrf
-                                        <div class="modal fade" id="module_url_create">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h4 class="modal-title">Module URL</h4>
-                                                        <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="form-group">
-                                                            <label for="create_mode"
-                                                                class="text-capitalize">Mode</label>
-                                                            <div class="input-group">
-                                                                <select id="create_mode" data-live-search="true"
-                                                                    title="Select"
-                                                                    class="selectpicker show-tick form-control"
-                                                                    name="create_mode">
-                                                                    <option value="" selected hidden disabled>Select
-                                                                    </option>
-                                                                     @php
-                                                                            $array = [];
-                                                                    @endphp
-                                                                    @foreach ($modules_urls as $modules_url)
-                                                                        @php
-                                                                            $array[] = $modules_url->mode;
-                                                                        @endphp
-                                                                    @endforeach
-                                                                        @if (!in_array('1',$array))
-                                                                            <option value="1">View</option>
-                                                                        @endif
-                                                                        @if (!in_array('2',$array))
-                                                                            <option value="2">Create</option>
-                                                                        @endif
-                                                                        @if (!in_array('3',$array))
-                                                                            <option value="3">Edit</option>
-                                                                        @endif
-                                                                        @if (!in_array('4',$array))
-                                                                            <option value="4">Delete</option>
-                                                                        @endif
-                                                                </select>
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_mode_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="module_name"
-                                                                class="text-capitalize">URL</label>
-                                                            <div class="input-group">
-                                                                <input type="hidden" name="create_module_id"
-                                                                    id="create_module_id"
-                                                                    value="{{ Session::get('m_id') }}">
-                                                                <input type="hidden" name="create_module_url_id"
-                                                                    id="create_module_url_id" value="">
-                                                                <input type="text" name="create_module_url_name"
-                                                                    id="create_module_url_name"
-                                                                    class="form-control">
-                                                            </div>
-                                                            <span class="invalid-feedback"
-                                                                id="create_module_url_name_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="create_type"
-                                                                class="text-capitalize">Type</label>
-                                                            <div class="input-group">
-                                                                <select id="create_type" data-live-search="true"
-                                                                    title="Select"
-                                                                    class="selectpicker show-tick form-control"
-                                                                    name="create_type">
-                                                                    <option value="" selected hidden disabled>Select
-                                                                    </option>
-                                                                    <option value="0">SideBar</option>
-                                                                    <option value="1">Inside Page</option>
-                                                                </select>
-                                                            </div>
-                                                            <span class="invalid-feedback" id="create_type_error">
-                                                            </span>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="module_status" class="text-capitalize">
-                                                                <input type="checkbox"
-                                                                    name="create_module_url_status me-2"
-                                                                    id="create_module_url_status"
-                                                                    value="0">Status</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer justify-content-between">
-                                                        <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="border px-2 btn create"
-                                                            style="background-color: #091E3E;color: white"
-                                                            id="add_module_btn">Save</button>
-                                                    </div>
-                                                </div>
-                                                <!-- /.modal-content -->
-                                            </div>
-                                            <!-- /.modal-dialog -->
-                                        </div>
-                                        <!-- /.modal -->
-                                    </form>
-                                </div>
-
-                                {{--
-                            </ul> --}}
-                        </div>
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+        @section('content_1')
+            <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12 mt-2">
+                <!-- Button trigger modal -->
+                @if ($create == 1)
+                    <a type="button" href="#" data-toggle="modal" data-target="#create_modal"
+                        class="border px-3 btn" style="background-color: #091E3E;color: white">
+                        Add
+                    </a>
+                @endif
             </div>
-            <!-- /.content-header -->
-
-            <!-- Main content -->
+        @endsection
+        <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
                     <!-- Small boxes (Stat box) -->
@@ -188,9 +22,8 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">Modules List</h3>
+                                    <h3 class="card-title">{{$module_name}} List</h3>
                                 </div>
-                                <!-- /.card-header -->
                                 <div class="card-body datatable_data">
                                     <table id="example2" class="table table-bordered table-striped">
                                         <thead>
@@ -281,7 +114,7 @@
                                                                     <li>
                                                                         <a class="dropdown-item" type="button" href="#"
                                                                             data-toggle="modal"
-                                                                            data-target="#module_url_update">
+                                                                            data-target="#edit_modal">
                                                                             Edit</a>
                                                                     </li>
                                                                 @endif
@@ -320,95 +153,196 @@
                                         </tfoot>
                                     </table>
                                 </div>
-                                <!-- /.card-body -->
                             </div>
-                            <!-- /.card -->
+                                <!-- /.card -->
                         </div>
                     </div>
                     <!-- /.row -->
                 </div><!-- /.container-fluid -->
             </section>
-            <!-- /.content -->
-        </div>
-    </div>
-    <div class="modal fade" id="module_url_update">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Module</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <!-- /.content -->
+        {{-- Add Modal Start --}}
+        <form action="" method="POST" id="create_modal_form">
+            @csrf
+            <div class="modal fade" id="create_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{$module_name}}</h4>
+                            <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="create_mode"
+                                    class="text-capitalize">Mode</label>
+                                <div class="input-group">
+                                    <select id="create_mode" data-live-search="true"
+                                        title="Select"
+                                        class="selectpicker show-tick form-control"
+                                        name="create_mode">
+                                        <option value="" selected hidden disabled>Select
+                                        </option>
+                                            @php
+                                                $array = [];
+                                        @endphp
+                                        @foreach ($modules_urls as $modules_url)
+                                            @php
+                                                $array[] = $modules_url->mode;
+                                            @endphp
+                                        @endforeach
+                                            @if (!in_array('1',$array))
+                                                <option value="1">View</option>
+                                            @endif
+                                            @if (!in_array('2',$array))
+                                                <option value="2">Create</option>
+                                            @endif
+                                            @if (!in_array('3',$array))
+                                                <option value="3">Edit</option>
+                                            @endif
+                                            @if (!in_array('4',$array))
+                                                <option value="4">Delete</option>
+                                            @endif
+                                    </select>
+                                </div>
+                                <span class="invalid-feedback" id="create_mode_error">
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="module_name"
+                                    class="text-capitalize">URL</label>
+                                <div class="input-group">
+                                    <input type="hidden" name="create_module_id"
+                                        id="create_module_id"
+                                        value="{{ Session::get('m_id') }}">
+                                    <input type="hidden" name="create_module_url_id"
+                                        id="create_module_url_id" value="">
+                                    <input type="text" name="create_module_url_name"
+                                        id="create_module_url_name"
+                                        class="form-control">
+                                </div>
+                                <span class="invalid-feedback"
+                                    id="create_module_url_name_error">
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label for="create_type"
+                                    class="text-capitalize">Type</label>
+                                <div class="input-group">
+                                    <select id="create_type" data-live-search="true"
+                                        title="Select"
+                                        class="selectpicker show-tick form-control"
+                                        name="create_type">
+                                        <option value="" selected hidden disabled>Select
+                                        </option>
+                                        <option value="0">SideBar</option>
+                                        <option value="1">Inside Page</option>
+                                    </select>
+                                </div>
+                                <span class="invalid-feedback" id="create_type_error">
+                                </span>
+                            </div>
+                            <div class="custom-control custom-checkbox">
+                                <input class="custom-control-input create_module_url_status" type="checkbox" id="create_module_url_status" checked value="1">
+                                <label for="create_module_url_status" class="custom-control-label">Status</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default"
+                                data-dismiss="modal">Close</button>
+                            <button type="submit" class="border px-2 btn create"
+                                style="background-color: #091E3E;color: white"
+                                id="add_module_btn">Save</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
                 </div>
-                <form action="" method="post" id="module_url_update_form">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="module_mode"
-                                class="text-capitalize">Mode</label>
-                            <div class="input-group">
-                                <select id="module_mode" data-live-search="true"
-                                    title="Select"
-                                    class="selectpicker show-tick form-control"
-                                    name="module_mode">
-                                        <option value="1">View</option>
-                                        <option value="2">Create</option>
-                                        <option value="3">Edit</option>
-                                        <option value="4">Delete</option>
-                                </select>
-                            </div>
-                            <span class="invalid-feedback" id="module_mode_error">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label for="module_url_id" class="text-capitalize">URL</label>
-                            <div class="input-group">
-                                <input type="hidden" name="module_url_id" id="module_url_id" value="">
-                                <input type="text" name="module_url" id="module_url" class="form-control">
-                            </div>
-                            <span class="invalid-feedback" id="module_url_error">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label for="module_id" class="text-capitalize">Module</label>
-                            <input type="hidden" name="module_id" id="module_id" value="">
-                            <input type="text" name="module_name" id="module_name" class="form-control" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="module_type" class="text-capitalize">Type</label>
-                            <div class="input-group">
-                                <select id="module_type" data-live-search="true" title="Select"
-                                    class="selectpicker show-tick form-control" name="module_type" required>
-                                    <option id="edit_module_type" selected hidden value="">
-                                    <option value="0">SideBar</option>
-                                    <option value="1">Inside Page</option>
-                                </select>
-                            </div>
-                            <span class="invalid-feedback" id="module_type_error">
-                            </span>
-                        </div>
-                        <div class="form-group">
-                            <label for="module_url_status" class="text-capitalize">
-                                <input type="checkbox" name="module_url_status me-2" id="module_url_status"
-                                    value="0">Status</label>
-                        </div>
-                    </div>
-                    <div class="modal-footer justify-content-between">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="submit" class="border px-2 btn update"
-                            style="background-color: #091E3E;color: white">Update</button>
-                    </div>
-                </form>
+                <!-- /.modal-dialog -->
             </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+            <!-- /.modal -->
+        </form>
+        {{-- Add Modal End --}}
+        {{-- Edit Modal Start --}}
+        <form action="" method="post" id="edit_modal_form">
+            @csrf
+            <div class="modal fade" id="edit_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">{{$module_name}}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="module_mode"
+                                        class="text-capitalize">Mode</label>
+                                    <div class="input-group">
+                                        <select id="module_mode" data-live-search="true"
+                                            title="Select"
+                                            class="selectpicker show-tick form-control"
+                                            name="module_mode">
+                                                <option value="1">View</option>
+                                                <option value="2">Create</option>
+                                                <option value="3">Edit</option>
+                                                <option value="4">Delete</option>
+                                        </select>
+                                    </div>
+                                    <span class="invalid-feedback" id="module_mode_error">
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="module_url_id" class="text-capitalize">URL</label>
+                                    <div class="input-group">
+                                        <input type="hidden" name="module_url_id" id="module_url_id" value="">
+                                        <input type="text" name="module_url" id="module_url" class="form-control">
+                                    </div>
+                                    <span class="invalid-feedback" id="module_url_error">
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="module_id" class="text-capitalize">Module</label>
+                                    <input type="hidden" name="module_id" id="module_id" value="">
+                                    <input type="text" name="module_name" id="module_name" class="form-control" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="module_type" class="text-capitalize">Type</label>
+                                    <div class="input-group">
+                                        <select id="module_type" data-live-search="true" title="Select"
+                                            class="selectpicker show-tick form-control" name="module_type" required>
+                                            <option id="edit_module_type" selected hidden value="">
+                                            <option value="0">SideBar</option>
+                                            <option value="1">Inside Page</option>
+                                        </select>
+                                    </div>
+                                    <span class="invalid-feedback" id="module_type_error">
+                                    </span>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input class="custom-control-input module_url_status" type="checkbox" id="module_url_status" value="0">
+                                    <label for="module_url_status" class="custom-control-label">Status</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="border px-2 btn update"
+                                    style="background-color: #091E3E;color: white">Update</button>
+                            </div>
+                
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+        </form>
+        {{-- Edit Modal End --}}
     @Include('layouts.links.admin.foot')
     @Include('layouts.links.datatable.foot')
     @Include('layouts.links.sweet_alert.foot')
-
+    @Include('layouts.links.toastr.foot')
     <script type="text/javascript">
         $('#module_url_status').click(function() {
             if ($(this).is(':checked')) {
@@ -701,8 +635,4 @@
             });
         });
     </script>
-    @endsection
-    {{-- @Include('layouts.links.modals.foot') --}}
-</body>
-
-</html>
+@endsection

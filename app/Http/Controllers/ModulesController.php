@@ -62,11 +62,8 @@ class ModulesController extends Controller
             $name = $request->name;
             $icon = $request->icon;
             $type = $request->type;
-
             $status = $request->status;
-
-
-            Module::insert([
+            Module::create([
                 'm_g_id' => $m_g_id,
                 'name' => $name,
                 'icon' => $icon,

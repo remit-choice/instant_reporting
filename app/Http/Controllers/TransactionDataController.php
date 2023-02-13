@@ -75,7 +75,7 @@ class TransactionDataController extends Controller
                     while (($emapData = fgetcsv($files, 10000, ",")) !== FALSE) {
                         $emapData = str_replace(",", " ", $emapData);
                         if ($i > 0) {
-                            TransactionsData::insert([
+                            TransactionsData::create([
                                 'transaction_date' => $emapData[0],
                                 'transaction_time' => $emapData[1],
                                 'agent_id_collect' => $emapData[2],
