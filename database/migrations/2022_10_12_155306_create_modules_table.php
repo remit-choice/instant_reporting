@@ -15,14 +15,15 @@ return new class extends Migration
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('m_g_id')->index('m_g_id')->nullable();
-            $table->string('name');
-            $table->string('icon')->nullable();
-            $table->string('status');
-            $table->bigInteger('sort')->nullable();
-            $table->string('type');
+            $table->unsignedBigInteger('m_g_id')->index('m_g_id');
+            $table->foreign('m_g_id')->references('id')->on('modules_groups')->onUpdate('cascade');
+            $table->string('name')->length(60);
+            $table->string('icon')->length(50)->nullable();
+            $table->integer('sort')->length(11)->nullable();
+            $table->integer('type')->length(3);
+            $table->tinyInteger('status')->length(2);
             $table->timestamps();
-            $table->foreign('m_g_id')->references('id')->on('modules_groups')->onDelete('cascade');
+            $table->softDeletes();
         });
     }
 

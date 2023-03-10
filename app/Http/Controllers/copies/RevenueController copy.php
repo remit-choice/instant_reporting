@@ -33,13 +33,6 @@ class RevenueController extends Controller
     public function filter($request)
     {
         if (FacadesRequest::isMethod('post')) {
-            if (empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
-                return redirect()->back()->with('failed', "From Date Mandatory");
-            } else {
-                if (!empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
-                    return redirect()->back()->with('failed', "From Date Mandatory");
-                }
-            }
             $date_from = '';
             $date_to = '';
             $tr_no_count = DB::raw('count(tr_no) as count_of_tr_no');
@@ -50,21 +43,41 @@ class RevenueController extends Controller
             $fx_loss = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))+SUM(IF(payin_ccy="GBP",(admin_charges),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) )) AS fx_loss');
             $total_revenue_in_gbp = DB::raw('SUM(IF(payin_ccy="GBP",(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/ buyer_dc_rate),(((buyer_dc_rate-agent_rate)*(payin_amt-admin_charges))/buyer_dc_rate))/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1)) +
             SUM(IF(agent_name_main="SSRL",((admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))-(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))),(admin_charges/(SELECT currencies_rates.rate FROM currencies INNER JOIN currencies_rates ON currencies.id=currencies_rates.c_id WHERE currencies.currency=payin_ccy AND currencies_rates.status=1))))  AS total_revenue_in_gbp');
-            $conditions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['status', '=', 'Paid']]);
-            if ($request->date_from && !$request->date_to) {
+
+            if (!empty($request->search_filter) && empty($request->date_from) && empty($request->date_to)) {
+                $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['status', '=', 'Paid']])->groupBy('customer_country')->orderBY('customer_country')->get();
+            } elseif (empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
-                $conditions->where('transaction_date', $date_from);
-            }
-            if ($request->date_from && $request->date_to) {
+                $transactions = TransactionsData::where([['customer_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', 'Paid']])->orderBY('customer_country', 'ASC')->get();
+            } elseif (!empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', 'Paid']])->groupBy('customer_country')->orderBY('customer_country')->get();
+            } elseif (empty($request->search_filter) && !empty($request->date_from) && !empty($request->date_to)) {
                 $date_from = date('d/m/Y', strtotime($request->date_from));
                 $date_to = date('d/m/Y', strtotime($request->date_to));
-                $conditions->whereBetween('transaction_date', [$date_from, $date_to]);
+                $transactions = TransactionsData::where('customer_country', '!=', '')->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->where('status', '=', 'Paid')->orderBY('customer_country')->get();
+            } elseif (!empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
+                $date_from = date('d/m/Y', strtotime($request->date_from));
+                $date_to = date('d/m/Y', strtotime($request->date_to));
+                $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['status', '=', 'Paid']])->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->groupBy('customer_country')->orderBY('customer_country')->get();
+            } else {
+                if (empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
+                    return redirect()->back()->with('failed', "From Date Mandatory");
+                } else {
+                    if (!empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
+                        return redirect()->back()->with('failed', "From Date Mandatory");
+                    }
+                }
             }
-            $transactions = $conditions->groupBy('customer_country')->orderBY('customer_country')->get();
             return view('accounts.transactions.sending.revenue.index', ['transactions' => $transactions]);
         }
     }
 }
+
+
+
+
+
                 // dd($transactions->toArray());
                 // dd($date_from);
                 // $transactions = TransactionsData::where('transaction_date', '=', $date_from)->select('beneficiary_country', DB::raw('count(tr_no) as count_of_tr_no'),)->groupBy('beneficiary_country')->get();
@@ -196,62 +209,3 @@ class RevenueController extends Controller
 
                 // $country[] = array_unique($country);
                 // dd($transactions->toArray());
-
-
-
-
-
-
-
-                            // $conditions = new TransactionsData();
-            // if ($conditions->search_filter) {
-            //     $conditions->where([['customer_country', '!=', ''], ['status', '=', 'Paid']]);
-            // }
-            // if ($conditions->date_from && $request->date_to) {
-            //     $date_from = date('d/m/Y', strtotime($request->date_from));
-            //     $date_to = date('d/m/Y', strtotime($request->date_to));
-            //     $conditions->whereBetween('transaction_date', [$date_from, $date_to]);
-            // }
-            // $transactions = $conditions->select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->groupBy('customer_country')->orderBY('customer_country')->get();
-
-
-
-
-
-             // $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->when($request->search_filter, function ($query) {
-            //     return $query->where([['customer_country', '!=', ''], ['status', '=', 'Paid']]);
-            // })->when([$request->date_from, !$request->date_to], function ($query) use ($date_from) {
-            //     return $query->where('transaction_date', $date_from);
-            // })->when([$request->date_from, $request->date_to], function ($query) use ($date_from, $date_to) {
-            //     return $query->whereBetween('transaction_date', [$date_from, $date_to]);
-            // })->groupBy('customer_country')->orderBY('customer_country')
-            //     // ->toSql();
-            //     ->get();
-            // dd($transactions);
-            // dd($transactions->toArray());
-
-            // if (!empty($request->search_filter) && empty($request->date_from) && empty($request->date_to)) {
-            //     $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['status', '=', 'Paid']])->groupBy('customer_country')->orderBY('customer_country')->get();
-            // } elseif (empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
-            //     $date_from = date('d/m/Y', strtotime($request->date_from));
-            //     $transactions = TransactionsData::where([['customer_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', 'Paid']])->orderBY('customer_country', 'ASC')->get();
-            // } elseif (!empty($request->search_filter) && !empty($request->date_from) && empty($request->date_to)) {
-            //     $date_from = date('d/m/Y', strtotime($request->date_from));
-            //     $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['transaction_date', '=', $date_from], ['status', '=', 'Paid']])->groupBy('customer_country')->orderBY('customer_country')->get();
-            // } elseif (empty($request->search_filter) && !empty($request->date_from) && !empty($request->date_to)) {
-            //     $date_from = date('d/m/Y', strtotime($request->date_from));
-            //     $date_to = date('d/m/Y', strtotime($request->date_to));
-            //     $transactions = TransactionsData::where('customer_country', '!=', '')->whereBetween('transaction_date', [$date_from, $date_to])->orwhere('transaction_date', '=', $date_from)->orwhere('transaction_date', '<=', $date_to)->where('status', '=', 'Paid')->orderBY('customer_country')->get();
-            // } elseif (!empty($request->date_from) && !empty($request->date_to) && !empty($request->search_filter)) {
-            //     $date_from = date('d/m/Y', strtotime($request->date_from));
-            //     $date_to = date('d/m/Y', strtotime($request->date_to));
-            //     $transactions = TransactionsData::select('customer_country', $tr_no_count, $vol_in_gbp, $fx_in_gbp, $charges_in_gbp, $net_admin_charges_in_gbp, $fx_loss, $total_revenue_in_gbp)->where([['customer_country', '!=', ''], ['status', '=', 'Paid']])->whereBetween('transaction_date', [$date_from, $date_to])->groupBy('customer_country')->orderBY('customer_country')->get();
-            // } else {
-            //     if (empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
-            //         return redirect()->back()->with('failed', "From Date Mandatory");
-            //     } else {
-            //         if (!empty($request->search_filter) && empty($request->date_from) && !empty($request->date_to)) {
-            //             return redirect()->back()->with('failed', "From Date Mandatory");
-            //         }
-            //     }
-            // }

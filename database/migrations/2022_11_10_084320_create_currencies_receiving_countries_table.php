@@ -15,16 +15,15 @@ class CreateCurrenciesReceivingCountriesTable extends Migration
     {
         Schema::create('currencies_receiving_countries', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable();
-            $table->string('iso')->nullable();
-            $table->string('iso3')->nullable();
-            $table->string('dial')->nullable();
-            $table->string('currency')->nullable();
-            $table->string('currency_name')->nullable();
-            $table->string('min_rate')->nullable();
-            $table->string('max_rate')->nullable();
-            $table->integer('status')->nullable();
+            $table->string('name')->length(50);
+            $table->string('iso')->length(3);
+            $table->string('iso3')->length(3);
+            $table->string('dial')->length(25);
+            $table->string('currency')->length(50);
+            $table->string('currency_name')->length(50);
+            $table->tinyInteger('status')->length(2)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

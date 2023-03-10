@@ -15,16 +15,17 @@ class CreateBuyersPaymentMethodsTable extends Migration
     {
         Schema::create('buyers_payment_methods', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('country')->nullable();
-            $table->unsignedBigInteger('b_id')->index('b_id')->nullable()->onDelete('cascade');
+            $table->string('country')->length(30)->nullable();
+            $table->unsignedBigInteger('b_id')->index('b_id')->onUpdate('cascade');
             $table->foreign('b_id')->references('id')->on('buyers');
-            $table->unsignedBigInteger('c_id')->index('c_id')->nullable()->onDelete('cascade');
+            $table->unsignedBigInteger('c_id')->index('c_id')->onUpdate('cascade');
             $table->foreign('c_id')->references('id')->on('currencies');
-            $table->unsignedBigInteger('p_m_id')->index('p_m_id')->nullable()->onDelete('cascade');
+            $table->unsignedBigInteger('p_m_id')->index('p_m_id')->onUpdate('cascade');
             $table->foreign('p_m_id')->references('id')->on('payment_methods');
-            $table->string('rate')->nullable();
-            $table->integer('status')->nullable();
+            $table->float('rate')->length(20)->nullable();
+            $table->tinyInteger('status')->length(2)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

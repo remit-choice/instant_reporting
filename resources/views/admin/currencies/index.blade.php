@@ -1,37 +1,40 @@
     @extends('layouts.admin.master')
     @section('content')
-    @Include('layouts.links.datatable.head')
-     <!-- Main content -->
-        <section class="content">
-            <div class="container-fluid">
-                <!-- Small boxes (Stat box) -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title">{{$module_name}} List</h3>
-                            </div>
-                            <div class="card-body">
-                                <table id="example1" class="table table-bordered table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-capitalize">#</th>
-                                            <th class="text-capitalize">name</th>
-                                            <th class="text-capitalize">iso</th>
-                                            <th class="text-capitalize">iso3</th>
-                                            <th class="text-capitalize">dial</th>
-                                            <th class="text-capitalize">currency</th>
-                                            <th class="text-capitalize">currency_name</th>
-                                            <th class="text-capitalize">min rate</th>
-                                            <th class="text-capitalize">max rate</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @php
+    @section('links_content_head')
+        @Include('layouts.links.datatable.head')
+        @Include('layouts.links.toastr.head')
+    @endsection
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <!-- Small boxes (Stat box) -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">{{ $module_name }} List</h3>
+                        </div>
+                        <div class="card-body">
+                            <table id="example1" class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="text-capitalize">#</th>
+                                        <th class="text-capitalize">name</th>
+                                        <th class="text-capitalize">iso</th>
+                                        <th class="text-capitalize">iso3</th>
+                                        <th class="text-capitalize">dial</th>
+                                        <th class="text-capitalize">currency</th>
+                                        <th class="text-capitalize">currency_name</th>
+                                        <th class="text-capitalize">min rate</th>
+                                        <th class="text-capitalize">max rate</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @php
                                         $counter = 1;
-                                        @endphp
-                                        @foreach ($currencies as $currency)
+                                    @endphp
+                                    @foreach ($currencies as $currency)
                                         <tr>
                                             <td>{{ $counter++ }} <input type="hidden" name="db_currency_id"
                                                     class="db_currency_id" value="{{ $currency->id }}">
@@ -61,49 +64,50 @@
                                                         <div class="dropdown-menu edit_currency"
                                                             aria-labelledby="dropdownMenuButton">
                                                             @if ($edit == 1)
-                                                            <li>
-                                                                <a class="dropdown-item" type="button" href="#"
-                                                                    data-toggle="modal" data-target="#edit_modal">
-                                                                    Edit</a>
-                                                            </li>
+                                                                <li>
+                                                                    <a class="dropdown-item" type="button"
+                                                                        href="#" data-toggle="modal"
+                                                                        data-target="#edit_modal">
+                                                                        Edit</a>
+                                                                </li>
                                                             @endif
                                                         </div>
                                                     </div>
                                                 @endif
                                             </td>
                                         </tr>
-                                        @endforeach
+                                    @endforeach
 
-                                    </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <th class="text-capitalize">#</th>
-                                            <th class="text-capitalize">name</th>
-                                            <th class="text-capitalize">iso</th>
-                                            <th class="text-capitalize">iso3</th>
-                                            <th class="text-capitalize">dial</th>
-                                            <th class="text-capitalize">currency</th>
-                                            <th class="text-capitalize">currency_name</th>
-                                            <th class="text-capitalize">min rate</th>
-                                            <th class="text-capitalize">max rate</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th class="text-capitalize">#</th>
+                                        <th class="text-capitalize">name</th>
+                                        <th class="text-capitalize">iso</th>
+                                        <th class="text-capitalize">iso3</th>
+                                        <th class="text-capitalize">dial</th>
+                                        <th class="text-capitalize">currency</th>
+                                        <th class="text-capitalize">currency_name</th>
+                                        <th class="text-capitalize">min rate</th>
+                                        <th class="text-capitalize">max rate</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
-                            <!-- /.card -->
                     </div>
+                    <!-- /.card -->
                 </div>
-                <!-- /.row -->
-            </div><!-- /.container-fluid -->
-        </section>
-            <!-- /.content -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
     <div class="modal fade" id="edit_modal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">{{$module_name}}</h4>
+                    <h4 class="modal-title">{{ $module_name }}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -111,8 +115,8 @@
                 <form action="{{ route('admin.currencies.edit') }}" method="post">
                     @csrf
                     <div class="modal-body">
-                        <div id="failes" class="alert alert-default-danger alert-dismissible fade show" role="alert"
-                            style="display: none">
+                        <div id="failes" class="alert alert-default-danger alert-dismissible fade show"
+                            role="alert" style="display: none">
                             <span class="text_fails"></span>
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
@@ -151,125 +155,129 @@
         <!-- /.modal-dialog -->
     </div>
     <!-- /.modal -->
-    @Include('layouts.links.admin.foot')
-    @Include('layouts.links.datatable.foot')
-    @Include('layouts.links.sweet_alert.foot')
-    <script type="text/javascript">
-        $('.edit_currency').on('click', function() {
-            var _this = $(this).parents('tr');
-            $('#currency_min_rate').val(_this.find('.db_currency_min_rate').val());
-            $('#currency_max_rate').val(_this.find('.db_currency_max_rate').val());
-            $('#currency_id').val(_this.find('.db_currency_id').val());
-        });
-        $(function() {
-            var Toast = Swal.mixin({
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 3000
+    @section('links_content_foot')
+        @Include('layouts.links.datatable.foot')
+        @Include('layouts.links.sweet_alert.foot')
+        <script type="text/javascript">
+            $('.edit_currency').on('click', function() {
+                var _this = $(this).parents('tr');
+                $('#currency_min_rate').val(_this.find('.db_currency_min_rate').val());
+                $('#currency_max_rate').val(_this.find('.db_currency_max_rate').val());
+                $('#currency_id').val(_this.find('.db_currency_id').val());
             });
-            $('.update').click(function(e) {
-                e.preventDefault();
-                var id = $('#currency_id').val();
-                var min_rate = $('#currency_min_rate').val();
-                var max_rate = $('#currency_max_rate').val();
-
-                console.log(id);
-                console.log(min_rate);
-                console.log(max_rate);
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+            $(function() {
+                var Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top-end',
+                    showConfirmButton: false,
+                    timer: 3000
                 });
-                if (min_rate != '' && max_rate != '' && min_rate < max_rate) {
-                Swal.fire({
-                    title: 'Are you sure?',
-                    icon: 'warning',
-                    confirmButtonColor: '#e64942',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: `No`,
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                            $.ajax({
-                                type: "post",
-                                url: "{{ route('admin.currencies.edit') }}",
-                                data: {
-                                    "id": id,
-                                    "min_rate": min_rate,
-                                    "max_rate": max_rate,
-                                },
-                                success: function(response) {
-                                    if (response == '1') {
-                                        Swal.fire(
-                                    'Updated!',
-                                    'Data Successfully Updated.!',
-                                    'success'
-                                ).then((result) => {
-                                    $('#edit_modal').modal('hide');
-                                        $("#min_rate" + id).load(location.href +
-                                            " #min_rate" + id);
-                                        $("#min_rate" + id).addClass('cur-rate td');
-                                        $("#max_rate" + id).load(location.href +
-                                            " #max_rate" + id);
-                                        $("#max_rate" + id).addClass('cur-rate td');
-                                });
-                                    }
-                                },
-                                error: (error) => {
-                                    console.log(JSON.stringify(error));
-                                }
-                            });
+                $('.update').click(function(e) {
+                    e.preventDefault();
+                    var id = $('#currency_id').val();
+                    var min_rate = $('#currency_min_rate').val();
+                    var max_rate = $('#currency_max_rate').val();
+
+                    console.log(id);
+                    console.log(min_rate);
+                    console.log(max_rate);
+                    $.ajaxSetup({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                }else {
-                if (min_rate == '') {
-                    $('#currency_min_rate_error').show();
-                    $('#currency_min_rate_error').html(
-                        "Required!");
-                    window.setInterval(function() {
-                        $('#currency_min_rate_error').slideUp('slow');
-                        $('#currency_min_rate_error').empty();
-                    }, 4000);
-                }
-                if (max_rate == '') {
-                    $('#currency_max_rate_error').show();
-                    $('#currency_max_rate_error').html(
-                        "Required!");
-                    window.setInterval(function() {
-                        $('#currency_max_rate_error').slideUp('slow');
-                        $('#currency_max_rate_error').empty();
-                    }, 4000);
-                }
-                if (min_rate > max_rate) {
-                    $('#failes').show();
-                    $('#failes .text_fails').html(
-                        "Minimum rate high from maximum rate!");
-                    window.setInterval(function() {
-                        $('#failes').slideUp('slow');
-                        $('#failes .text_fails').empty();
-                    }, 4000);
-                }else if (min_rate == max_rate) {
-                    $('#failes').show();
-                    $('#failes .text_fails').html(
-                        "Minimum rate is equal to maximum rate!");
-                    window.setInterval(function() {
-                        $('#failes').slideUp('slow');
-                        $('#failes .text_fails').empty();
-                    }, 4000);
-                }else{
-                    $('#failes').show();
-                    $('#failes .text_fails').html(
-                        "Maximum rate less from Minimum rate!");
-                    window.setInterval(function() {
-                        $('#failes').slideUp('slow');
-                        $('#failes .text_fails').empty();
-                    }, 4000);
-                }
-                }
+                    if (min_rate != '' && max_rate != '' && min_rate < max_rate) {
+                        Swal.fire({
+                            title: 'Are you sure?',
+                            icon: 'warning',
+                            confirmButtonColor: '#e64942',
+                            showCancelButton: true,
+                            confirmButtonText: 'Yes',
+                            cancelButtonText: `No`,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    type: "post",
+                                    url: "{{ route('admin.currencies.edit') }}",
+                                    data: {
+                                        "id": id,
+                                        "min_rate": min_rate,
+                                        "max_rate": max_rate,
+                                    },
+                                    success: function(response) {
+                                        if (response == '1') {
+                                            Swal.fire(
+                                                'Updated!',
+                                                'Data Successfully Updated.!',
+                                                'success'
+                                            ).then((result) => {
+                                                $('#edit_modal').modal('hide');
+                                                $("#min_rate" + id).load(location
+                                                    .href +
+                                                    " #min_rate" + id);
+                                                $("#min_rate" + id).addClass(
+                                                    'cur-rate td');
+                                                $("#max_rate" + id).load(location
+                                                    .href +
+                                                    " #max_rate" + id);
+                                                $("#max_rate" + id).addClass(
+                                                    'cur-rate td');
+                                            });
+                                        }
+                                    },
+                                    error: (error) => {
+                                        console.log(JSON.stringify(error));
+                                    }
+                                });
+                            }
+                        });
+                    } else {
+                        if (min_rate == '') {
+                            $('#currency_min_rate_error').show();
+                            $('#currency_min_rate_error').html(
+                                "Required!");
+                            window.setInterval(function() {
+                                $('#currency_min_rate_error').slideUp('slow');
+                                $('#currency_min_rate_error').empty();
+                            }, 4000);
+                        }
+                        if (max_rate == '') {
+                            $('#currency_max_rate_error').show();
+                            $('#currency_max_rate_error').html(
+                                "Required!");
+                            window.setInterval(function() {
+                                $('#currency_max_rate_error').slideUp('slow');
+                                $('#currency_max_rate_error').empty();
+                            }, 4000);
+                        }
+                        if (min_rate > max_rate) {
+                            $('#failes').show();
+                            $('#failes .text_fails').html(
+                                "Minimum rate high from maximum rate!");
+                            window.setInterval(function() {
+                                $('#failes').slideUp('slow');
+                                $('#failes .text_fails').empty();
+                            }, 4000);
+                        } else if (min_rate == max_rate) {
+                            $('#failes').show();
+                            $('#failes .text_fails').html(
+                                "Minimum rate is equal to maximum rate!");
+                            window.setInterval(function() {
+                                $('#failes').slideUp('slow');
+                                $('#failes .text_fails').empty();
+                            }, 4000);
+                        } else {
+                            $('#failes').show();
+                            $('#failes .text_fails').html(
+                                "Maximum rate less from Minimum rate!");
+                            window.setInterval(function() {
+                                $('#failes').slideUp('slow');
+                                $('#failes .text_fails').empty();
+                            }, 4000);
+                        }
+                    }
+                });
             });
-        });
-    </script>
-   @endsection
-
+        </script>
+    @endsection
+@endsection

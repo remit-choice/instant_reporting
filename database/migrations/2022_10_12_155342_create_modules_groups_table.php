@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('modules_groups', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->nullable();
-            $table->string('icon')->nullable();
-            $table->bigInteger('sort')->nullable();
-            $table->integer('status')->nullable();
+            $table->string('name')->length(60);
+            $table->string('icon')->length(60)->nullable();
+            $table->integer('sort')->length(4)->nullable();
+            $table->tinyInteger('status')->length(2)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BuyerPaymentMethod extends Model
 {
 
-    protected $fillable = ['id', 'country', 'b_id', 'c_id', 'p_m_id', 'rate', 'status', 'created_at', 'updated_at'];
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['id', 'country', 'b_id', 'c_id', 'p_m_id', 'rate', 'status', 'created_at', 'updated_at', 'deleted_at'];
     protected $table = 'buyers_payment_methods';
-    use HasFactory;
 
     public function buyers()
     {

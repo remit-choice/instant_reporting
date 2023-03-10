@@ -1,8 +1,10 @@
 
     @extends('layouts.admin.master')
     @section('content')
-    @Include('layouts.links.datatable.head')
+    @section('links_content_head')
+        @Include('layouts.links.datatable.head')
     @Include('layouts.links.toastr.head')
+    @endsection
         <!-- Main content -->
         <section class="content">
             <div class="container-fluid">
@@ -56,7 +58,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                        <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-6">
                             <label>From Date</label>
                             @if (request()->input('date_from'))
                                 <input type="date" name="date_from" id=""
@@ -68,7 +70,7 @@
                                     class="form-control" value="" style="width: 100%">
                             @endif
                         </div>
-                            <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-6">
+                        <div class="form-group col-lg-2 col-md-2 col-sm-6 col-xs-6">
                             <label>To Date</label>
                             @if (request()->input('date_to'))
                                 <input type="date" name="date_to" id=""
@@ -80,10 +82,11 @@
                                     class="form-control" value="" style="width: 100%">
                             @endif
                         </div>
-                    </div>
-                    <div class="row d-flex justify-content-center">
-                        <button type="submit" name="filter" class="btn mb-1"
+                        <div class="form-group col-lg-1 col-md-1 col-sm-3 col-xs-3">
+                            <label class="invisible">Submit</label>
+                            <button type="submit" name="filter" class="btn form-control"
                             style="background-color: #091E3E;color: white">Submit</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -189,9 +192,9 @@
             </div><!-- /.container-fluid -->
         </section>
         <!-- /.content -->
-        @Include('layouts.links.admin.foot')
-        @Include('layouts.links.datatable.foot')
-        @Include('layouts.links.sweet_alert.foot')
+        @section('links_content_foot')
+    @Include('layouts.links.datatable.foot')
+    @Include('layouts.links.sweet_alert.foot')
         <script type="text/javascript">
             $(document).on('click', '#beneficiary_country_clear', function() {
                 $('#beneficiary_country').val(null).trigger("change");
@@ -201,3 +204,5 @@
             });
         </script>
     @endsection
+    @endsection
+

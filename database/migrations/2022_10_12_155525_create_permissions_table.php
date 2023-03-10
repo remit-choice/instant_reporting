@@ -15,15 +15,16 @@ return new class extends Migration
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('r_id')->index('r_id')->nullable();
-            $table->unsignedBigInteger('m_id')->index('m_id')->nullable();
-            $table->integer('view')->nullable();
-            $table->integer('add')->nullable();
-            $table->integer('edit')->nullable();
-            $table->integer('delete')->nullable();
+            $table->unsignedBigInteger('r_id')->index('r_id');
+            $table->foreign('r_id')->references('id')->on('roles')->onUpdate('cascade');
+            $table->unsignedBigInteger('m_id')->index('m_id');
+            $table->foreign('m_id')->references('id')->on('modules')->onUpdate('cascade');
+            $table->tinyInteger('view')->length(2)->nullable();
+            $table->tinyInteger('add')->length(2)->nullable();
+            $table->tinyInteger('edit')->length(2)->nullable();
+            $table->tinyInteger('delete')->length(2)->nullable();
             $table->timestamps();
-            $table->foreign('r_id')->references('id')->on('roles')->onDelete('cascade');
-            $table->foreign('m_id')->references('id')->on('modules')->onDelete('cascade');
+            $table->softDeletes();
         });
     }
 

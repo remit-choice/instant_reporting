@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Module extends Model
 {
-    protected $fillable = ['id', 'm_g_id', 'name', 'icon', 'status', 'type', 'sort'];
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['id', 'm_g_id', 'name', 'icon', 'sort', 'type', 'status', 'created_at', 'updated_at', 'deleted_at'];
     protected $table = 'modules';
 
     public function permissions()

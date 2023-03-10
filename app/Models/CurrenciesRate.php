@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CurrenciesRate extends Model
 {
-    protected $fillable = ['id', 'c_id', 'iso', 'iso3', 'currency', 'dated', 'rate', 'status'];
+    use HasFactory, SoftDeletes;
+    protected $fillable = ['id', 'c_id', 'iso', 'iso3', 'currency', 'dated', 'rate', 'status', 'created_at', 'updated_at', 'deleted_at'];
     protected $table = 'currencies_rates';
-    use HasFactory;
     public function currencies()
     {
         return $this->hasOne(Currency::class, 'c_id', 'id');

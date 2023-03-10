@@ -54,7 +54,7 @@ class TransactionDataController extends Controller
             return view('admin.upload_data.transactions.create');
         } elseif (FacadesRequest::isMethod('post')) {
             if ($request->file('transaction_file')) {
-                // ini_set('max_execution_time', 180);
+                ini_set('max_execution_time', 36000);
                 $file = $request->file('transaction_file');
                 $extension = $file->getClientOriginalExtension();
                 // $filename = time() . '.' . $extension;
@@ -164,7 +164,6 @@ class TransactionDataController extends Controller
                             ]);
                         }
                         $i++;
-                        // dd($emapData);
                     }
                     // } else {
                     //     return redirect()->back()->with(['failed' => "File Size is big"]);
